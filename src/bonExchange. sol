@@ -1,0 +1,50 @@
+/*
+- add onlyOwner for emergency withdraw
+- switch endBlock to require tokensLeft >= exchange amount else revert
+- also add a startBlock var
+- this will require an approvalo for transfer
+- change mint to transfer tokens and also add the erc20 acceptance stuff from staking
+- deploy bonv2 on polygon as place holder and burn that token on BRIDGE
+*/
+
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.22 <0.9.0;
+
+import Token from "../Token.sol";
+
+contract bonExchange {
+
+  // Old Token
+  address public tokenV1;
+
+  // New Token
+  address public tokenv2;
+
+  uint256 public endBlock;
+
+  constructor(
+    address _tokenV1,
+    address _tokenV2,
+    uint256 _endBlock
+
+  ) public {
+    tokenV1 = _tokenV1;
+    tokenv2 = _tokenV2;
+    endBlock = _endBlock;
+  }
+
+  event MigrateToV2(address indexed user,uint256 amount);
+
+  function migratationNewToken(uint256 _inputAmt) public {
+
+    require(block.number < endBlock, "too late :(");
+    IERC20(tokenV1).safeTransferFrom(
+      address(msg.sender),
+      burnAddress,
+      _inputAmt
+    );
+
+    Token(tokenv2).mint(msg.sender, _inputAmt);
+    emit MigrateToV2(msg.sender,_inputAmt);
+  }
+}
