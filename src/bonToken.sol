@@ -31,35 +31,34 @@ contract bonToken is Ownable, ERC20, ERC20Burnable {
     event WhitelistAddressUpdated(address newWhitelist);
     
 
-    // Bank_of_Nowhere, BON, 21000000, XXX, XXX, XXX, 4, SEETXT, SEETXT
-// do I need _nameSymb in both the first and second args?
+    // Bank_of_Nowhere, BON, 21000000, XXX, XXX, XXX, 4, SEETXT
+    // do I need _nameSymb in both the first and second args?
     constructor(
         string memory _name,
         string memory _symbol,
-        uint _supply,
+        //uint _supply,
         address _treasury, 
         address _stakers, 
         address _devs,
         uint _tax,
-        address[] _airdropAddresses,
-        uint _airdropAmount
-        )
-        ERC20(_name, _symbol) {
-            _mint(msg.sender, _supply * 10 ** decimals());
+        address[] memory _airdropAddresses
+        ) ERC20(_name, _symbol) {
+            _mint(msg.sender, (19_950_000) * 10 ** decimals());
+            
+            uint length = _airdropAddresses.length;
+            uint ADPerWallet = ((1_050_000) / length) * 10 ** decimals();
+            for (uint i; i < length; ) {
+                _mint(_airdropAddresses[i], ADPerWallet);
+                unchecked { ++i; }
+            }
+
+            bonTax = _tax;
             bonTreasury = _treasury;
             bonStakers = _stakers;
             bonDevs = _devs;
-            bonTax = _tax;
-            //whitelistedAddress[_treasury] = true;
-            //whitelistedAddress[_stakers] = true;
-            //whitelistedAddress[_devs] = true;
-
-            uint length = _airdropAddresses.length;
-            uint completeADAmount = _airdropAmount * 10 ** decimals();
-            for (uint i; i < length; ) {
-                IERC20(address.this).transfer(_airdropAddresses[i], completeADAmount);
-                unchecked { ++i; }
-            }
+            whitelistedAddress[_treasury] = true;
+            whitelistedAddress[_stakers] = true;
+            whitelistedAddress[_devs] = true;
     }
 
     function setTreasuryAddress(address _treasury) external onlyOwner{
@@ -89,9 +88,8 @@ contract bonToken is Ownable, ERC20, ERC20Burnable {
         emit WhitelistAddressUpdated(_whitelist);
     }
 
-// add a can't be zero clause
-
     function setTax(uint256 _tax) external onlyOwner{
+        require(_tax > 0, "ERROR: tax must be greater than 0");
         bonTax = _tax;
         emit TaxUpdated(bonTax);
     }
