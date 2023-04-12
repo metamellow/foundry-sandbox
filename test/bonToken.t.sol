@@ -61,7 +61,7 @@ contract contractTest is Test {
         console.log("TREASURY AFTER:", contractTested.bonTreasury());
         console.log("STAKERS AFTER:", contractTested.bonStakers());
         console.log("DEVS AFTER:", contractTested.bonDevs());
-        console.log("WALLT WL AFTER:", contractTested.whitelistedAddress(address(700)));
+        console.log("WALLT WL AFTER:", contractTested.whitelistedAddress(address(696)));
         console.log("TAX AFTER:", contractTested.bonTax());
     }
 
