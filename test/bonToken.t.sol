@@ -69,8 +69,6 @@ contract contractTest is Test {
         vm.stopPrank();
         vm.startPrank(address(71));
         contractTested.setTreasuryAddress(address(71));
-        contractTested.setStakersAddress(address(72));
-        contractTested.setDevAddress(address(70));
     }
 
     function test_Transfers() public{
