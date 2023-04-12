@@ -55,7 +55,7 @@ contract contractTest is Test {
         contractTested.setTreasuryAddress(address(71));
         contractTested.setStakersAddress(address(72));
         contractTested.setDevAddress(address(70));
-        contractTested.setWhitelistAddress(address(700));
+        contractTested.setWhitelistAddress(address(696));
         contractTested.setTax(69);
         
         console.log("TREASURY AFTER:", contractTested.bonTreasury());
