@@ -6,7 +6,7 @@ import "../src/bonToken.sol";
 
 contract contractTest is Test {
     bonToken public contractTested;
-    address tempMsgSender = address(69);
+    address tempMsgSender = address(69); //just use 69 not a var
 
     function setUp() public{
         // --- WALLETS ---
