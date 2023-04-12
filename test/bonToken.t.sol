@@ -23,7 +23,6 @@ contract contractTest is Test {
         contractTested = new bonToken(
             "Bank_of_Nowhere", 
             "BON", 
-            //21000000, 
             address(70), 
             address(71), 
             address(72), 
