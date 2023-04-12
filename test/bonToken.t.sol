@@ -82,7 +82,7 @@ contract contractTest is Test {
         console.log("700 WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(700)));
         console.log("701 WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(701)));
         //console.log("NEW WLLT APPRVL: ", IERC20(contractTested).allowance(address(700), address(contractTested)));
-        IERC20(address(contractTested)).transfer(address(701), 9_000);
+        IERC20(address(contractTested)).transfer(address(701), 9_000); // I think this needs to be transferFrom
         console.log("700 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(700)));
         console.log("701 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(701)));
         console.log("TRES WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(70)));
