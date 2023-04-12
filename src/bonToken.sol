@@ -7,7 +7,7 @@ NOTES:
 - this contract owner should be ledger, but treasuries not
 
 TODO:
-- need to test airdrop function
+- consider bumping the BONDAO percent up to 7.5-10%
 
 */
 
