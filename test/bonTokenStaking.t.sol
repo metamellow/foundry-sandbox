@@ -41,6 +41,11 @@ contract contractTest is Test {
 
     function testFail_0xSetUpLogs() public{
         console.log("CNRT ADDR: ", address(contractTested));
+        console.log("TIMER DUR: ", contractTested.timerDuration());
+        console.log("RWD RATE: ", contractTested.rwdRate());
+        console.log("STKD SUPPL: ", contractTested.stakedPoolSupply());
+        //console.log("xxx: ", );
+        //console.log("xxx: ", );
         console.log("TKN ADDR: ", address(testedToken));
         console.log("OWNR: ", testedToken.owner());
         console.log("OWNR BAL: ", IERC20(testedToken).balanceOf(address(69)));
@@ -52,5 +57,19 @@ contract contractTest is Test {
         console.log("DEVS BAL: ", IERC20(testedToken).balanceOf(address(72)));
         assertFalse(0 == 0);
     }
+
+    // deposit to staking
+
+    // check rewards
+
+    // check time
+
+    // withdraw rewards
+
+    // withdraw all
+
+    // only owners
+
+    // close pool
 
 }
