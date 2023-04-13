@@ -59,6 +59,21 @@ contract contractTest is Test {
     }
 
     // deposit to staking
+    function test_depositToStaking(){
+        IERC20(address(testedToken)).approve(
+            address(69), 
+            115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        IERC20(address(testedToken)).transfer(address(700), 50000000000000000000000);
+        console.log("TST WLLT B4 BAL: ", IERC20(testedToken).balanceOf(address(700)));
+
+        vm.stopPrank();
+        vm.startPrank(address(700));
+        IERC20(address(testedToken)).approve(
+            address(700), 
+            115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        contractTested.depositToStaking(10000000000000000000000);
+        
+    }
 
     // check rewards
 
