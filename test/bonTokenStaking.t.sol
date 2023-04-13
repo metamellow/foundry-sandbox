@@ -3,27 +3,54 @@ pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
 import "../src/bonTokenStaking.sol";
+import "../src/bonToken.sol";
 
 contract contractTest is Test {
     bonTokenStaking public contractTested;
-    //address public RVLT = 0xf0f9D895aCa5c8678f706FB8216fa22957685A13;
+    bonToken public testedToken;
 
     function setUp() public{
         // --- WALLETS ---
-        address user = address(69);
-        vm.startPrank(user);
+        vm.startPrank(address(69));
         address[] memory testAddresses = new address[](3);
             testAddresses[0] = address(70);
             testAddresses[1] = address(71);
             testAddresses[2] = address(72);
 
         // --- TOKENS ---
-        vm.deal(user, 1_000_000 ether);
-        //deal(RVLT, user, 1_000_000_000_000 ether);
-        //bool success = IERC20(RVLT).approve(0x8fA079a96cE08F6E8A53c1C00566c434b248BFC4, 115792089237316195423570985008687907853269984665640564039457584007913129639935);
-        //require(success, "Approve failed");
+        vm.deal(address(69), 1_000_000 ether);
         
         // --- CONTRACTS ---
-        contractTested = new bonTokenStaking();
+        testedToken = new bonToken(
+            "Bank_of_Nowhere", 
+            "BON", 
+            //21000000, 
+            address(70), 
+            address(71), 
+            address(72), 
+            4, 
+            testAddresses
+        );
+
+        contractTested = new bonTokenStaking(
+            address(contractTested),
+            604800,
+            50
+        );
     }
+
+    function testFail_0xSetUpLogs() public{
+        console.log("CNRT ADDR: ", address(contractTested));
+        console.log("TKN ADDR: ", address(testedToken));
+        console.log("OWNR: ", testedToken.owner());
+        console.log("OWNR BAL: ", IERC20(testedToken).balanceOf(address(69)));
+        console.log("TRES: ", testedToken.bonTreasury());
+        console.log("TRES BAL: ", IERC20(testedToken).balanceOf(address(70)));
+        console.log("STAKER: ", testedToken.bonStakers());
+        console.log("STAKER BAL: ", IERC20(testedToken).balanceOf(address(71)));
+        console.log("DEVS: ", testedToken.bonDevs());
+        console.log("DEVS BAL: ", IERC20(testedToken).balanceOf(address(72)));
+        assertFalse(0 == 0);
+    }
+
 }
