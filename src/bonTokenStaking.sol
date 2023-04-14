@@ -9,7 +9,6 @@ b. Y = adjustable % of rewards pool
 c. balances held in actual amounts; minus 18 zeros for easy reading
 
 TODO:
-- ready to test! see if the rewards works now?
 - MUST whitelist stakingContract on token to avoid accounting discrepencies
 
 */
