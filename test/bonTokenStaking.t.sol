@@ -67,7 +67,7 @@ contract contractTest is Test {
         IERC20(address(testedToken)).transfer(address(700), 50000000000000000000000);
         console.log("TST WLLT B4 BAL: ", IERC20(testedToken).balanceOf(address(700)));
 
-
+// I guess try it in the setup?
         /*
         vm.stopPrank();
         vm.startPrank(address(700));
