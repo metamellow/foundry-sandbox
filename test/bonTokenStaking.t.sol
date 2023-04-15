@@ -22,9 +22,8 @@ contract contractTest is Test {
         
         // --- CONTRACTS ---
         testedToken = new bonToken(
-            "Bank_of_Nowhere", 
-            "BON", 
-            //21000000, 
+            "BON.DAO GOVERNANCE TOKEN", 
+            "BANK", 
             address(70), 
             address(71), 
             address(72), 
