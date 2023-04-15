@@ -22,7 +22,7 @@ contract contractTest is Test {
         
         // --- CONTRACTS ---
         testedToken = new bonToken(
-            "BON.DAO GOVERNANCE TOKEN", 
+            "BON GOVERNANCE TOKEN", 
             "BANK", 
             address(70), 
             address(71), 
