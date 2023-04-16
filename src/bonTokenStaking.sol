@@ -10,6 +10,7 @@ c. balances held in actual amounts; minus 18 zeros for easy reading
 
 TODO:
 - MUST whitelist stakingContract on token to avoid accounting discrepencies
+- stakingContract NON staked tokens CANT BE zero (for rewardsCalc to work)
 
 */
 
@@ -44,9 +45,12 @@ contract bonTokenStaking is Ownable{
     function calculateRewards(address _user) public view returns (uint256) {
         require(isStaked[_user], "This address has not staked");
         uint256 totalTokenBalance = IERC20(bonTokenAddress).balanceOf(address(this));
-        uint256 userBalance = stakedPoolBalances[_user];
         uint256 rwdPoolSupply = totalTokenBalance - stakedPoolSupply;
-        return (userBalance / stakedPoolSupply) * (rwdPoolSupply * (rwdRate / 1000));
+        uint256 userBalance = stakedPoolBalances[_user];
+        uint256 rwdPoolAftrRate = (rwdPoolSupply * rwdRate / 1000);
+        uint256 userRewardsAmount =  rwdPoolAftrRate * userBalance / stakedPoolSupply;
+        require(userRewardsAmount > 0, "ERROR: Reward can not be zero");
+        return userRewardsAmount;
     }
 
     function calculateTime(address _user) public view returns (uint256) {
@@ -117,6 +121,7 @@ contract bonTokenStaking is Ownable{
     }
 
     function setRate(uint256 _rwdRate) external onlyOwner {
+        require(_rwdRate > 0 && _rwdRate < 1000, "Rate must be > 0 and < 1000");
         rwdRate = _rwdRate;
     }
 

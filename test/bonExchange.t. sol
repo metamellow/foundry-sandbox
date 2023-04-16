@@ -2,7 +2,7 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import "../src/bonExchange.sol";
+import "../src/BonExchange.sol";
 
 contract contractTest is Test {
     bonExchange public contractTested;

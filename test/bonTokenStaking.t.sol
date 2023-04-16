@@ -2,12 +2,12 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import "../src/bonTokenStaking.sol";
-import "../src/bonToken.sol";
+import "../src/BonTokenStaking.sol";
+import "../src/BonToken.sol";
 
 contract contractTest is Test {
-    bonTokenStaking public contractTested;
-    bonToken public testedToken;
+    bonTokenStaking public staking;
+    bonToken public token;
 
     function setUp() public{
         // --- WALLETS ---
@@ -21,7 +21,7 @@ contract contractTest is Test {
         vm.deal(address(69), 1_000_000 ether);
         
         // --- CONTRACTS ---
-        testedToken = new bonToken(
+        token = new bonToken(
             "BON GOVERNANCE TOKEN", 
             "BANK", 
             address(70), 
@@ -31,68 +31,68 @@ contract contractTest is Test {
             testAddresses
         );
 
-        contractTested = new bonTokenStaking(
-            address(contractTested),
+        staking = new bonTokenStaking(
+            address(token),
             604800,
             50
         );
-        testedToken.setWhitelistAddress(address(contractTested));
+        token.setWhitelistAddress(address(staking));
+        // add some seed tokens
     }
 
     function testFail_0xSetUpLogs() public{
         console.log("MSG.SENDER: ", address(msg.sender));
-        console.log("CNRT ADDR: ", address(contractTested));
-        console.log("TIMER DUR: ", contractTested.timerDuration());
-        console.log("RWD RATE: ", contractTested.rwdRate());
-        console.log("STKD SUPPL: ", contractTested.stakedPoolSupply());
-        console.log("TKN ADDR: ", address(testedToken));
-        console.log("STKR CNT WHTLSTD ON TKN: ", testedToken.whitelistedAddress(address(contractTested)));
-        console.log("OWNR: ", testedToken.owner());
-        console.log("OWNR BAL: ", IERC20(testedToken).balanceOf(address(69)));
-        console.log("TRES: ", testedToken.bonTreasury());
-        console.log("TRES BAL: ", IERC20(testedToken).balanceOf(address(70)));
-        console.log("STAKER: ", testedToken.bonStakers());
-        console.log("STAKER BAL: ", IERC20(testedToken).balanceOf(address(71)));
-        console.log("DEVS: ", testedToken.bonDevs());
-        console.log("DEVS BAL: ", IERC20(testedToken).balanceOf(address(72)));
+        console.log("CNRT ADDR: ", address(staking));
+        console.log("TIMER DUR: ", staking.timerDuration());
+        console.log("RWD RATE: ", staking.rwdRate());
+        console.log("STKD SUPPL: ", staking.stakedPoolSupply());
+        console.log("TKN ADDR: ", address(token));
+        console.log("STKR CNT WHTLSTD ON TKN: ", token.whitelistedAddress(address(staking)));
+        console.log("OWNR: ", token.owner());
+        console.log("OWNR BAL: ", ERC20(token).balanceOf(address(69)));
+        console.log("TRES: ", token.bonTreasury());
+        console.log("TRES BAL: ", ERC20(token).balanceOf(address(70)));
+        console.log("STAKER: ", token.bonStakers());
+        console.log("STAKER BAL: ", ERC20(token).balanceOf(address(71)));
+        console.log("DEVS: ", token.bonDevs());
+        console.log("DEVS BAL: ", ERC20(token).balanceOf(address(72)));
         assertFalse(0 == 0);
     }
 
     // deposit to staking
     function test_depositToStaking() public{
-        IERC20(address(testedToken)).approve(
-            address(69), 
-            115792089237316195423570985008687907853269984665640564039457584007913129639935);
-        IERC20(address(testedToken)).transfer(address(700), 50000000000000000000000);
-        console.log("TST WLLT B4 BAL: ", IERC20(testedToken).balanceOf(address(700)));
+        // --- setup stuff ---
+        ERC20(address(token)).transfer(address(700), 50000000000000000000000);
+        ERC20(address(token)).transfer(address(701), 50000000000000000000000);
+        ERC20(address(token)).transfer(address(staking), 69000000000000000000000); //get a little fake tax in there
 
-// I guess try it in the setup?
-        /*
+        // --- start testing here ---
         vm.stopPrank();
         vm.startPrank(address(700));
-        IERC20(address(testedToken)).approve(
-            address(700), 
-            115792089237316195423570985008687907853269984665640564039457584007913129639935);
-        IERC20(address(testedToken)).approve(
-            address(contractTested), 
-            115792089237316195423570985008687907853269984665640564039457584007913129639935);
-        IERC20(address(testedToken)).approve(
-            0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38, 
-            115792089237316195423570985008687907853269984665640564039457584007913129639935);
-        contractTested.depositToStaking(10000000000000000000000);
-        */
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        console.log("ADDR700 B4sTK BAL: ", ERC20(token).balanceOf(address(700)));
+        staking.depositToStaking(10000000000000000000000);
+        vm.warp(696969); //8 days
+       
+        console.log("ADDR700 AFTsTK BAL: ", ERC20(token).balanceOf(address(700)));
+        console.log("STKD SUPPL: ", staking.stakedPoolSupply());
+        console.log("STK CNT TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(staking)));
+        console.log("ADDR700 isSTKed: ", staking.isStaked(address(700)));
+        console.log("ADDR700 STKD AMT: ", staking.stakedPoolBalances(address(700)));
+        console.log("ADDR700 STKD TME: ", staking.withdrawTimer(address(700)));
+        console.log("ADDR700 calcTME: ", staking.calculateTime(address(700)));
+        console.log("ADDR700 calcRWD: ", staking.calculateRewards(address(700)));
 
-        console.log("TST WLLT AFT BAL: ", IERC20(testedToken).balanceOf(address(700)));
-        //console.log("STKD SUPPL: ", contractTested.stakedPoolSupply());
-        //console.log("ADDR700 RWD: ", contractTested.calculateRewards(address(700)));
-        //console.log("ADDR700 TME: ", contractTested.calculateTime(address(700)));
+        vm.stopPrank();
+        vm.startPrank(address(701));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(10000000000000000000000);
+        vm.warp(1696969);
+        console.log("ADDR700 calcRWD +STK: ", staking.calculateRewards(address(700)));
     }
 
-    // check rewards
-
-    // check time
-
     // withdraw rewards
+    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     // withdraw all
 

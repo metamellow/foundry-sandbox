@@ -5,6 +5,8 @@ pragma solidity ^0.8.9;
 NOTES:
 - on first deploy on mainnet, use fresh temp wallets for all treasuries
 - this contract owner should be ledger, but treasuries not
+- 'bonStakers' set at fresh BUT THEN switched to staking contract ASAP
+- 
 
 TODO:
 - consider bumping the BONDAO percent up to 7.5-10%
@@ -31,7 +33,7 @@ contract bonToken is Ownable, ERC20, ERC20Burnable {
     event WhitelistAddressUpdated(address newWhitelist);
     
 
-    // Bank_of_Nowhere, BON, 21000000, XXX, XXX, XXX, 4, SEETXT
+    // "BON GOVERNANCE TOKEN", "BANK", XXX, XXX, XXX, 4, airdropArray
     // do I need _nameSymb in both the first and second args?
     constructor(
         string memory _name,
@@ -63,34 +65,34 @@ contract bonToken is Ownable, ERC20, ERC20Burnable {
     }
 
     function setTreasuryAddress(address _treasury) external onlyOwner{
-        require(_treasury != address(0), "ERROR: address != 0");
+        require(_treasury != address(0), "ERROR: Can not be zero address");
         bonTreasury = _treasury;
         whitelistedAddress[_treasury] = true;
         emit TreasuryAddressUpdated(_treasury);
     }
 
     function setStakersAddress(address _stakers) external onlyOwner{
-        require(_stakers != address(0), "ERROR: address != 0");
+        require(_stakers != address(0), "ERROR: Can not be zero address");
         bonStakers = _stakers;
         whitelistedAddress[_stakers] = true;
         emit StakersAddressUpdated(_stakers);
     }
 
     function setDevAddress(address _dev) external onlyOwner{
-        require(_dev != address(0), "ERROR: address != 0");
+        require(_dev != address(0), "ERROR: Can not be zero address");
         bonDevs = _dev;
         whitelistedAddress[_dev] = true;
         emit DevsAddressUpdated(_dev);
     }
 
     function setWhitelistAddress(address _whitelist) external onlyOwner{
-        require(_whitelist != address(0), "setWhitelistAddress: Zero address");
+        require(_whitelist != address(0), "ERROR: Can not be zero address");
         whitelistedAddress[_whitelist] = true;
         emit WhitelistAddressUpdated(_whitelist);
     }
 
     function setTax(uint256 _tax) external onlyOwner{
-        require(_tax > 0, "ERROR: tax must be greater than 0");
+        require(_tax > 0 && _tax < 1000, "ERROR: Tax must be > 0 and < 1000");
         bonTax = _tax;
         emit TaxUpdated(bonTax);
     }

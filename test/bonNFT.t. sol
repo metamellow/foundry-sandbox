@@ -8,7 +8,7 @@ NOTES:
 
 
 import "forge-std/Test.sol";
-import "../src/bonNFT.sol";
+import "../src/BonNFT.sol";
 
 contract contractTest is Test {
     bonNFT public contractTested;
