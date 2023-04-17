@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-/*  NOTES:
+/* 
+NOTES:
 a. tokens for rewards transfered via token tax to this contract address
 b. every 7 days, stakers can claim X% of Y% of rewards pool
 b. X = users % of THEIR tokens staked over TOTAL staked
@@ -11,7 +12,7 @@ c. balances held in actual amounts; minus 18 zeros for easy reading
 TODO:
 - MUST whitelist stakingContract on token to avoid accounting discrepencies
 - stakingContract NON staked tokens CANT BE zero (for rewardsCalc to work)
-
+- stake as many wallets as possible to decrease the reward proportion ratio
 */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
