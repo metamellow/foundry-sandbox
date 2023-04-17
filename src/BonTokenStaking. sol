@@ -11,7 +11,7 @@ c. balances held in actual amounts; minus 18 zeros for easy reading
 
 TODO:
 - MUST whitelist stakingContract on token to avoid accounting discrepencies
-- stakingContract NON staked tokens CANT BE zero (for rewardsCalc to work)
+- send BANK to stakingContract ASAP for rewardsCalc to work
 - stake as many wallets as possible to decrease the reward proportion ratio
 */
 
@@ -50,7 +50,8 @@ contract bonTokenStaking is Ownable{
         uint256 userBalance = stakedPoolBalances[_user];
         uint256 rwdPoolAftrRate = (rwdPoolSupply * rwdRate / 1000);
         uint256 userRewardsAmount =  rwdPoolAftrRate * userBalance / stakedPoolSupply;
-        require(userRewardsAmount > 0, "ERROR: Reward can not be zero");
+        //require(userRewardsAmount > 0, "ERROR: Reward can not be zero");
+        //this would lock stakers in after a pool close
         return userRewardsAmount;
     }
 
