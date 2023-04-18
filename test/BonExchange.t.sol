@@ -3,10 +3,13 @@ pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
 import "../src/BonExchange.sol";
+import "../src/BankToken.sol";
+import "../src/OldBonToken.sol";
 
 contract contractTest is Test {
-    bonExchange public contractTested;
-    //address public RVLT = 0xf0f9D895aCa5c8678f706FB8216fa22957685A13;
+    bonExchange public exchange;
+    bankToken public bank;
+    bonToken public bon;
 
     function setUp() public{
         // --- WALLETS ---
@@ -19,12 +22,32 @@ contract contractTest is Test {
 
         // --- TOKENS ---
         vm.deal(user, 1_000_000 ether);
-        //deal(RVLT, user, 1_000_000_000_000 ether);
-        //bool success = IERC20(RVLT).approve(0x8fA079a96cE08F6E8A53c1C00566c434b248BFC4, 115792089237316195423570985008687907853269984665640564039457584007913129639935);
-        //require(success, "Approve failed");
         
         // --- CONTRACTS ---
-        contractTested = new bonExchange();
+        bank = new bankToken(
+            "BON GOVERNANCE TOKEN", 
+            "BANK", 
+            address(70), 
+            address(71), 
+            address(72), 
+            4, 
+            testAddresses
+        );
+
+        bon = new bonToken(
+            "Bank of Nowhere", 
+            "BON", 
+            21_000_000
+        );
+    }
+
+    function testFail_0xSetUpLogs() public{
+        console.log("EXCHNG ADDR: ", address(exchange));
+        console.log("BON ADDR: ", address(bon));
+        console.log("BANK ADDR: ", address(bank));
+        console.log("OWNR BON: ", ERC20(bon).balanceOf(address(69)));
+        console.log("OWNR BANK: ", ERC20(bank).balanceOf(address(69)));
+        assertFalse(0 == 0);
     }
 
 }
