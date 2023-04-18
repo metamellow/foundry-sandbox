@@ -23,7 +23,7 @@ contract bonTokenStaking is Ownable{
     IERC20 public bonTokenAddress;
 
     uint256 public timerDuration; // "604800" == 7 days (7 * 24 * 60 * 60)
-	uint256 public rwdRate; // "50" ==  5% of rwdpool
+    uint256 public rwdRate; // "50" ==  5% of rwdpool
     uint256 public stakedPoolSupply;
 
     mapping(address => bool) public isStaked;
@@ -137,7 +137,6 @@ contract bonTokenStaking is Ownable{
         if(tokenBalance > 0){
             bool success1 = IERC20(bonTokenAddress).transfer(msg.sender, tokenBalance - stakedPoolSupply);
             require(success1 == true, "transfer failed!");
-
         }
         if(gasBalance > 0){
             (bool success2,) = payable(msg.sender).call{value: gasBalance}("");
