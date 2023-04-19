@@ -5,10 +5,6 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol"; //NEW!!
-
-
-// NEED to test BURNN
 
 contract bonNFT is ERC721, Ownable{
     using Strings for uint256;
@@ -17,10 +13,10 @@ contract bonNFT is ERC721, Ownable{
     uint256 public erc20Price = 186900000000000000000000000; // 186900000 ERC20 token
     uint256 public gasPrice = 1000000000000000; // 0.001 gas token
     uint256 public constant maxTokens = 3000;
-    uint256 private constant tokensReserved = 20;
-    uint256 public constant maxMintAmount = 10;
+    uint256 private constant tokensReserved = 40;
+    uint256 public constant maxMintAmount = 20;
     uint256 public totalSupply;
-    string public baseUri = "ipfs://bafybeihscowmgmn6evsax36ys57hreo744vj5lgie3m6yjrb2u2vjufpiq/";
+    string public baseUri = "ipfs://bafybeif7d6m5r276btnjp47n7al4doeijsllg36734df4suhvirw3vltvq/";
     string public baseExtension = ".json";
     bool public isSaleActive;
     
@@ -28,7 +24,7 @@ contract bonNFT is ERC721, Ownable{
 
     event NewNFTMinted(address sender, uint256 tokenId);
 
-    constructor(address[] memory _addresses) ERC721("RVLT Comics #1", "RVLT_C1") {
+    constructor(address[] memory _addresses) ERC721("Modulusverse RVLT", "BONxRVLT") {
         for(uint256 i = 1; i <= tokensReserved; ++i) {
             _safeMint(msg.sender, i);
         }

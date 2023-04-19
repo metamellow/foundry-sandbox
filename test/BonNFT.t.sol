@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 
 /*
 NOTES:
-- for more testing ideas, see: https://github.com/s0crates-eth/foundry_sandbox/blob/main/test/NFT.t.sol
+- test needs to be run via Alchemy rpc
 */
 
 

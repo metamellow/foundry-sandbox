@@ -10,6 +10,7 @@ NOTES:
 
 TODO:
 - consider bumping the BONDAO percent up to 7.5-10%
+- test BUURRRNNN
 
 */
 
