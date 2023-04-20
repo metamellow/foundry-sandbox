@@ -4,6 +4,7 @@ pragma solidity ^0.8.17;
 /*
 NOTES:
 - test needs to be run via Alchemy rpc
+forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/elpiyNU3HOchYaeMMpCteXolAFqJYTEi -vvv
 */
 
 
@@ -36,7 +37,7 @@ contract contractTest is Test {
     }
 
     function test_initialState() public{
-        assertEq(contractTested.totalSupply(), 23);
+        assertEq(contractTested.totalSupply(), 43);
     }
 
     function test_nftTokenTransferAndMinting() public{
@@ -45,7 +46,7 @@ contract contractTest is Test {
         contractTested.mint{value: 1 ether}(2);
         uint afterErcBal = IERC20(RVLT).balanceOf(address(69));
         assertFalse(beforeErcBal == afterErcBal);
-        assertEq(contractTested.totalSupply(), 25);
+        assertEq(contractTested.totalSupply(), 45);
     }
 
     function testFail_mintingGasNotEnough() public{
