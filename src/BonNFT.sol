@@ -16,7 +16,7 @@ contract bonNFT is ERC721, Ownable{
     uint256 private constant tokensReserved = 40;
     uint256 public constant maxMintAmount = 20;
     uint256 public totalSupply;
-    string public baseUri = "ipfs://bafybeif7d6m5r276btnjp47n7al4doeijsllg36734df4suhvirw3vltvq/";
+    string public baseUri = "ipfs://bafybeiclavwr2b54yjoyxcswrr5wumf6q5hmzayerrguvzlkltlrbfvfqe/";
     string public baseExtension = ".json";
     bool public isSaleActive;
     
