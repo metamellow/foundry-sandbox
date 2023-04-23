@@ -31,6 +31,12 @@ contract bonExchange is Ownable {
 
   	event MigrateToBANK(address indexed user,uint256 amount);
 
+
+// change burn to accept and hold; use the allowance approve transfer structure built for the NFTs
+
+
+
+
  	function exchangeToken(uint256 _amount) public {
     	require(block.timestamp < end, "too late");
     	uint256 tokenBalance = IERC20(bank).balanceOf(address(this));
