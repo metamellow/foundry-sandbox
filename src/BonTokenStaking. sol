@@ -13,6 +13,9 @@ TODO:
 - MUST whitelist stakingContract on token to avoid accounting discrepencies
 - send BANK to stakingContract ASAP for rewardsCalc to work
 - stake as many wallets as possible to decrease the reward proportion ratio
+- Add emits to EVERYTHING because this makes JS interaction way way easier; rewards timeLeft etc
+
+
 */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
