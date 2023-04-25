@@ -2,14 +2,13 @@
 pragma solidity ^0.8.9;
 
 /*
-NOTES:
+DEV NOTES:
 - on first deploy on mainnet, use fresh temp wallets for all treasuries
 - this contract owner should be ledger, but treasuries not
 - 'bonStakers' set at fresh BUT THEN switched to staking contract ASAP
 - 
 
 TODO:
-- consider bumping the BONDAO percent up to 7.5-10%
 - test BUURRRNNN
 
 */
