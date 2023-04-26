@@ -31,25 +31,18 @@ contract bonExchange is Ownable {
 
   	event MigrateToBANK(address indexed user,uint256 amount);
 
-
-// change burn to accept and hold; use the allowance approve transfer structure built for the NFTs
-
-
  	function exchangeToken(uint256 _amount) public {
     	require(block.timestamp < end, "too late");
     	uint256 tokenBalance = IERC20(bank).balanceOf(address(this));
 		require(tokenBalance > _amount, "not enough in pool, check remaining contract balance");
-		IERC20(bon).transferFrom(
-      		address(msg.sender), 
-      		0x000000000000000000000000000000000000dEaD, 
-      		_amount);
-    	bool success = IERC20(bank).transfer(msg.sender, _amount);
-    	require(success == true, "transfer failed!");
+		bool success1 = IERC20(bon).transferFrom(msg.sender, address(this), _amount);
+        require(success1 == true, "transfer failed!");
+    	bool success2 = IERC20(bank).transfer(msg.sender, _amount);
+    	require(success2 == true, "transfer failed!");
     	emit MigrateToBANK(msg.sender,_amount);
  	}
 
 	// onlyOwners
-// add an only owner that BURNS any remaining BANK tokens after time limit
 
   	function changeBonAddr(address _newAddr) external onlyOwner{
     	bon = IERC20(_newAddr);
@@ -64,15 +57,22 @@ contract bonExchange is Ownable {
   	}
 
   	function closeExchangePool() external payable onlyOwner {
-        uint256 tokenBalance = IERC20(bank).balanceOf(address(this));
+        uint256 bankBalance = IERC20(bank).balanceOf(address(this));
+		uint256 bonBalance = IERC20(bon).balanceOf(address(this));
         uint256 gasBalance = address(this).balance;
-        if(tokenBalance > 0){
-            bool success1 = IERC20(bank).transfer(msg.sender, tokenBalance);
+        if(bankBalance > 0){
+            bool success1 = IERC20(bank).transfer(msg.sender, bankBalance);
             require(success1 == true, "transfer failed!");
+			// burned on Polygon after unwrapping process
+        }
+		if(bonBalance > 0){
+            bool success2 = IERC20(bon).transfer(msg.sender, bonBalance);
+            require(success2 == true, "transfer failed!");
+			// burned on Polygon after unwrapping process
         }
         if(gasBalance > 0){
-            (bool success2,) = payable(msg.sender).call{value: gasBalance}("");
-            require(success2 == true, "transfer failed!");
+            (bool success3,) = payable(msg.sender).call{value: gasBalance}("");
+            require(success3 == true, "transfer failed!");
         }
   	}
 }

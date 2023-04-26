@@ -6,6 +6,7 @@ DEV NOTES:
 - on first deploy on mainnet, use fresh temp wallets for all treasuries
 - this contract owner should be ledger, but treasuries not
 - 'bonStakers' set at fresh BUT THEN switched to staking contract ASAP
+- need to whitelist exchange contract asap
 */
 
 import "@openzeppelin/contracts/access/Ownable.sol";

@@ -5,9 +5,6 @@ import "forge-std/Test.sol";
 import "../src/BankToken.sol";
 
 
-// need to test BURN
-
-
 contract contractTest is Test {
     bonToken public contractTested;
     address tempMsgSender = address(69);
