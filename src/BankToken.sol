@@ -6,11 +6,6 @@ DEV NOTES:
 - on first deploy on mainnet, use fresh temp wallets for all treasuries
 - this contract owner should be ledger, but treasuries not
 - 'bonStakers' set at fresh BUT THEN switched to staking contract ASAP
-- 
-
-TODO:
-- test BUURRRNNN
-
 */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -34,7 +29,6 @@ contract bankToken is Ownable, ERC20, ERC20Burnable {
     
 
     // "BON GOVERNANCE TOKEN", "BANK", XXX, XXX, XXX, 4, airdropArray
-    // do I need _nameSymb in both the first and second args?
     constructor(
         string memory _name,
         string memory _symbol,

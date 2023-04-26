@@ -35,8 +35,6 @@ contract bonExchange is Ownable {
 // change burn to accept and hold; use the allowance approve transfer structure built for the NFTs
 
 
-
-
  	function exchangeToken(uint256 _amount) public {
     	require(block.timestamp < end, "too late");
     	uint256 tokenBalance = IERC20(bank).balanceOf(address(this));
@@ -51,6 +49,7 @@ contract bonExchange is Ownable {
  	}
 
 	// onlyOwners
+// add an only owner that BURNS any remaining BANK tokens after time limit
 
   	function changeBonAddr(address _newAddr) external onlyOwner{
     	bon = IERC20(_newAddr);
