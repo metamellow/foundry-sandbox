@@ -33,7 +33,6 @@ contract bankToken is Ownable, ERC20, ERC20Burnable {
     constructor(
         string memory _name,
         string memory _symbol,
-        //uint _supply,
         address _treasury, 
         address _stakers, 
         address _devs,

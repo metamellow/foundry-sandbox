@@ -6,7 +6,7 @@ import "../src/BankToken.sol";
 
 
 contract contractTest is Test {
-    bonToken public contractTested;
+    bankToken public contractTested;
     address tempMsgSender = address(69);
 
     function setUp() public{
@@ -21,7 +21,7 @@ contract contractTest is Test {
         vm.deal(tempMsgSender, 1_000_000 ether);
         
         // --- CONTRACTS ---
-        contractTested = new bonToken(
+        contractTested = new bankToken(
             "Bank_of_Nowhere", 
             "BON", 
             //21000000, 
@@ -75,7 +75,7 @@ contract contractTest is Test {
         contractTested.setDevAddress(address(70));
     }
 
-    function test_Transfers() public{
+    function test_TransferFrom() public{
         console.log("OWNR WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(69)));
         IERC20(address(contractTested)).approve(
             address(69), 
@@ -91,6 +91,30 @@ contract contractTest is Test {
         console.log("701 WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(701)));
         //console.log("NEW WLLT APPRVL: ", IERC20(contractTested).allowance(address(700), address(contractTested)));
         IERC20(address(contractTested)).transferFrom(address(700), address(701), 9_000);
+        console.log("700 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(700)));
+        console.log("701 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(701)));
+        console.log("OWNR WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(69)));
+        console.log("TRES WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(70)));
+        console.log("STKR WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(71)));
+        console.log("DEV WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(72)));
+    }
+
+    function test_Transfer() public{
+        console.log("OWNR WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(69)));
+        IERC20(address(contractTested)).approve(
+            address(69), 
+            115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        IERC20(address(contractTested)).transfer(address(700), 69_000);
+        
+        vm.stopPrank();
+        vm.startPrank(address(700));
+        IERC20(address(contractTested)).approve(
+            address(700), 
+            115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        console.log("700 WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(700)));
+        console.log("701 WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(701)));
+        //console.log("NEW WLLT APPRVL: ", IERC20(contractTested).allowance(address(700), address(contractTested)));
+        IERC20(address(contractTested)).transfer(address(701), 9_000);
         console.log("700 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(700)));
         console.log("701 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(701)));
         console.log("OWNR WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(69)));

@@ -111,10 +111,8 @@ contract contractTest is Test {
         console.log("OWNR ETH BAL aft: ", address(69).balance);
     }
 
-    //////////// IT doesnt seem that the token tax is working?
-    
     function test_4banktransfertest() public{
-        bank.transfer(address(700), 1000);
+        bank.transfer(address(700), 100_001);
         console.log("700 BANK BAL b4: ", ERC20(bank).balanceOf(address(700)));
         console.log("701 BANK BAL b4: ", ERC20(bank).balanceOf(address(701)));
         console.log("70 BANK BAL b4: ", ERC20(bank).balanceOf(address(70)));
@@ -123,10 +121,12 @@ contract contractTest is Test {
        
         vm.stopPrank();
         vm.startPrank(address(700));
-        bank.transfer(address(701), 500);
+        // vv I think this is only needed bc its a testing file, so it fucks up the msg.sender
+        bank.approve(address(700), 115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        bank.transfer(address(701), 100_000);
 
-        console.log("700 BANK BAL b4: ", ERC20(bank).balanceOf(address(700)));
-        console.log("701 BANK BAL b4: ", ERC20(bank).balanceOf(address(701)));
+        console.log("700 BANK BAL aft: ", ERC20(bank).balanceOf(address(700)));
+        console.log("701 BANK BAL aft: ", ERC20(bank).balanceOf(address(701)));
         console.log("70 BANK BAL aft: ", ERC20(bank).balanceOf(address(70)));
         console.log("71 BANK BAL aft: ", ERC20(bank).balanceOf(address(71)));
         console.log("72 BANK BAL aft: ", ERC20(bank).balanceOf(address(70)));
