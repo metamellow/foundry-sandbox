@@ -38,7 +38,7 @@ contract bonExchange is Ownable {
   	event MigrateToBANK(address indexed user,uint256 amount);
 
  	function exchangeToken(uint256 _amount) public {
-    	require(block.timestamp < end, "too late");
+    	require(block.timestamp < end, "sorry exchange has ended");
     	uint256 tokenBalance = IERC20(bank).balanceOf(address(this));
 		require(tokenBalance > _amount, "not enough in pool, check remaining contract balance");
 		bool success1 = IERC20(bon).transferFrom(msg.sender, address(this), _amount);
