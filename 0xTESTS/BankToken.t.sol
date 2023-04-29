@@ -87,10 +87,12 @@ contract contractTest is Test {
         IERC20(address(contractTested)).approve(
             address(700), 
             115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        console.log("TTL SPPL B4: ", contractTested.totalSupply());
         console.log("700 WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(700)));
         console.log("701 WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(701)));
         //console.log("NEW WLLT APPRVL: ", IERC20(contractTested).allowance(address(700), address(contractTested)));
         IERC20(address(contractTested)).transferFrom(address(700), address(701), 9_000);
+        console.log("TTL SPPL AFT: ", contractTested.totalSupply());
         console.log("700 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(700)));
         console.log("701 WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(701)));
         console.log("OWNR WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(69)));
