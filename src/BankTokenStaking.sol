@@ -79,6 +79,8 @@ contract bonTokenStaking is Ownable{
     }
 
 
+// fix the withdraw all torequired that they DONT have a pending rewards AND at least sevenDayas logged, it should emit and tell them to withdraw rewards first, and then also I need to DELETE the rewards transfer from here as well
+
     function withdrawAll() public{
         require(isStaked[msg.sender], "This address has not staked");
 
