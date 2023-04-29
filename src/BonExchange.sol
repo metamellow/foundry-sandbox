@@ -5,6 +5,12 @@
 - this will require an approvalo for transfer
 - change mint to transfer tokens and also add the erc20 acceptance stuff from staking
 - deploy bonv2 on polygon as place holder and burn that token on BRIDGE
+
+
+
+- there's no reasons to have to wqot until close to withdraw and burn, so add another function BRO
+
+
 */
 
 // SPDX-License-Identifier: MIT
