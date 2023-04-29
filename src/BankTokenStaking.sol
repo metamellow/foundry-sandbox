@@ -14,6 +14,7 @@ TODO:
 - send BANK to stakingContract ASAP for rewardsCalc to work
 - stake as many wallets as possible to decrease the reward proportion ratio
 - Add emits to EVERYTHING because this makes JS interaction way way easier; rewards timeLeft etc
+- see if I can do this contract as a proxy uups
 
 
 */
