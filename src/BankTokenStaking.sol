@@ -82,7 +82,7 @@ contract bonTokenStaking is Ownable{
     function withdrawAll() public{
         require(isStaked[msg.sender], "This address has not staked");
 
-        uint256 userBalance = stakedPoolBalances[msg.sender];
+        uint256 userBalance = stakedPoolBalances[msg.sender]; //sandwich the requires to save gas
         uint256 userReward = calculateRewards(msg.sender);
         uint256 timeElapsed = calculateTime(msg.sender);
 
