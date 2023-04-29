@@ -51,7 +51,7 @@ contract bonTokenStaking is Ownable{
         uint256 totalTokenBalance = IERC20(bonTokenAddress).balanceOf(address(this));
         uint256 rwdPoolSupply = totalTokenBalance - stakedPoolSupply;
         uint256 userBalance = stakedPoolBalances[_user];
-        uint256 rwdPoolAftrRate = (rwdPoolSupply * rwdRate / 1000);
+        uint256 rwdPoolAftrRate = (rwdPoolSupply * rwdRate / 1000); // remove brackets?
         uint256 userRewardsAmount =  rwdPoolAftrRate * userBalance / stakedPoolSupply;
         //require(userRewardsAmount > 0, "ERROR: Reward can not be zero");
         //this would lock stakers in after a pool close
