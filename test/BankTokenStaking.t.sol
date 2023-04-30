@@ -2,61 +2,43 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import "../src/BonTokenStaking.sol";
+import "../src/BankTokenStaking.sol";
 import "../src/BankToken.sol";
 
 contract contractTest is Test {
-    bonTokenStaking public staking;
-    bonToken public token;
+    bankTokenStaking public staking;
+    bankToken public token;
 
     function setUp() public{
         // --- WALLETS ---
         vm.startPrank(address(69));
         address[] memory testAddresses = new address[](3);
-            testAddresses[0] = address(70);
-            testAddresses[1] = address(71);
-            testAddresses[2] = address(72);
+            testAddresses[0] = address(10001); // vvvvv all BONNFT holders
+            testAddresses[1] = address(10002); //
+            testAddresses[2] = address(10003); // ...
 
         // --- TOKENS ---
         vm.deal(address(69), 1_000_000 ether);
         
         // --- CONTRACTS ---
-        token = new bonToken(
-            "BON GOVERNANCE TOKEN", 
+        token = new bankToken(
+            "Bank of Nowhere", 
             "BANK", 
-            address(70), 
-            address(71), 
-            address(72), 
+            address(70), // treasury
+            address(71), // staker (swapped to contract address below)
+            address(72), // dev
             4, 
             testAddresses
         );
 
-        staking = new bonTokenStaking(
+        staking = new bankTokenStaking(
             address(token),
             604800,
             50
         );
+        token.setStakersAddress(address(staking));
         token.setWhitelistAddress(address(staking));
         // add some seed tokens
-    }
-
-    function testFail_0xSetUpLogs() public{
-        console.log("MSG.SENDER: ", address(msg.sender));
-        console.log("CNRT ADDR: ", address(staking));
-        console.log("TIMER DUR: ", staking.timerDuration());
-        console.log("RWD RATE: ", staking.rwdRate());
-        console.log("STKD SUPPL: ", staking.stakedPoolSupply());
-        console.log("TKN ADDR: ", address(token));
-        console.log("STKR CNT WHTLSTD ON TKN: ", token.whitelistedAddress(address(staking)));
-        console.log("OWNR: ", token.owner());
-        console.log("OWNR BAL: ", ERC20(token).balanceOf(address(69)));
-        console.log("TRES: ", token.bonTreasury());
-        console.log("TRES BAL: ", ERC20(token).balanceOf(address(70)));
-        console.log("STAKER: ", token.bonStakers());
-        console.log("STAKER BAL: ", ERC20(token).balanceOf(address(71)));
-        console.log("DEVS: ", token.bonDevs());
-        console.log("DEVS BAL: ", ERC20(token).balanceOf(address(72)));
-        assertFalse(0 == 0);
     }
 
     // deposit to staking
@@ -65,7 +47,8 @@ contract contractTest is Test {
         ERC20(address(token)).transfer(address(700), 50000000000000000000000);
         ERC20(address(token)).transfer(address(701), 50000000000000000000000);
         ERC20(address(token)).transfer(address(staking), 69000000000000000000000); //get a little fake tax in there
-
+        staking.setStakingOpen(true); // turn on/off to test lock
+        
         // --- start testing here ---
         vm.stopPrank();
         vm.startPrank(address(700));
@@ -91,59 +74,99 @@ contract contractTest is Test {
         console.log("ADDR700 calcRWD +STK: ", staking.calculateRewards(address(700)));
     }
 
-    // withdraw rewards
-    function test_2withdrawStaking() public{
+    // withdraw all staked tokens
+    function test_2withdrawAll() public{
         // --- setup stuff ---
         ERC20(address(token)).transfer(address(700), 50000000000000000000000);
         ERC20(address(token)).transfer(address(701), 50000000000000000000000);
         ERC20(address(token)).transfer(address(staking), 69000000000000000000000); //get a little fake tax in there
+        staking.setStakingOpen(true); // turn on/off to test lock
+        
         vm.stopPrank();
         vm.startPrank(address(700));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
         staking.depositToStaking(10000000000000000000000);
+        
         vm.stopPrank();
         vm.startPrank(address(701));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
         staking.depositToStaking(10000000000000000000000);
-        vm.warp(696969);
 
+        console.log("STKD SUPPL b4: ", staking.stakedPoolSupply());
+        console.log("STK CNT TOTAL erc20 BAL b4: ", ERC20(token).balanceOf(address(staking)));
+        console.log("ADDR700 TOTAL erc20 BAL b4: ", ERC20(token).balanceOf(address(700)));
+        console.log("ADDR701 TOTAL erc20 BAL b4: ", ERC20(token).balanceOf(address(701)));
+        console.log("ADDR700 STKD AMT b4: ", staking.stakedPoolBalances(address(700)));
+        console.log("ADDR701 STKD AMT b4: ", staking.stakedPoolBalances(address(701)));
+        
         // --- start testing stuff ---
-        console.log("P0 STKD SUPPL: ", staking.stakedPoolSupply());
-        console.log("P0 STK CNT TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(staking)));
-        console.log("P0 ADDR700 TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(700)));
-        console.log("P0 ADDR701 TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(701)));
-        console.log("P0 ADDR700 STKD AMT: ", staking.stakedPoolBalances(address(700)));
-        console.log("P0 ADDR701 STKD AMT: ", staking.stakedPoolBalances(address(701)));
-        console.log("P0 ADDR700 calcRWD: ", staking.calculateRewards(address(700)));
-        console.log("P0 ADDR701 calcRWD: ", staking.calculateRewards(address(701)));
-        console.log("P0 ADDR700 calcTME: ", staking.calculateTime(address(700)));
-        console.log("P0 ADDR701 calcTME: ", staking.calculateTime(address(701)));
+        //vm.warp(696969); (test toggle)
+        
         vm.stopPrank();
         vm.startPrank(address(700));
-        staking.withdrawRewards();
-        console.log("P1 STKD SUPPL: ", staking.stakedPoolSupply());
-        console.log("P1 STK CNT TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(staking)));
-        console.log("P1 ADDR700 TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(700)));
-        console.log("P1 ADDR701 TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(701)));
-        console.log("P1 ADDR700 STKD AMT: ", staking.stakedPoolBalances(address(700)));
-        console.log("P1 ADDR701 STKD AMT: ", staking.stakedPoolBalances(address(701)));
-        console.log("P1 ADDR700 calcRWD: ", staking.calculateRewards(address(700)));
-        console.log("P1 ADDR701 calcRWD: ", staking.calculateRewards(address(701)));
-        console.log("P1 ADDR700 calcTME: ", staking.calculateTime(address(700)));
-        console.log("P1 ADDR701 calcTME: ", staking.calculateTime(address(701)));
+        staking.withdrawAll();
+
         vm.stopPrank();
         vm.startPrank(address(701));
         staking.withdrawAll();
-        console.log("P2 STKD SUPPL: ", staking.stakedPoolSupply());
-        console.log("P2 STK CNT TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(staking)));
-        console.log("P2 ADDR700 TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(700)));
-        console.log("P2 ADDR701 TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(701)));
-        console.log("P2 ADDR700 STKD AMT: ", staking.stakedPoolBalances(address(700)));
-        console.log("P2 ADDR701 STKD AMT: ", staking.stakedPoolBalances(address(701)));
-        console.log("P2 ADDR700 calcRWD: ", staking.calculateRewards(address(700)));
-        //console.log("P2 ADDR701 calcRWD: ", staking.calculateRewards(address(701)));
-        console.log("P2 ADDR700 calcTME: ", staking.calculateTime(address(700)));
-        //console.log("P2 ADDR701 calcTME: ", staking.calculateTime(address(701)));
+
+        console.log("STKD SUPPL af: ", staking.stakedPoolSupply());
+        console.log("STK CNT TOTAL erc20 BAL af: ", ERC20(token).balanceOf(address(staking)));
+        console.log("ADDR700 TOTAL erc20 BAL af: ", ERC20(token).balanceOf(address(700)));
+        console.log("ADDR701 TOTAL erc20 BAL af: ", ERC20(token).balanceOf(address(701)));
+        console.log("ADDR700 STKD AMT af: ", staking.stakedPoolBalances(address(700)));
+        console.log("ADDR701 STKD AMT af: ", staking.stakedPoolBalances(address(701)));
+    }
+
+        // withdraw rewards
+    function test_2withdrawRewards() public{
+        // --- setup stuff ---
+        ERC20(address(token)).transfer(address(700), 50000000000000000000000);
+        ERC20(address(token)).transfer(address(701), 50000000000000000000000);
+        ERC20(address(token)).transfer(address(staking), 69000000000000000000000); //get a little fake tax in there
+        staking.setStakingOpen(true); // turn on/off to test lock
+        
+        vm.stopPrank();
+        vm.startPrank(address(700));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(10000000000000000000000);
+        
+        vm.stopPrank();
+        vm.startPrank(address(701));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(10000000000000000000000);
+
+        vm.warp(696969); // (test toggle)
+
+        console.log("STKD SUPPL b4: ", staking.stakedPoolSupply());
+        console.log("STK CNT TOTAL erc20 BAL b4: ", ERC20(token).balanceOf(address(staking)));
+        console.log("ADDR700 TOTAL erc20 BAL b4: ", ERC20(token).balanceOf(address(700)));
+        console.log("ADDR701 TOTAL erc20 BAL b4: ", ERC20(token).balanceOf(address(701)));
+        console.log("ADDR700 STKD AMT b4: ", staking.stakedPoolBalances(address(700)));
+        console.log("ADDR701 STKD AMT b4: ", staking.stakedPoolBalances(address(701)));
+        console.log("ADDR700 calcRWD: b4", staking.calculateRewards(address(700)));
+        console.log("ADDR701 calcRWD: b4", staking.calculateRewards(address(701)));
+        console.log("ADDR700 calcTME b4: ", staking.calculateTime(address(700)));
+        console.log("ADDR701 calcTME b4: ", staking.calculateTime(address(701)));
+
+        // --- start testing stuff ---
+        vm.stopPrank();
+        vm.startPrank(address(700));
+        staking.withdrawRewards();
+
+        vm.stopPrank();
+        vm.startPrank(address(701));
+        staking.withdrawRewards();
+
+        console.log("STKD SUPPL af: ", staking.stakedPoolSupply());
+        console.log("STK CNT TOTAL erc20 BAL af: ", ERC20(token).balanceOf(address(staking)));
+        console.log("ADDR700 TOTAL erc20 BAL af: ", ERC20(token).balanceOf(address(700)));
+        console.log("ADDR701 TOTAL erc20 BAL af: ", ERC20(token).balanceOf(address(701)));
+        console.log("ADDR700 STKD AMT af: ", staking.stakedPoolBalances(address(700)));
+        console.log("ADDR701 STKD AMT af: ", staking.stakedPoolBalances(address(701)));
+        console.log("ADDR700 calcRWD: af", staking.calculateRewards(address(700)));
+        console.log("ADDR700 calcTME af: ", staking.calculateTime(address(700)));
+        console.log("ADDR701 calcTME af: ", staking.calculateTime(address(701)));
     }
     
     // only owners
@@ -151,7 +174,6 @@ contract contractTest is Test {
         // --- set up ---
         console.log("P0 TIMER DUR: ", staking.timerDuration());
         console.log("P0 RWD RATE: ", staking.rwdRate());
-        //console.log("P0 BANK erc ADDR: ", staking.bonTokenAddress());
 
         // --- test ---
         staking.setTimer(694200);
@@ -159,7 +181,6 @@ contract contractTest is Test {
         staking.setTokenAddress(address(420));
         console.log("P1 TIMER DUR: ", staking.timerDuration());
         console.log("P1 RWD RATE: ", staking.rwdRate());
-        //console.log("P0 BANK erc ADDR: ", staking.bonTokenAddress());
     }
 
     // close pool
@@ -169,15 +190,20 @@ contract contractTest is Test {
         ERC20(address(token)).transfer(address(700), 50000000000000000000000);
         ERC20(address(token)).transfer(address(701), 50000000000000000000000);
         ERC20(address(token)).transfer(address(staking), 69000000000000000000000); //get a little fake tax in there
+        staking.setStakingOpen(true); // turn on/off to test lock
+
         vm.stopPrank();
         vm.startPrank(address(700));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
         staking.depositToStaking(10000000000000000000000);
+
         vm.stopPrank();
         vm.startPrank(address(701));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
         staking.depositToStaking(10000000000000000000000);
+        
         vm.warp(696969);
+
         console.log("P0 STKD SUPPL: ", staking.stakedPoolSupply());
         console.log("P0 STK CNT TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(staking)));
         console.log("P0 ADDR069 TOTAL erc20 BAL: ", ERC20(token).balanceOf(address(69)));
