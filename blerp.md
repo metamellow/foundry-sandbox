@@ -5,11 +5,32 @@ TOKEN DEPLOY:
 - later, this contract owner should be ledger, but treasuries NOT
 
 
-EXCHANGE DEPLOY:
-- need to add exchange contract address to BANK bonStakers addr var asap
-- need to whitelist exchange address on token contract asap
+STAKING DEPLOY:
+- set staking status as TRUE
+- need to add STAKING contract address to BANK bonStakers addr var asap
+- need to whitelist STAKING address on token contract asap
 - send some BANK to stakingContract ASAP for rewardsCalc to work
 - stake as many wallets as possible to decrease the reward proportion ratio
+
+EXCHANGE DEPLOY:
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
