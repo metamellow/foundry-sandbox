@@ -1,3 +1,27 @@
+
+# Notes to remember on REAL day
+TOKEN DEPLOY:
+- on first deploy on mainnet, set all treasuries to OWNER wallet
+- later, this contract owner should be ledger, but treasuries NOT
+
+
+EXCHANGE DEPLOY:
+- need to add exchange contract address to BANK bonStakers addr var asap
+- need to whitelist exchange address on token contract asap
+- send some BANK to stakingContract ASAP for rewardsCalc to work
+- stake as many wallets as possible to decrease the reward proportion ratio
+
+
+
+
+
+
+
+
+
+
+
+
 # DEV NOTES
 - For forked testing: forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/elpiyNU3HOchYaeMMpCteXolAFqJYTEi --match-contract <test contract name> -vvv
 - For specific test names: forge test --match-contract <test contract name> -vvv

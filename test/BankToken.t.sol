@@ -22,9 +22,8 @@ contract contractTest is Test {
         
         // --- CONTRACTS ---
         contractTested = new bankToken(
-            "Bank_of_Nowhere", 
-            "BON", 
-            //21000000, 
+            "Bank of Nowhere", 
+            "BANK",
             address(70), 
             address(71), 
             address(72), 
