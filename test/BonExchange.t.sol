@@ -131,4 +131,27 @@ contract contractTest is Test {
         console.log("71 BANK BAL aft: ", ERC20(bank).balanceOf(address(71)));
         console.log("72 BANK BAL aft: ", ERC20(bank).balanceOf(address(70)));
     }
+
+    function test_5pullBONtoBurn() public{
+        bank.transfer(address(exchange), 10500000000000000000000000);
+        bon.transfer(address(exchange), 10500000000000000000000000);
+        vm.deal(address(exchange), 69 ether);
+
+        
+        console.log("EXCHNG BON BAL b4: ", ERC20(bon).balanceOf(address(exchange)));
+        console.log("EXCHNG BANK BAL b4: ", ERC20(bank).balanceOf(address(exchange)));
+        console.log("EXCHNG ETH BAL b4: ", address(exchange).balance);
+        console.log("OWNR BON BAL b4: ", ERC20(bon).balanceOf(address(69)));
+        console.log("OWNR BANK BAL b4: ", ERC20(bank).balanceOf(address(69)));
+        console.log("OWNR ETH BAL b4: ", address(exchange).balance);
+
+        exchange.pullBONtoBurn();
+
+        console.log("EXCHNG BON BAL aft: ", ERC20(bon).balanceOf(address(exchange)));
+        console.log("EXCHNG BANK BAL aft: ", ERC20(bank).balanceOf(address(exchange)));
+        console.log("EXCHNG ETH BAL aft: ", address(exchange).balance);
+        console.log("OWNR BON BAL aft: ", ERC20(bon).balanceOf(address(69)));
+        console.log("OWNR BANK BAL aft: ", ERC20(bank).balanceOf(address(69)));
+        console.log("OWNR ETH BAL aft: ", address(69).balance);
+    }
 }

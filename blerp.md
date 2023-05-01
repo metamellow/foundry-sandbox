@@ -13,6 +13,7 @@ STAKING DEPLOY:
 - stake as many wallets as possible to decrease the reward proportion ratio
 
 EXCHANGE DEPLOY:
+- need to send 10.5m to contract
 - 
 
 

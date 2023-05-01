@@ -35,17 +35,18 @@ contract bonExchange is Ownable {
 		end = block.timestamp + _secondsTillEnd;
   	}
 
-  	event MigrateToBANK(address indexed user,uint256 amount);
+	event MigrateToBANK(address indexed user, uint256 amountExchanged, uint newBankBalance);
 
  	function exchangeToken(uint256 _amount) public {
     	require(block.timestamp < end, "sorry exchange has ended");
     	uint256 tokenBalance = IERC20(bank).balanceOf(address(this));
-		require(tokenBalance > _amount, "not enough in pool, check remaining contract balance");
+		require(tokenBalance > _amount, "not enough in pool check contract balances");
 		bool success1 = IERC20(bon).transferFrom(msg.sender, address(this), _amount);
         require(success1 == true, "transfer failed!");
     	bool success2 = IERC20(bank).transfer(msg.sender, _amount);
     	require(success2 == true, "transfer failed!");
-    	emit MigrateToBANK(msg.sender,_amount);
+        uint256 newBankBalance = IERC20(bank).balanceOf(address(msg.sender));
+    	emit MigrateToBANK(msg.sender, _amount, newBankBalance);
  	}
 
 	// onlyOwners
@@ -62,14 +63,22 @@ contract bonExchange is Ownable {
     	end = block.timestamp + _secondsTillEnd;
   	}
 
-  	function closeExchangePool() external payable onlyOwner {
+  	function pullBONtoBurn() external payable onlyOwner {
+        uint256 bonBalance = IERC20(bon).balanceOf(address(this));
+        require(bonBalance > 0, "no BON remaining");
+		bool success1 = IERC20(bon).transfer(msg.sender, bonBalance);
+        require(success1 == true, "transfer failed!");
+			// burned on Polygon after unwrapping process
+  	}
+	
+	function closeExchangePool() external payable onlyOwner {
         uint256 bankBalance = IERC20(bank).balanceOf(address(this));
 		uint256 bonBalance = IERC20(bon).balanceOf(address(this));
         uint256 gasBalance = address(this).balance;
         if(bankBalance > 0){
             bool success1 = IERC20(bank).transfer(msg.sender, bankBalance);
             require(success1 == true, "transfer failed!");
-			// burned on Polygon after unwrapping process
+			// burned on Modulus if not claimed
         }
 		if(bonBalance > 0){
             bool success2 = IERC20(bon).transfer(msg.sender, bonBalance);
