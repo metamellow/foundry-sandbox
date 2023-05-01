@@ -1,23 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-/* 
-NOTES:
-a. tokens for rewards transfered via token tax to this contract address
-b. every 7 days, stakers can claim X% of Y% of rewards pool
-b. X = users % of THEIR tokens staked over TOTAL staked
-b. Y = adjustable % of rewards pool
-c. balances held in actual amounts; minus 18 zeros for easy reading
-
-TODO:
-- MUST whitelist stakingContract on token to avoid accounting discrepencies
-- send BANK to stakingContract ASAP for rewardsCalc to work
-- stake as many wallets as possible to decrease the reward proportion ratio
-- Add emits to EVERYTHING because this makes JS interaction way way easier; rewards timeLeft etc
-- see if I can do this contract as a proxy uups
-
-
-*/
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
+/* -.-.-.-. BANK OF NOWHERE $BANK STAKING POOL -.-.-.-. */
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -26,8 +12,8 @@ contract bankTokenStaking is Ownable{
 
     IERC20 public bankTokenAddress;
 
-    uint256 public timerDuration; // "604800" == 7 days (7 * 24 * 60 * 60)
-    uint256 public rwdRate; // "50" ==  5% of rwdpool
+    uint256 public timerDuration;
+    uint256 public rwdRate;
     uint256 public stakedPoolSupply;
     bool public stakingOpen;
 

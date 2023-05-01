@@ -1,5 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0 <0.9.0;
+
+pragma solidity ^0.8.9;
+
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
+/* -.-.-. BANK OF NOWHERE $BON token (**MOCK UP) -.-.-. */
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
  
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
  

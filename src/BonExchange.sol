@@ -1,20 +1,10 @@
-/*
-- add onlyOwner for emergency withdraw
-- switch endBlock to require tokensLeft >= exchange amount else revert
-- also add a startBlock var
-- this will require an approvalo for transfer
-- change mint to transfer tokens and also add the erc20 acceptance stuff from staking
-- deploy bonv2 on polygon as place holder and burn that token on BRIDGE
-
-
-
-- there's no reasons to have to wqot until close to withdraw and burn, so add another function BRO
-
-
-*/
-
 // SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.9;
+
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
+/* -.-.-. BANK OF NOWHERE $BON to $BANK EXCHANGE -.-.-. */
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -35,7 +25,7 @@ contract bonExchange is Ownable {
 		end = block.timestamp + _secondsTillEnd;
   	}
 
-	event MigrateToBANK(address indexed user, uint256 amountExchanged, uint newBankBalance);
+  	event MigrateToBANK(address indexed user, uint256 amountExchanged, uint newBankBalance);
 
  	function exchangeToken(uint256 _amount) public {
     	require(block.timestamp < end, "sorry exchange has ended");

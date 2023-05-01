@@ -1,13 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-/*
-DEV NOTES:
-- on first deploy on mainnet, use fresh temp wallets for all treasuries
-- this contract owner should be ledger, but treasuries not
-- 'bonStakers' set at fresh BUT THEN switched to staking contract ASAP
-- need to whitelist exchange contract asap
-*/
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
+/* -.-.- BANK OF NOWHERE $BANK GOVERNANCE TOKEN .-.-.-. */
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -18,7 +14,7 @@ contract bankToken is Ownable, ERC20, ERC20Burnable {
     address public bonTreasury;
     address public bonStakers;
     address public bonDevs;
-    uint public bonTax; //4 == 0.4%
+    uint public bonTax;
 
     mapping(address => bool) public whitelistedAddress;
 
@@ -28,8 +24,6 @@ contract bankToken is Ownable, ERC20, ERC20Burnable {
     event DevsAddressUpdated(address newDevs);
     event WhitelistAddressUpdated(address newWhitelist);
     
-
-    // "BON GOVERNANCE TOKEN", "BANK", XXX, XXX, XXX, 4, airdropArray
     constructor(
         string memory _name,
         string memory _symbol,
