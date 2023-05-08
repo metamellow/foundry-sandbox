@@ -99,7 +99,7 @@ contract bankToken is Ownable, ERC20, ERC20Burnable {
                 uint256 burnAmount = taxAmount * 10/100;
                 uint256 devsAmount = taxAmount * 10/100;
                 uint256 userAmount = _amount - taxAmount;
-                burnFrom(_sender, burnAmount);
+                _burn(_sender, burnAmount);
                 super._transfer(_sender, bonTreasury, treasuryAmount);
                 super._transfer(_sender, bonStakers, stakersAmount);
                 super._transfer(_sender, bonDevs, devsAmount);

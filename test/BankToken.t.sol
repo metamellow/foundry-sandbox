@@ -50,7 +50,15 @@ contract contractTest is Test {
         assertFalse(0 == 0);
     }
 
-    function test_CheckOnlyOwners() public{
+    function testFail_1CheckOnlyOwner() public{
+        vm.stopPrank();
+        vm.startPrank(address(71));
+        contractTested.setTreasuryAddress(address(71));
+        contractTested.setStakersAddress(address(72));
+        contractTested.setDevAddress(address(70));
+    }
+    
+    function test_2CheckOnlyOwners() public{
         vm.stopPrank();
         vm.startPrank(tempMsgSender);
         contractTested.setTreasuryAddress(address(71));
@@ -66,15 +74,9 @@ contract contractTest is Test {
         console.log("TAX AFTER:", contractTested.bonTax());
     }
 
-    function testFail_CheckOnlyOwner() public{
-        vm.stopPrank();
-        vm.startPrank(address(71));
-        contractTested.setTreasuryAddress(address(71));
-        contractTested.setStakersAddress(address(72));
-        contractTested.setDevAddress(address(70));
-    }
 
-    function test_TransferFrom() public{
+
+    function test_3TransferFrom() public{
         console.log("OWNR WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(69)));
         IERC20(address(contractTested)).approve(
             address(69), 
@@ -100,7 +102,7 @@ contract contractTest is Test {
         console.log("DEV WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(72)));
     }
 
-    function test_Transfer() public{
+    function test_4Transfer() public{
         console.log("OWNR WLLT B4 BAL: ", IERC20(contractTested).balanceOf(address(69)));
         IERC20(address(contractTested)).approve(
             address(69), 
@@ -122,5 +124,26 @@ contract contractTest is Test {
         console.log("TRES WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(70)));
         console.log("STKR WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(71)));
         console.log("DEV WLLT AFT BAL: ", IERC20(contractTested).balanceOf(address(72)));
+    }
+
+    function test_5TransferNEW() public{
+        contractTested.transfer(address(1001), 1_000_000);
+        console.log("Supply b4: ", contractTested.totalSupply());
+        console.log("TRES WLLT b4: ", IERC20(contractTested).balanceOf(address(70)));
+        console.log("STKR WLLT b4: ", IERC20(contractTested).balanceOf(address(71)));
+        console.log("DEV WLLT b4: ", IERC20(contractTested).balanceOf(address(72)));
+        console.log("1001 b4: ", IERC20(contractTested).balanceOf(address(1001)));
+        console.log("1002 b4: ", IERC20(contractTested).balanceOf(address(1002)));
+
+        vm.stopPrank();
+        vm.startPrank(address(1001));
+        contractTested.transfer(address(1002), 1_000_000);
+
+        console.log("Supply af: ", contractTested.totalSupply());
+        console.log("TRES WLLT af: ", IERC20(contractTested).balanceOf(address(70)));
+        console.log("STKR WLLT af: ", IERC20(contractTested).balanceOf(address(71)));
+        console.log("DEV WLLT af: ", IERC20(contractTested).balanceOf(address(72)));
+        console.log("1001 af: ", IERC20(contractTested).balanceOf(address(1001)));
+        console.log("1002 af: ", IERC20(contractTested).balanceOf(address(1002)));
     }
 }
