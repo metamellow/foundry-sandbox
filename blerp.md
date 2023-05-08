@@ -11,6 +11,7 @@
 
 
 **STAKING DEPLOY**:
+- I should really add a quick mint/burn token for staking receipt
 - set staking status as TRUE
 - need to add STAKING contract address to BANK bonStakers addr var asap
 - need to whitelist STAKING address on token contract asap
