@@ -40,7 +40,7 @@
 
 
 
-- todo ; use api3 air nodes on Modulus
+- todo ; use api3 air nodes qrnd on Modulus to make a simple scratcher card dapp that takes an upfront cost and uses probability into make sure that the house wins more
 
 
 
