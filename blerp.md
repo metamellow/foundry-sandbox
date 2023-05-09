@@ -5,6 +5,7 @@
 - use this for all deploys and then slowly switch out
 
 **TOKEN DEPLOY**:
+- add 4 only owner vars for the tax proportions but require them to all add up to 100
 - clean up airdrop list https://docs.google.com/spreadsheets/d/1utck9-9MXnCJFf329RT2UoMNhQqgVd2wXyJhJJnl7ZY/
 - on first deploy on mainnet, set all treasuries to OWNER ldgr wallet
 - later, this contract owner should be ledger, but treasuries NOT
