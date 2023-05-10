@@ -27,7 +27,7 @@
 - LP token split [1B CULT && 8.4M BANK] (?)
 - Bridge CULT over to ledger wallet (?)
 - Burn LP tokens if possible
-
+- I'm gonna have to also do LPs for WBANK and WBON..
 
 
 
