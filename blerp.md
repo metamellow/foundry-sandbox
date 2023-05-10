@@ -24,7 +24,7 @@
 - need to send 10.5m BANK to exchange contract
 
 **BANK LP SETUP**:
-- LP token split [1B CULT && 8.4M BANK] (?)
+- LP token split [1B CULT && 8.4M BANK] (actually NO I need to split the 1B between the BANK but also the WBON needed to exchange and just buysell on Mod)
 - Bridge CULT over to ledger wallet (?)
 - Burn LP tokens if possible
 - I'm gonna have to also do LPs for WBANK and WBON..
