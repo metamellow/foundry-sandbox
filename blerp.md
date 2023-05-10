@@ -3,6 +3,7 @@
 **PRE DEPLOYMENTS**:
 - make a new MetaMask wallet secured by ledger
 - use this for all deploys and then slowly switch out
+- bridge the BON I want to both exchange and ALSO for the LP for WBON on Mod which I should set up before doing anything else
 
 **TOKEN DEPLOY**:
 - add 4 only owner vars for the tax proportions but require them to all add up to 100
