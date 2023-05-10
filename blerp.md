@@ -5,14 +5,14 @@
 - use this for all deploys and then slowly switch out
 - bridge the BON I want to both exchange and ALSO for the LP for WBON on Mod which I should set up before doing anything else
 
-**TOKEN DEPLOY**:
+**3 TOKEN DEPLOY**:
 - add 4 only owner vars for the tax proportions but require them to all add up to 100
 - clean up airdrop list https://docs.google.com/spreadsheets/d/1utck9-9MXnCJFf329RT2UoMNhQqgVd2wXyJhJJnl7ZY/
 - on first deploy on mainnet, set all treasuries to OWNER ldgr wallet
 - later, this contract owner should be ledger, but treasuries NOT
 
 
-**STAKING DEPLOY**:
+**1 STAKING DEPLOY**:
 - I should really add a quick mint/burn token for staking receipt
 - set staking status as TRUE
 - need to add STAKING contract address to BANK bonStakers addr var asap
@@ -20,11 +20,11 @@
 - send some BANK to stakingContract ASAP for rewardsCalc to work
 - stake as many wallets as possible to decrease the reward proportion ratio
 
-**EXCHANGE DEPLOY**:
+**2 EXCHANGE DEPLOY**:
 - need to whitelist EXCHANGE address on token contract asap
 - need to send 10.5m BANK to exchange contract
 
-**BANK LP SETUP**:
+**4 BANK LP SETUP**:
 - LP token split [1B CULT && 8.4M BANK] (actually NO I need to split the 1B between the BANK but also the WBON needed to exchange and just buysell on Mod .. and the WBANK can be done by me for me..)
 - Bridge CULT over to ledger wallet (?)
 - Burn LP tokens if possible
