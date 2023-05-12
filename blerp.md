@@ -21,12 +21,17 @@
 - 
 
 **3 TOKEN DEPLOY**:
-- 
+- string memory _name,      Bank of Nowhere
+    string memory _symbol,  BANK
+    address _treasury,      0xtemp-onLedgerForNow
+    address _stakers,       0xtemp-onLedgerForNow
+    address _devs,          0xtemp-onLedgerForNow
+    uint _tax,              4
 - 
 
 **4 FINALIZATION**:
-- need to send 10.5m BANK to exchange contract; then exchange MY 0.5WBON
-- need to whitelist EXCHANGE and STAKING address on token contract
+- need to send 10.5m BANK to exchange contract; then exchange MY WBON
+- need to whitelist EXCHANGE and STAKING and a TRADING wallet address on token contract
 - send some BANK to stakingContract ASAP for rewardsCalc to work; and stake TWO wallets at least
 - set staking status as TRUE
 
