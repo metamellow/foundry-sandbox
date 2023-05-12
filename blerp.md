@@ -1,61 +1,53 @@
 
-# Notes to remember on REAL day
-**PRE DEPLOYMENTS**:
-- make a new MetaMask wallet secured by ledger
-- use this for all deploys and then slowly switch out
-- bridge the BON I want to both exchange and ALSO for the LP for WBON on Mod which I should set up before doing anything else
+# ----- Notes to remember on REAL day -----
 
-**3 TOKEN DEPLOY**:
-- add 4 only owner vars for the tax proportions but require them to all add up to 100
+**0 PRE DEPLOYMENTS**:
+- make a new MetaMask wallet secured by ledger; use this for all deploys and then slowly switch out
+- Send CULT to bridge to this wallet
+- Purchase BON with BONNFT money and bridge that over
+- set up LP for WBON on Mod [0.5B CULT &&  BONNFT WBON funds]
 - clean up airdrop list https://docs.google.com/spreadsheets/d/1utck9-9MXnCJFf329RT2UoMNhQqgVd2wXyJhJJnl7ZY/
-- on first deploy on mainnet, set all treasuries to OWNER ldgr wallet
-- later, this contract owner should be ledger, but treasuries NOT
-
+- Bridge over my own BON that I want to exchange to BANK
 
 **1 STAKING DEPLOY**:
 - I should really add a quick mint/burn token for staking receipt
-- set staking status as TRUE
-- need to add STAKING contract address to BANK bonStakers addr var asap
-- need to whitelist STAKING address on token contract asap
-- send some BANK to stakingContract ASAP for rewardsCalc to work
-- stake as many wallets as possible to decrease the reward proportion ratio
+- use WBON as address temporarily
+- var: 604800 (7 days)
+- var: 50 (5% of pool)
 
 **2 EXCHANGE DEPLOY**:
-- need to whitelist EXCHANGE address on token contract asap
-- need to send 10.5m BANK to exchange contract
+- Use WBON address and WBON address for now, and switch BANK later
+- Use 2629746 (1 month) for exchange timer
+- 
 
-**4 BANK LP SETUP**:
-- LP token split [1B CULT && 8.4M BANK] (actually NO I need to split the 1B between the BANK but also the WBON needed to exchange and just buysell on Mod .. and the WBANK can be done by me for me..)
+**3 TOKEN DEPLOY**:
+- 
+- 
+
+**4 FINALIZATION**:
+- need to send 10.5m BANK to exchange contract; then exchange MY 0.5WBON
+- need to whitelist EXCHANGE and STAKING address on token contract
+- send some BANK to stakingContract ASAP for rewardsCalc to work; and stake TWO wallets at least
+- set staking status as TRUE
+
+**5 BANK LP SETUP**:
+- LP token split [0.5B CULT && 8.4M BANK]
 - Bridge CULT over to ledger wallet (?)
 - Burn LP tokens if possible
 - I'm gonna have to also do LPs for WBANK and WBON..
+- 
+
+**6 12 NFTs DEPLOY**
+- ... utility?
 
 
+# ----- Other Notes -----
 
-
-
-
-
-
-
-
-
-
-
+**TODOOO LATTEERRR**:
 - todo ; use api3 air nodes qrnd on Modulus to make a simple scratcher card dapp that takes an upfront cost and uses probability into make sure that the house wins more
+- 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# DEV NOTES
+**DEV NOTES**
 - For forked testing: forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/elpiyNU3HOchYaeMMpCteXolAFqJYTEi --match-contract <test contract name> -vvv
-- For specific test names: forge test --match-contract <test contract name> -vvv
+- For specific test names: forge test --match-contract <test contract name>- vvv
+- xxxxxxxxxxxxxxx
