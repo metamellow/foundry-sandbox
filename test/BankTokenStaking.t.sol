@@ -229,4 +229,51 @@ contract contractTest is Test {
         console.log("P1 ADDR700 STKD AMT: ", staking.stakedPoolBalances(address(700)));
         console.log("P1 ADDR701 STKD AMT: ", staking.stakedPoolBalances(address(701)));
     }
+
+    // withdraw all staked tokens
+    function test_5stkBANKTest() public{
+        // --- setup stuff ---
+        ERC20(address(token)).transfer(address(700), 50000000000000000000000);
+        ERC20(address(token)).transfer(address(701), 50000000000000000000000);
+        ERC20(address(token)).transfer(address(staking), 69000000000000000000000); //get a little fake tax in there
+        staking.setStakingOpen(true); // turn on/off to test lock
+        
+        vm.stopPrank();
+        vm.startPrank(address(700));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(10000000000000000000000);
+        
+        vm.stopPrank();
+        vm.startPrank(address(701));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(10000000000000000000000);
+
+        console.log("stkBANK name: ", ERC20(staking).name());
+        console.log("stkBANK symbol: ", ERC20(staking).symbol());
+        console.log("stkBANK symbol: ", ERC20(staking).totalSupply());
+        console.log("ADDR700 stkBANK: ", ERC20(staking).balanceOf(address(700)));
+        console.log("ADDR701 stkBANK: ", ERC20(staking).balanceOf(address(701)));
+
+        /*
+        //to test transfer block 
+        staking.transfer(address(700), 5000000000000000000000);
+        console.log("ADDR700 stkBANK: ", ERC20(staking).balanceOf(address(700)));
+        console.log("ADDR701 stkBANK: ", ERC20(staking).balanceOf(address(701)));
+        */
+        
+        // --- start testing stuff ---
+        //vm.warp(696969); (test toggle)
+        
+        vm.stopPrank();
+        vm.startPrank(address(700));
+        staking.withdrawAll();
+
+        vm.stopPrank();
+        vm.startPrank(address(701));
+        staking.withdrawAll();
+
+        console.log("stkBANK symbol: ", ERC20(staking).totalSupply());
+        console.log("ADDR700 stkBANK: ", ERC20(staking).balanceOf(address(700)));
+        console.log("ADDR701 stkBANK: ", ERC20(staking).balanceOf(address(701)));
+    }
 }

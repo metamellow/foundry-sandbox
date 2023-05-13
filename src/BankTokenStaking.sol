@@ -6,9 +6,11 @@ pragma solidity ^0.8.9;
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract bankTokenStaking is Ownable{
+
+contract bankTokenStaking is ERC20, Ownable{
 
     IERC20 public bankTokenAddress;
 
@@ -28,7 +30,8 @@ contract bankTokenStaking is Ownable{
     constructor(
         address _bankTokenAddress, 
         uint256 _timerDuration, 
-        uint256 _rwdRate){
+        uint256 _rwdRate) 
+        ERC20("BANK Staking", "stkBANK"){
         bankTokenAddress = IERC20(_bankTokenAddress);
         timerDuration = _timerDuration;
         rwdRate = _rwdRate;
@@ -64,6 +67,8 @@ contract bankTokenStaking is Ownable{
         stakedPoolBalances[msg.sender] += _amount;
         stakedPoolSupply += _amount;
 
+        _mint(msg.sender, _amount); //stkdBANK
+
         emit DepositEmit(msg.sender, _amount, stakedPoolBalances[msg.sender]);
     }
 
@@ -83,6 +88,8 @@ contract bankTokenStaking is Ownable{
 
         bool success = IERC20(bankTokenAddress).transfer(msg.sender, userBalance);
         require(success == true, "transfer failed!");
+
+        _burn(msg.sender, userBalance); //stkdBANK
 
         emit WithdrawEmit(msg.sender, userBalance);
     }
@@ -136,5 +143,14 @@ contract bankTokenStaking is Ownable{
             (bool success2,) = payable(msg.sender).call{value: gasBalance}("");
             require(success2 == true, "transfer failed!");
         }
+    }
+
+    // stkBANK overrides
+    function transfer(address to, uint256 amount) public override onlyOwner returns (bool success) {
+        return super.transfer(to, amount);
+    }
+
+    function transferFrom(address from, address to, uint256 amount) public override onlyOwner returns (bool success) {
+        return super.transferFrom(from, to, amount);
     }
 }

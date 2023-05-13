@@ -2,12 +2,15 @@
 # ----- Notes to remember on REAL day -----
 
 **0 PRE DEPLOYMENTS**:
-- make a new MetaMask wallet secured by ledger; use this for all deploys and then slowly switch out
-- Send CULT to bridge to this wallet
-- Purchase BON with BONNFT money and bridge that over
+- clean up airdrop list
+    >> https://docs.google.com/spreadsheets/d/1utck9-9MXnCJFf329RT2UoMNhQqgVd2wXyJhJJnl7ZY/
+- use ledger BON_DEPLYR for all things;
+    >> 0x287B6551Ab70E38E4c1de44643340b56739ff306
+- Bridge tokens
+    >> 0x28.... 1B cult for LPs && ~$4k BON for WBON/CULT LP
+    >> 0xc70... my personal BON to bridge (this is freedom fund wallet)
 - set up LP for WBON on Mod [0.5B CULT &&  BONNFT WBON funds]
-- clean up airdrop list https://docs.google.com/spreadsheets/d/1utck9-9MXnCJFf329RT2UoMNhQqgVd2wXyJhJJnl7ZY/
-- Bridge over my own BON that I want to exchange to BANK
+
 
 **1 STAKING DEPLOY**:
 - I should really add a quick mint/burn token for staking receipt
@@ -37,9 +40,6 @@
 
 **5 BANK LP SETUP**:
 - LP token split [0.5B CULT && 8.4M BANK]
-- Bridge CULT over to ledger wallet (?)
-- Burn LP tokens if possible
-- I'm gonna have to also do LPs for WBANK and WBON..
 - 
 
 **6 12 NFTs DEPLOY**
@@ -50,7 +50,10 @@
 
 **TODOOO LATTEERRR**:
 - todo ; use api3 air nodes qrnd on Modulus to make a simple scratcher card dapp that takes an upfront cost and uses probability into make sure that the house wins more
-- 
+- WBANK LP on Polygon
+
+
+
 
 **DEV NOTES**
 - For forked testing: forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/elpiyNU3HOchYaeMMpCteXolAFqJYTEi --match-contract <test contract name> -vvv
