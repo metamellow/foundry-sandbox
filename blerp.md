@@ -10,10 +10,11 @@
     >> 0x28.... 1B cult for LPs && ~$4k BON for WBON/CULT LP
     >> 0xc70... my personal BON to bridge (this is freedom fund wallet)
 - set up LP for WBON on Mod [0.5B CULT &&  BONNFT WBON funds]
+    >> https://designingtokenomics.com/the-complete-tokenomics-course-primer/articles/liquidity-matters-how-to-setup-liquidity-for-a-token
+    >> https://support.uniswap.org/hc/en-us/articles/7423194619661-How-to-provide-liquidity-on-Uniswap-V3
 
 
 **1 STAKING DEPLOY**:
-- I should really add a quick mint/burn token for staking receipt
 - use WBON as address temporarily
 - var: 604800 (7 days)
 - var: 50 (5% of pool)
