@@ -1,5 +1,5 @@
 
-- make a WBANK to BON exchange on Polygon; bridge the BON over and stock the contract; but on the Polygon bridge, add a 4% tax that burns and sends back to Modulus BANK staking
+- make a WBANK to BON exchange on Polygon; bridge the BON over and stock the contract; but on the Polygon bridge, add a 4% tax that burns and sends back to Modulus BANK staking; label BONtoBANK as taxfree and then label BANKtoBON as 4%
 - also, add someway to easily move people from old staking to new staking or at least change alter what they need to deposit and what they get in return etc
 - 
 
