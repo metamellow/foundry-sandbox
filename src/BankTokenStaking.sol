@@ -5,7 +5,7 @@ pragma solidity ^0.8.9;
 /* -.-.-.-. BANK OF NOWHERE $BANK STAKING POOL -.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol"; // can delete?
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -146,6 +146,8 @@ contract bankTokenStaking is ERC20, Ownable{
     }
 
     // stkBANK overrides
+    // can delete?
+    /*
     function transfer(address to, uint256 amount) public override onlyOwner returns (bool success) {
         return super.transfer(to, amount);
     }
@@ -153,4 +155,11 @@ contract bankTokenStaking is ERC20, Ownable{
     function transferFrom(address from, address to, uint256 amount) public override onlyOwner returns (bool success) {
         return super.transferFrom(from, to, amount);
     }
+    */
+
+    
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override onlyOwner {
+        return super._beforeTokenTransfer(from, to, amount);
+    }
+    
 }
