@@ -5,7 +5,8 @@ pragma solidity ^0.8.9;
 /* -.-.-.-. BANK OF NOWHERE $BANK STAKING POOL -.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol"; // can delete?
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+// ^^^^^^^^^^^^^ how can I delete this?????????
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -67,7 +68,7 @@ contract bankTokenStaking is ERC20, Ownable{
         stakedPoolBalances[msg.sender] += _amount;
         stakedPoolSupply += _amount;
 
-        _mint(msg.sender, _amount); //stkdBANK
+        _mint(msg.sender, _amount); //stkBANK
 
         emit DepositEmit(msg.sender, _amount, stakedPoolBalances[msg.sender]);
     }
@@ -89,7 +90,7 @@ contract bankTokenStaking is ERC20, Ownable{
         bool success = IERC20(bankTokenAddress).transfer(msg.sender, userBalance);
         require(success == true, "transfer failed!");
 
-        _burn(msg.sender, userBalance); //stkdBANK
+        _burn(msg.sender, userBalance); //stkBANK
 
         emit WithdrawEmit(msg.sender, userBalance);
     }
@@ -146,8 +147,6 @@ contract bankTokenStaking is ERC20, Ownable{
     }
 
     // stkBANK overrides
-    // can delete?
-    /*
     function transfer(address to, uint256 amount) public override onlyOwner returns (bool success) {
         return super.transfer(to, amount);
     }
@@ -155,11 +154,13 @@ contract bankTokenStaking is ERC20, Ownable{
     function transferFrom(address from, address to, uint256 amount) public override onlyOwner returns (bool success) {
         return super.transferFrom(from, to, amount);
     }
-    */
 
-    
+    // ^^^^^^^^^^^^^^^^^^^can delete?
+    // -------------------why doesnt this work?
+    /*
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal override onlyOwner {
         return super._beforeTokenTransfer(from, to, amount);
     }
+    */
     
 }
