@@ -1,6 +1,5 @@
 
 # ----- Notes to work on BEFORE real day -----
-- Create a set of images for BANK NFTs airdrop
 - write contracts and find airdrop list; 
     >> - art, autocrat, vitalik, s0c, merp, chad, xxx
     >> 1. Socrates	469-399 BC	The father of Western philosophy, known for his method of inquiry called the Socratic method.
@@ -67,11 +66,11 @@
 - Use 2081376000 (66 years) for exchange timer
 - 
 
-**7 12 NFTs DEPLOY**
-- contracts, art, ipfs, contracts
-
-**8 Update BONWORLD website**
+**7 Update BONWORLD website**
 - xx
+
+**8 13 NFTs DEPLOY**
+- contracts, art, ipfs, contracts
 
 
 # ----- Other Notes -----
