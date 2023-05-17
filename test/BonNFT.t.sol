@@ -19,10 +19,20 @@ contract contractTest is Test {
         // wallets setup
         address user = address(69);
         vm.startPrank(user);
-        address[] memory testAddresses = new address[](3);
-            testAddresses[0] = address(70);
-            testAddresses[1] = address(71);
-            testAddresses[2] = address(72);
+        address[] memory testAddresses = new address[](13);
+            testAddresses[0] = address(1);
+            testAddresses[1] = address(2);
+            testAddresses[2] = address(3);
+            testAddresses[3] = address(4);
+            testAddresses[4] = address(5);
+            testAddresses[5] = address(6);
+            testAddresses[6] = address(7);
+            testAddresses[7] = address(8);
+            testAddresses[8] = address(9);
+            testAddresses[9] = address(10);
+            testAddresses[10] = address(11);
+            testAddresses[11] = address(12);
+            testAddresses[12] = address(13);
 
         // token setup
         vm.deal(user, 1_000_000 ether);
