@@ -1,10 +1,5 @@
 
 # ----- Notes to work on BEFORE real day -----
-- make a WBANK to BON exchange on Polygon;
-    >> - bridge the BON over and stock the contract
-    >> - on the Polygon bridge, add a 4% (60stk/30brn/10dev) tax that burns and sends back to Modulus BANK staking
-    >> - label BONtoBANK as taxfree and then label BANKtoBON as 4%
-    >> - going to need to make a new graphic; can use the idea of yin and yang;
 - Create a set of images for BANK NFTs airdrop
 - write contracts and find airdrop list; 
     >> - art, autocrat, vitalik, s0c, merp, chad, xxx
@@ -70,9 +65,13 @@
 
 **6 WBANK EXCHANGE DEPLOY**:
 - Use 2081376000 (66 years) for exchange timer
+- 
 
 **7 12 NFTs DEPLOY**
 - contracts, art, ipfs, contracts
+
+**8 Update BONWORLD website**
+- xx
 
 
 # ----- Other Notes -----
