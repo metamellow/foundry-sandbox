@@ -76,7 +76,7 @@
 # ----- Other Notes -----
 
 **TODOOO LATTEERRR**:
-- todo ; use api3 air nodes qrnd on Modulus to make a simple scratcher card dapp that takes an upfront cost and uses probability into make sure that the house wins more----- or I can make a bet on the weather dApp that uses one source for distant weathwr predictions and then pay out based on the bet
+- todo ; use api3 air nodes qrnd on Modulus to make a simple scratcher card dapp that takes an upfront cost and uses probability into make sure that the house wins more----- or I can make a bet on the weather dApp that uses one source for distant weathwr predictions and then pay out based on the bet, people can bet to double their money and if it exists ij the pool then its sent but if they lose it just staysijn the pool AND BON makes money from a 4% tax on on and out
 - WBANK LP on Polygon
 
 
