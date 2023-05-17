@@ -1,11 +1,18 @@
 
-- make a WBANK to BON exchange on Polygon; bridge the BON over and stock the contract; but on the Polygon bridge, add a 4% tax that burns and sends back to Modulus BANK staking; label BONtoBANK as taxfree and then label BANKtoBON as 4%; going to need to make a new graphic; can use the idea of yin and yang;
-- also, add secondary third etc staking pools that work in conjunction with the current system 
-
-
-
-
-
+# ----- Notes to work on BEFORE real day -----
+- make a WBANK to BON exchange on Polygon;
+    >> - bridge the BON over and stock the contract
+    >> - on the Polygon bridge, add a 4% (60stk/30brn/10dev) tax that burns and sends back to Modulus BANK staking
+    >> - label BONtoBANK as taxfree and then label BANKtoBON as 4%
+    >> - going to need to make a new graphic; can use the idea of yin and yang;
+- Create a set of images for BANK NFTs airdrop
+    >> - write contracts and find airdrop list; art, autocrat, vitalik, s0c, merp, chad, xxx
+    >> - 
+- how to set up LP for WBON on Mod [0.5B CULT &&  BONNFT WBON funds]
+    >> - https://designingtokenomics.com/the-complete-tokenomics-course-primer/articles/liquidity-matters-how-to-setup-liquidity-for-a-token
+    >> - https://support.uniswap.org/hc/en-us/articles/7423194619661-How-to-provide-liquidity-on-Uniswap-V3
+- xxx
+    >> - xxx
 
 
 # ----- Notes to remember on REAL day -----
@@ -18,17 +25,13 @@
 - Bridge tokens
     >> 0x28.... 1B cult for LPs && ~$4k BON for WBON/CULT LP
     >> 0xc70... my personal BON to bridge (this is freedom fund wallet)
-- set up LP for WBON on Mod [0.5B CULT &&  BONNFT WBON funds]
-    >> https://designingtokenomics.com/the-complete-tokenomics-course-primer/articles/liquidity-matters-how-to-setup-liquidity-for-a-token
-    >> https://support.uniswap.org/hc/en-us/articles/7423194619661-How-to-provide-liquidity-on-Uniswap-V3
-
 
 **1 STAKING DEPLOY**:
 - use WBON as address temporarily
 - var: 604800 (7 days)
 - var: 50 (5% of pool)
 
-**2 EXCHANGE DEPLOY**:
+**2 WBON EXCHANGE DEPLOY**:
 - Use WBON address and WBON address for now, and switch BANK later
 - Use 2629746 (1 month) for exchange timer
 - 
@@ -52,8 +55,11 @@
 - LP token split [0.5B CULT && 8.4M BANK]
 - 
 
-**6 12 NFTs DEPLOY**
-- ... utility?
+**6 WBANK EXCHANGE DEPLOY**:
+- 
+
+**7 12 NFTs DEPLOY**
+- contracts, art, ipfs, contracts
 
 
 # ----- Other Notes -----
