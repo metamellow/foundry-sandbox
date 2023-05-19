@@ -34,6 +34,7 @@
     >> 0xc70... my personal BON to bridge (this is freedom fund wallet)
 
 **1 STAKING DEPLOY**:
+---------- add some way to drain all funds and then move them to the v2 staking and then use the reciept as a way to keep the ledger information and allow them to withdraw
 - use WBON as address temporarily
 - var: 604800 (7 days)
 - var: 50 (5% of pool)
