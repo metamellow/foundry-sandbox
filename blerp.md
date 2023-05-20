@@ -27,6 +27,7 @@
 **0 PRE DEPLOYMENTS**:
 - clean up airdrop list
     >> https://docs.google.com/spreadsheets/d/1utck9-9MXnCJFf329RT2UoMNhQqgVd2wXyJhJJnl7ZY/
+- add the semi anons to BANK adlist;
 - use ledger BON_DEPLYR for all things;
     >> 0x287B6551Ab70E38E4c1de44643340b56739ff306
 - Bridge tokens
