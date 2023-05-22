@@ -1,3 +1,19 @@
+/*
+
+- set a low hardcap for the ILO bc all unsold tokens get burned
+- 
+
+
+
+
+
+
+
+
+
+*/
+
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
