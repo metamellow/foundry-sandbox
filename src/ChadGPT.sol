@@ -1,7 +1,7 @@
 /*
 
 - set a low hardcap for the ILO bc all unsold tokens get burned
-- 
+- add BONtreasury to the airdrop; making 6
 
 
 
