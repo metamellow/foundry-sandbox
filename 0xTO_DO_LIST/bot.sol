@@ -1,3 +1,19 @@
+/*
+"I want to make a 'front runner' bot in solidity, sometimes also known as a 'sandwich' bot; 
+one that scans the most recent batch of pending transactions in the mempool (polygon), 
+finds a vulnerable transaction (one with lower than average gas and higher than average slippage), 
+and then automatically places two transactions to profit from it (one before the vulnerable transaction and one after).
+
+Some other note:
+- add a check to make sure that the transaction is actually vulnerable before it places a transaction to profit from it
+- add a way to stop the bot if it is losing money
+- please double check that you have finished the entire code snippet before sending it to me (because in the past you have sent half complete code).
+- The main goal is to increase the amount of ether inside the bot contract
+
+Can you write this code for me? (solidity preferred)"
+*/
+
+
 // From Bard:
 /*
     pragma solidity ^0.8.0;
