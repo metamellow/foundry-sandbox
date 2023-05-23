@@ -1,5 +1,5 @@
 - airdrop the BON portion to BONNFT holders the day the presale ends
-- make the stakers site simple
+- make the stakers site simple; put in take out every 420 hours plus interest; low payback but exponential like current
 
 
 
