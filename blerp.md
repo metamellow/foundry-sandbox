@@ -1,3 +1,9 @@
+- airdrop the BON portion to BONNFT holders the day the presale ends
+- make the stakers site simple
+
+
+
+
 
 # ----- Notes to work on BEFORE real day -----
 - how to set up LP for WBON on Mod [0.5B CULT &&  BONNFT WBON funds]
