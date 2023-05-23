@@ -1,15 +1,6 @@
 /*
 
 - set a low hardcap for the ILO bc all unsold tokens get burned
-- add BONtreasury to the airdrop; making 6
-
-
-
-
-
-
-
-
 
 */
 
@@ -29,13 +20,14 @@ contract ChadGPT is Ownable, ERC20, ERC20Burnable{
     mapping(address => bool) public whitelistedAddress;
 
     event DevsAddressUpdated(address newDevs);
+    event TaxUpdated(uint newTax);
     event WhitelistAddressUpdated(address newWhitelist);
     
     constructor(
         string memory _name, // ChadGPT Alpha Meme
         string memory _symbol, // ChadGPT
         address _devs, // dev multisig
-        uint _tax, // dev multisig
+        uint _tax, // 42
         address[] memory _airdropAddresses
         ) ERC20(_name, _symbol) {
             _mint(msg.sender, (402_762_762_765) * 10 ** decimals()); // 95.8% of total supply
@@ -58,6 +50,12 @@ contract ChadGPT is Ownable, ERC20, ERC20Burnable{
         devs = _dev;
         whitelistedAddress[_dev] = true;
         emit DevsAddressUpdated(_dev);
+    }
+
+    function setTax(uint _tax) external onlyOwner{
+        require(_tax != 0, "ERROR: Tax cannot be 0");
+        tax = _tax;
+        emit TaxUpdated(_tax);
     }
 
     function setWhitelistAddress(address _whitelist) external onlyOwner{
