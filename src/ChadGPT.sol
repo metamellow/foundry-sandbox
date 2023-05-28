@@ -1,12 +1,9 @@
-/*
-
-- set a low hardcap for the ILO bc all unsold tokens get burned
-
-*/
-
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
+
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
+/* -.-.-.-.-.-.- $CHADGPT ALPHA MEME TOKEN -.-.-.-.-.-. */
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
