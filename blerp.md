@@ -47,7 +47,7 @@
 
 **4 FINALIZATION**:
 - need to send 10.5m BANK to exchange contract; then exchange MY WBON
-- need to whitelist EXCHANGE and STAKING and a TRADING wallet address on token contract
+- need to whitelist EXCHANGE and (STAKING?) and a TRADING wallet address on token contract
 - send some BANK to stakingContract ASAP for rewardsCalc to work; and stake TWO wallets at least
 - set staking status as TRUE
 

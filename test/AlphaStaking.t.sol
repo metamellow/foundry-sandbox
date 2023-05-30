@@ -31,21 +31,29 @@ contract contractTest is Test {
 
         staking = new alphaStaking(
             address(token),
-            248400,
-            42
+            248400, //69 hours
+            42 //percent of pool
         );
 
-        // token.setDevAddress(address(42069));
-        // token.setWhitelistAddress(address(staking));
-        // add some seed tokens?
+        // --- NEED TODOs AFTER DEPLOY ---
+        token.transfer(address(staking), 1_000_000);
     }
 
-    function testFail_0xSetUpLogs() public{
+    function runConsolLogs() public view{
+        
+        console.log("_____________________TOKENS_INFOM_____________________");
         console.log("TOKN ADDR: ", address(token));
-        console.log("TOKN SUPL: ", ERC20(token).totalSupply());
-
+        console.log("TOKN TSUP: ", ERC20(token).totalSupply());
         console.log("STKG ADDR: ", address(staking));
         console.log("STKG TBAL: ", ERC20(token).balanceOf(address(staking)));
 
+        console.log("_____________________WALLET_INFOM_____________________");
+        console.log("OWRW TBAL: ", token.balanceOf(address(69)));
+        console.log("TAXW TBAL: ", token.balanceOf(address(420)));
+    }
+    
+    function testFail_0xSetUpLogs() public{
+        runConsolLogs();
         assertFalse(0 == 0);
     }
+}
