@@ -1,7 +1,7 @@
 
 // - need to fix this so that it can handle Tax
 // - add an onlyOwners switch that deducts a percentage of the reward and burns it
-// 
+// - also launch this for BON to make burns
 
 
 
