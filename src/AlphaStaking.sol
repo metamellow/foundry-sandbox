@@ -1,7 +1,7 @@
 
 // - need to fix this so that it can handle Tax; read Bal before and after transfer and make that the logged value
 // - add an onlyOwners switch that deducts a percentage of the reward and burns it; might want to combine the switch AND rate into one
-// - also launch this for BON to make burns
+// - also launch this for BON to make burns; gonna need to do a 'burnable' check somehow BC some are some arent
 
 
 
