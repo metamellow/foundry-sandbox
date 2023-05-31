@@ -36,7 +36,7 @@ contract contractTest is Test {
         );
 
         // --- NEED TODOs AFTER DEPLOY ---
-        token.transfer(address(staking), 1_000_000); // put some tokens in the pool
+        token.transfer(address(staking), 30_000_000_000 ether); // put some tokens in the pool
         staking.setStakingOpen(true); // open the pool for deposits
     }
 
@@ -46,7 +46,7 @@ contract contractTest is Test {
         console.log("TOKN TSUP: ", ERC20(token).totalSupply());
         console.log("STKG ADDR: ", address(staking));
         console.log("STKG TBAL: ", ERC20(token).balanceOf(address(staking)));
-        console.log("STKG SKPL: ", ERC20(token).stakedPoolSupply());
+        console.log("STKG SKPL: ", staking.stakedPoolSupply());
 
         console.log("_____________________WALLET_INFOM_____________________");
         console.log("OWRW TBAL: ", token.balanceOf(address(69)));
@@ -57,12 +57,13 @@ contract contractTest is Test {
     }
 
     function testFail_0xSetUpLogs() public{
-        runConsolLogs();
+        reuseable_ConsolLogs();
         assertFalse(0 == 0);
     }
     
 
     function reuseable_depositToStaking() public{
+        console.log("_____________________DEPST_INFOM_____________________");
         vm.stopPrank();
         vm.startPrank(address(10001));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
@@ -83,12 +84,11 @@ contract contractTest is Test {
         staking.depositToStaking(1_000_000_000 ether);
         console.log("AD3W RWRD: ", staking.calculateRewards(address(10003)));
         console.log("AD3W TIME: ", staking.calculateTime(address(10003)));
-
-        console.log("STKG SKPL: ", ERC20(token).stakedPoolSupply());
     }
 
     function test_1_depositToStaking() public{
         reuseable_depositToStaking();
+        reuseable_ConsolLogs();
     }
 
 }
