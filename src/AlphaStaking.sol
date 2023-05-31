@@ -38,7 +38,7 @@ contract alphaStaking is ERC20, Ownable{
         address _tokenAddr, 
         uint256 _timerDuration, 
         uint256 _rwdRate) 
-        ERC20("Alpha Staking", "stkChad"){
+        ERC20("Alpha Staking", "aChad"){
         tokenAddr = IERC20(_tokenAddr);
         timerDuration = _timerDuration;
         rwdRate = _rwdRate;
@@ -77,7 +77,7 @@ contract alphaStaking is ERC20, Ownable{
         stakedPoolBalances[msg.sender] += totalStaked;
         stakedPoolSupply += totalStaked;
 
-        _mint(msg.sender, totalStaked); //stkChad
+        _mint(msg.sender, totalStaked); //aChad
 
         emit DepositEmit(msg.sender, totalStaked, stakedPoolBalances[msg.sender]);
     }
@@ -99,7 +99,7 @@ contract alphaStaking is ERC20, Ownable{
         bool success = IERC20(tokenAddr).transfer(msg.sender, userBalance);
         require(success == true, "transfer failed!");
 
-        _burn(msg.sender, userBalance); //stkChad
+        _burn(msg.sender, userBalance); //aChad
 
         emit WithdrawEmit(msg.sender, userBalance);
     }
@@ -155,7 +155,7 @@ contract alphaStaking is ERC20, Ownable{
         }
     }
 
-    // stkChad overrides
+    // aChad overrides
     function transfer(address to, uint256 amount) public override onlyOwner returns (bool success) {
         return super.transfer(to, amount);
     }
