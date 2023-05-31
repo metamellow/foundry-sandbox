@@ -1,10 +1,3 @@
-- airdrop the BON portion to BONNFT holders the day the presale ends
-- make the stakers site simple; put in take out every 420 hours plus interest; low payback but exponential like current
-
-
-
-
-
 # ----- Notes to work on BEFORE real day -----
 - how to set up LP for WBON on Mod [0.5B CULT &&  BONNFT WBON funds]
     >> - https://designingtokenomics.com/the-complete-tokenomics-course-primer/articles/liquidity-matters-how-to-setup-liquidity-for-a-token

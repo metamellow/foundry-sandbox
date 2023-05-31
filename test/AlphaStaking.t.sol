@@ -40,13 +40,13 @@ contract contractTest is Test {
         staking.setStakingOpen(true); // open the pool for deposits
     }
 
-    function runConsolLogs() public view{
-        
+    function reuseable_ConsolLogs() public view{
         console.log("_____________________TOKENS_INFOM_____________________");
         console.log("TOKN ADDR: ", address(token));
         console.log("TOKN TSUP: ", ERC20(token).totalSupply());
         console.log("STKG ADDR: ", address(staking));
         console.log("STKG TBAL: ", ERC20(token).balanceOf(address(staking)));
+        console.log("STKG SKPL: ", ERC20(token).stakedPoolSupply());
 
         console.log("_____________________WALLET_INFOM_____________________");
         console.log("OWRW TBAL: ", token.balanceOf(address(69)));
@@ -55,29 +55,40 @@ contract contractTest is Test {
         console.log("AD2W TBAL: ", token.balanceOf(address(10002)));
         console.log("AD3W TBAL: ", token.balanceOf(address(10003)));
     }
-    
+
     function testFail_0xSetUpLogs() public{
         runConsolLogs();
         assertFalse(0 == 0);
     }
+    
 
-    function test_1_depositToStaking() public{
-        staking.setStakingOpen(true);
-
+    function reuseable_depositToStaking() public{
         vm.stopPrank();
         vm.startPrank(address(10001));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
         staking.depositToStaking(1_000_000_000 ether);
-        
+        console.log("AD1W RWRD: ", staking.calculateRewards(address(10001)));
+        console.log("AD1W TIME: ", staking.calculateTime(address(10001)));
+
         vm.stopPrank();
         vm.startPrank(address(10002));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
         staking.depositToStaking(1_000_000_000 ether);
+        console.log("AD2W RWRD: ", staking.calculateRewards(address(10002)));
+        console.log("AD2W TIME: ", staking.calculateTime(address(10002)));
 
         vm.stopPrank();
         vm.startPrank(address(10003));
         ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
         staking.depositToStaking(1_000_000_000 ether);
+        console.log("AD3W RWRD: ", staking.calculateRewards(address(10003)));
+        console.log("AD3W TIME: ", staking.calculateTime(address(10003)));
 
+        console.log("STKG SKPL: ", ERC20(token).stakedPoolSupply());
     }
+
+    function test_1_depositToStaking() public{
+        reuseable_depositToStaking();
+    }
+
 }
