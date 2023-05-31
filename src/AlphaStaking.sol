@@ -68,18 +68,20 @@ contract alphaStaking is ERC20, Ownable{
         require(stakingOpen == true, "Staking pool is closed");
         require(_amount > 0, "Deposit must be > 0");
         
+        uint before = IERC20(tokenAddr).balOf(msg.sender);
         // all users must APPROVE staking contract to use erc20 before v-this-v can work
         bool success = IERC20(tokenAddr).transferFrom(msg.sender, address(this), _amount);
         require(success == true, "transfer failed!");
+        uint totalStaked = before - (IERC20(tokenAddr).balOf(msg.sender));
         
         isStaked[msg.sender] = true;
         withdrawTimer[msg.sender] = block.timestamp;
-        stakedPoolBalances[msg.sender] += _amount;
-        stakedPoolSupply += _amount;
+        stakedPoolBalances[msg.sender] += totalStaked;
+        stakedPoolSupply += totalStaked;
 
-        _mint(msg.sender, _amount); //stkChad
+        _mint(msg.sender, totalStaked); //stkChad
 
-        emit DepositEmit(msg.sender, _amount, stakedPoolBalances[msg.sender]);
+        emit DepositEmit(msg.sender, totalStaked, stakedPoolBalances[msg.sender]);
     }
 
     function withdrawAll() public{

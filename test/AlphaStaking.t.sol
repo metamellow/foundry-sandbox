@@ -36,7 +36,8 @@ contract contractTest is Test {
         );
 
         // --- NEED TODOs AFTER DEPLOY ---
-        token.transfer(address(staking), 1_000_000);
+        token.transfer(address(staking), 1_000_000); // put some tokens in the pool
+        staking.setStakingOpen(true); // open the pool for deposits
     }
 
     function runConsolLogs() public view{
@@ -50,10 +51,33 @@ contract contractTest is Test {
         console.log("_____________________WALLET_INFOM_____________________");
         console.log("OWRW TBAL: ", token.balanceOf(address(69)));
         console.log("TAXW TBAL: ", token.balanceOf(address(420)));
+        console.log("AD1W TBAL: ", token.balanceOf(address(10001)));
+        console.log("AD2W TBAL: ", token.balanceOf(address(10002)));
+        console.log("AD3W TBAL: ", token.balanceOf(address(10003)));
     }
     
     function testFail_0xSetUpLogs() public{
         runConsolLogs();
         assertFalse(0 == 0);
+    }
+
+    function test_1_depositToStaking() public{
+        staking.setStakingOpen(true);
+
+        vm.stopPrank();
+        vm.startPrank(address(10001));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(1_000_000_000 ether);
+        
+        vm.stopPrank();
+        vm.startPrank(address(10002));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(1_000_000_000 ether);
+
+        vm.stopPrank();
+        vm.startPrank(address(10003));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(1_000_000_000 ether);
+
     }
 }
