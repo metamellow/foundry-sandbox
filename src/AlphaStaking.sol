@@ -1,6 +1,11 @@
-// - add an onlyOwners switch that deducts a percentage of the reward and burns it; might want to combine the switch AND rate into one; it should be put in the rewards giving function; just 0.5% or 50/10000; should be called the brnRate
-// - also launch this for BON to make burns; gonna need to do a 'burnable' check somehow BC some are some arent
-
+/*
+- add an onlyOwners switch that deducts a percentage of the reward and burns it; 
+    might want to combine the switch AND rate into one; 
+    it should be put in the rewards giving function; 
+    just 0.5% or 50/10000; should be called the brnRate
+- also launch this for BON to make burns; 
+    gonna need to do a 'burnable' check somehow BC some are some arent
+*/ 
 
 
 
@@ -9,7 +14,7 @@
 pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.-. $CHADGPT ALPHA STAKING POOL -.-.-.-.-.-. */
+/* -.-.-.-.-.-. $CHADGPT ALPHA STAKING POOL .-.-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -66,11 +71,11 @@ contract alphaStaking is ERC20, Ownable{
         require(stakingOpen == true, "Staking pool is closed");
         require(_amount > 0, "Deposit must be > 0");
         
-        uint before = IERC20(tokenAddr).balanceOf(msg.sender);
+        uint before = IERC20(tokenAddr).balanceOf(address(this));
         // all users must APPROVE staking contract to use erc20 before v-this-v can work
         bool success = IERC20(tokenAddr).transferFrom(msg.sender, address(this), _amount);
         require(success == true, "transfer failed!");
-        uint totalStaked = before - (IERC20(tokenAddr).balanceOf(msg.sender));
+        uint totalStaked = (IERC20(tokenAddr).balanceOf(address(this))) - before;
         
         isStaked[msg.sender] = true;
         withdrawTimer[msg.sender] = block.timestamp;

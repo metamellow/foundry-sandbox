@@ -91,4 +91,35 @@ contract contractTest is Test {
         reuseable_ConsolLogs();
     }
 
+    function reusable_withdrawAllfrom3ADwallets() public{
+        console.log("_____________________WTALL_INFOM_____________________");
+        vm.warp(248401);
+        vm.stopPrank();
+        vm.startPrank(address(10001));
+        staking.depositToStaking(1_000_000_000 ether);
+        console.log("AD1W RWRD: ", staking.calculateRewards(address(10001)));
+        console.log("AD1W TIME: ", staking.calculateTime(address(10001)));
+
+        vm.warp(248402);
+        vm.stopPrank();
+        vm.startPrank(address(10002));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(1_000_000_000 ether);
+        console.log("AD2W RWRD: ", staking.calculateRewards(address(10002)));
+        console.log("AD2W TIME: ", staking.calculateTime(address(10002)));
+
+        vm.warp(248403);
+        vm.stopPrank();
+        vm.startPrank(address(10003));
+        ERC20(address(token)).approve(address(staking), 1_000_000_000 ether);
+        staking.depositToStaking(1_000_000_000 ether);
+        console.log("AD3W RWRD: ", staking.calculateRewards(address(10003)));
+        console.log("AD3W TIME: ", staking.calculateTime(address(10003)));
+    }
+    
+    function test_2_withdrawAll() public{
+        reusable_withdrawAllfrom3ADwallets();
+        reuseable_ConsolLogs();
+    }
+
 }
