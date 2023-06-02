@@ -1,26 +1,4 @@
-/*
-- add an onlyOwners switch that deducts a percentage of the reward and burns it; 
-    might want to combine the switch AND rate into one; 
-    it should be put in the rewards giving function; 
-    just 0.5% or 50/10000; should be called the brnRate
-- also launch this for BON to make burns; 
-    gonna need to do a 'burnable' check somehow BC some are some arent
-- try this:
-    ERC20Burnable token
-    As a variable 
-    or 
-    address token;
-    ......
-    try ERC20Burnable(token).burn(amount) {
-    } catch {
-        token.transfer(address(0), amount)
-    }
-*/ 
-
-
-
-
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GNU
 pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
@@ -29,17 +7,19 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
 
 contract alphaStaking is ERC20, Ownable{
 
-    IERC20 public tokenAddr; // 0x6632d8c49234a6783b45cdc5fc9355a47124e187 (ChadGPT)
+    address public tokenAddr; // 0x6632d8c49234a6783b45cdc5fc9355a47124e187 (ChadGPT)
 
+    uint256 public stakedPoolSupply;
     uint256 public timerDuration; // 248400 (69 hours)
     uint256 public rwdRate; // 420 (4.2% of pool)
-    uint256 public stakedPoolSupply;
+    uint256 public brnRate; // 50 (0.5% of reward)
     bool public stakingOpen;
+    bool public burnOn;
 
     mapping(address => bool) public isStaked;
     mapping(address => uint256) public withdrawTimer;
@@ -52,12 +32,15 @@ contract alphaStaking is ERC20, Ownable{
     constructor(
         address _tokenAddr, 
         uint256 _timerDuration, 
-        uint256 _rwdRate) 
+        uint256 _rwdRate,
+        uint256 _brnRate) 
         ERC20("Alpha Staking", "aChad"){
-        tokenAddr = IERC20(_tokenAddr);
+        tokenAddr = _tokenAddr;
         timerDuration = _timerDuration;
         rwdRate = _rwdRate;
+        brnRate = _brnRate;
         stakingOpen = false;
+        burnOn = true;
     }
     
     function calculateRewards(address _user) public view returns (uint256) {
@@ -129,14 +112,27 @@ contract alphaStaking is ERC20, Ownable{
         uint256 userBalance = stakedPoolBalances[msg.sender];
         require(userBalance > 0, 'insufficient balance');
 
-        uint256 userReward = calculateRewards(msg.sender);
-        require(userReward > 0, 'insufficient reward');
+        uint256 rewards = calculateRewards(msg.sender);
+        require(rewards > 0, 'insufficient reward');
         
         withdrawTimer[msg.sender] = block.timestamp;
-        bool success = IERC20(tokenAddr).transfer(msg.sender, userReward);
-        require(success == true, "transfer failed!");
 
-        emit RewardsEmit(msg.sender, userBalance, userReward);
+        if(burnOn == true){
+            uint burnAmount = rewards * brnRate / 10000;
+            try ERC20Burnable(tokenAddr).burn(burnAmount){}
+            catch {IERC20(tokenAddr).transfer(address(0), burnAmount);}
+
+            uint userReward = rewards - (burnAmount);
+            bool success = IERC20(tokenAddr).transfer(msg.sender, userReward);
+            require(success == true, "transfer failed!");
+
+            emit RewardsEmit(msg.sender, userBalance, userReward);
+        } else {
+            bool success = IERC20(tokenAddr).transfer(msg.sender, rewards);
+            require(success == true, "transfer failed!");
+
+            emit RewardsEmit(msg.sender, userBalance, rewards);
+        }
     }
 
     //onlyOwners
@@ -145,16 +141,25 @@ contract alphaStaking is ERC20, Ownable{
     }
 
     function setRate(uint256 _rwdRate) external onlyOwner {
-        require(_rwdRate > 0 && _rwdRate < 1000, "Rate must be > 0 and < 1000");
+        require(_rwdRate > 0 && _rwdRate < 10000, "Must be > 0 and < 10000");
         rwdRate = _rwdRate;
     }
 
+    function setBurn(uint256 _brnRate) external onlyOwner {
+        require(_brnRate > 0 && _brnRate < 10000, "Must be > 0 and < 10000");
+        brnRate = _brnRate;
+    }
+
     function setTokenAddress(address _newTokenAddress) external onlyOwner {
-        tokenAddr = IERC20(_newTokenAddress);
+        tokenAddr = _newTokenAddress;
     } 
 
     function setStakingOpen(bool _trueOrFalse) external onlyOwner {
         stakingOpen =  _trueOrFalse;
+    }
+
+    function setBurnOn(bool _trueOrFalse) external onlyOwner {
+        burnOn =  _trueOrFalse;
     } 
     
     function closeRewardsPool() external payable onlyOwner {

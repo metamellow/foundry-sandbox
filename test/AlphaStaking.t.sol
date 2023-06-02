@@ -32,7 +32,8 @@ contract contractTest is Test {
         staking = new alphaStaking(
             address(token),
             248400, //69 hours
-            42 //percent of pool
+            420, //percent of pool
+            50 //burn rate
         );
 
         // --- NEED TODOs AFTER DEPLOY ---
