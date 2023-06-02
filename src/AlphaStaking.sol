@@ -5,6 +5,16 @@
     just 0.5% or 50/10000; should be called the brnRate
 - also launch this for BON to make burns; 
     gonna need to do a 'burnable' check somehow BC some are some arent
+- try this:
+    ERC20Burnable token
+    As a variable 
+    or 
+    address token;
+    ......
+    try ERC20Burnable(token).burn(amount) {
+    } catch {
+        token.transfer(address(0), amount)
+    }
 */ 
 
 
