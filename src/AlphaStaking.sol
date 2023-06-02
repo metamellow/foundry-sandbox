@@ -17,8 +17,9 @@ contract alphaStaking is ERC20, Ownable{
     uint256 public timerDuration; // 248400 (69 hours)
     uint256 public rwdRate; // 420 (4.2% of pool)
     uint256 public brnRate; // 50 (0.5% of reward)
-    bool public stakingOpen; // true (can start staking)
     bool public burnOn; // true (does burn tokens)
+    bool public stakingOpen; // true (can start staking)
+
 
     mapping(address => bool) public isStaked;
     mapping(address => uint256) public withdrawTimer;
@@ -33,15 +34,15 @@ contract alphaStaking is ERC20, Ownable{
         uint256 _timerDuration, 
         uint256 _rwdRate,
         uint256 _brnRate, 
-        bool _stakingOpen,
-        bool _burnOn) 
+        bool _burnOn,
+        bool _stakingOpen) 
         ERC20("Alpha Staking", "aChad"){
         tokenAddr = _tokenAddr;
         timerDuration = _timerDuration;
         rwdRate = _rwdRate;
         brnRate = _brnRate;
-        stakingOpen = _stakingOpen;
         burnOn = _burnOn;
+        stakingOpen = _stakingOpen;
     }
     
     function calculateRewards(address _user) public view returns (uint256) {

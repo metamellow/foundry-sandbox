@@ -34,8 +34,8 @@ contract contractTest is Test {
             248400, //69 hours
             420, //percent of pool
             50, //burn rate
-            true, //pool open
-            true // burn on
+            true, //burn on
+            true //pool open
         );
 
         // --- NEED TODOs AFTER DEPLOY ---
