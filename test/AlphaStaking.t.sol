@@ -150,4 +150,6 @@ contract contractTest is Test {
         reuseable_ConsolLogs();
     }
 
+
+// test a nonburnable token
 }
