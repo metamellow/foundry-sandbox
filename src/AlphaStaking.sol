@@ -13,13 +13,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract alphaStaking is ERC20, Ownable{
 
     address public tokenAddr; // 0x6632d8c49234a6783b45cdc5fc9355a47124e187 (ChadGPT)
-
     uint256 public stakedPoolSupply;
     uint256 public timerDuration; // 248400 (69 hours)
     uint256 public rwdRate; // 420 (4.2% of pool)
     uint256 public brnRate; // 50 (0.5% of reward)
-    bool public stakingOpen;
-    bool public burnOn;
+    bool public stakingOpen; // true (can start staking)
+    bool public burnOn; // true (does burn tokens)
 
     mapping(address => bool) public isStaked;
     mapping(address => uint256) public withdrawTimer;
@@ -33,14 +32,16 @@ contract alphaStaking is ERC20, Ownable{
         address _tokenAddr, 
         uint256 _timerDuration, 
         uint256 _rwdRate,
-        uint256 _brnRate) 
+        uint256 _brnRate, 
+        bool _stakingOpen,
+        bool _burnOn) 
         ERC20("Alpha Staking", "aChad"){
         tokenAddr = _tokenAddr;
         timerDuration = _timerDuration;
         rwdRate = _rwdRate;
         brnRate = _brnRate;
-        stakingOpen = false;
-        burnOn = true;
+        stakingOpen = _stakingOpen;
+        burnOn = _burnOn;
     }
     
     function calculateRewards(address _user) public view returns (uint256) {

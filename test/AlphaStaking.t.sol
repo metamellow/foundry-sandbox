@@ -33,7 +33,9 @@ contract contractTest is Test {
             address(token),
             248400, //69 hours
             420, //percent of pool
-            50 //burn rate
+            50, //burn rate
+            true, //pool open
+            true // burn on
         );
 
         // --- NEED TODOs AFTER DEPLOY ---
