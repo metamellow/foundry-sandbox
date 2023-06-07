@@ -69,7 +69,30 @@
 
 
 
-**DEV NOTES**
+# **DEV NOTES**
+
 - For forked testing: forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/elpiyNU3HOchYaeMMpCteXolAFqJYTEi --match-contract <test contract name> -vvv
 - For specific test names: forge test --match-contract <test contract name>- vvv
 - xxxxxxxxxxxxxxx
+
+# DEPLOY STUFF
+1. create "deploy.sh" with this info:
+    >> 
+        #!/usr/bin/env bash
+
+        # Read the RPC URL
+        echo Enter Your RPC URL:
+        echo Example: "https://eth-goerli.alchemyapi.io/v2//XXXXXXXXXX"
+        read -s rpc
+
+        # Read the contract name
+        echo Which contract do you want to deploy \(eg Greeter\)?
+        read contract
+
+        forge create ./src/${contract}.sol:${contract} -i --rpc-url $rpc
+2. in VSCode bash terminal, run "chmod u+x ./deploy.sh"
+3. run by "./deploy.sh"
+4. Paste Alchemy API info (you wont see it bc its hidden), then press enter
+5. Paste contract info (like "QuizFactory"), then enter
+6. Paste private key, then enter
+7. Wait for the transaction to go through
