@@ -1,5 +1,7 @@
 /*
 - build in a blacklist?
+- edit so buys are transferred in USDT and sells are stored in BANK
+- 
 */
 
 
