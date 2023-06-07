@@ -96,3 +96,46 @@
 5. Paste contract info (like "QuizFactory"), then enter
 6. Paste private key, then enter
 7. Wait for the transaction to go through
+    
+# OTHER UNORGANIZED NOTES
+>> 
+    # powershell steps
+    1) open empty folder in powershell (not in VS or github)
+    2) 'forge init'
+    3) 'forge build'
+    4) 'forge test'
+    5) 'anvil'
+    6) 'forge script script/HelloWorld.s.sol:ContractScript --fork-url http://localhost:8545 \ --private-key $PRIVATE_KEY --broadcast'
+    7) to READ functions: 'cast call $CONTRACT_ADDRESS "greet()(string)"'
+    8) to WRITE functions: 'cast send $CONTRACT_ADDRESS "updateGreeting(string)" "My new greeting" --private-key $PRIVATE_KEY'
+
+    # install libraries
+    0) install git stuff: 'git init' AND/OR 'git add .' OR update in the APP
+    1) install packages: 'forge install OpenZeppelin/openzeppelin-contracts'
+    2) remap stuff: CREATE 'remappings.txt' & WRITE '@openzeppelin/=lib/openzeppelin-contracts/'
+    3) helpful: forge install motdotla/dotenv
+    4) to update foundry stuff: "cargo install --git https://github.com/foundry-rs/foundry foundry-cli anvil chisel"
+
+    # important links
+    - info on testing 'assertions': 
+        - https://book.getfoundry.sh/reference/ds-test#asserting
+    - logging like console.log:
+        - 'forge test -vv' (more v's more logs)
+        - https://book.getfoundry.sh/reference/ds-test#logging
+    - deploy script is needed
+        - 
+
+    # Testing
+    - see for a short list of VM commands: https://book.getfoundry.sh/reference/forge-std/std-cheats
+    - see for a longer list of cheat commands: https://book.getfoundry.sh/cheatcodes/
+    - 
+
+    $TESTING_PRIVATE_KEY
+    $TESTING_SEPOLIA_RPC_URL
+
+
+    forge create NFT --rpc-url=$TESTING_SEPOLIA_RPC_URL --private-key=$TESTING_PRIVATE_KEY --constructor-args foundryTestNFTs FT
+
+    forge script script/NFT.s.sol:MyScript --rpc-url sepolia --broadcast --verify -vvvv
+
+    forge script script/NFT.s.sol:MyScript --fork-url anvil --broadcast
