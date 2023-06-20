@@ -5,6 +5,9 @@
 // final choice-- users pay in matic, tax is taken, remainder is uniswapped to BON and held in contract as reward--- this will create steady upward value and then a drop on rewards sale, but volume is volume
 // - https://blog.chain.link/how-to-build-a-crypto-game/#connecting_your_wallet  
 
+
+
+
 // SPDX-License-Identifier: GNU
 pragma solidity ^0.8.13;
 
