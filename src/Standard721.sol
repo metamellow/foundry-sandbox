@@ -15,7 +15,7 @@ contract NFT is ERC721, Ownable{
     uint256 public totalSupply;
     uint256 private reserved;
 
-    string public baseUri = "ipfs://xxx/";
+    string public baseUri = "ipfs://bafybeifvuftc456ml5yj6crrvckklevddnipizzeb6op7prdjmauefsggu/";
     string public baseExtension = ".json";
 
     mapping(address => uint256) private mintedPerWallet;
