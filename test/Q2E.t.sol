@@ -5,34 +5,41 @@ import "forge-std/Test.sol";
 import "../src/Q2E.sol";
 
 contract Q2ETest is Test {
-    Q2E public game;
+    Q2E public lotto;
 
     function setUp() public {
         // create a question
-        string memory question = "2 * 2 = ";
-        string memory answer = "4";
+        string memory _question = "BON LOTTO #0.1";
+        string memory _answer = "69";
         // salt is needed bc need to hash answer provided
-        bytes32 salt = bytes32("changeThisBeforeDeploying");
-        bytes32 hashedAnswer = keccak256(abi.encodePacked(salt, answer));
-        emit log_bytes32(hashedAnswer);
+        bytes32 _salt = bytes32("changeThisBeforeDeploying");
+        bytes32 _hashedAnswer = keccak256(abi.encodePacked(_salt, _answer));
+        console.log("setUp _hashedAnswer: ", log_bytes32(_hashedAnswer));
 
-        //start game
-        game = new Q2E(question, hashedAnswer);
-        emit log(game.question());
-
-        /*
         lotto = new Q2E(
-            "BON LOTTO #0.1",                           // string memory _question
-            "69",                                       // bytes32 _hashedAnswer
+            _question,                                  // string memory _question
+            _hashedAnswer,                              // bytes32 _hashedAnswer
             0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f, // address _erc20contract
             0x26432f7cf51e644c0adcaf3574216ee1c0a9af6d, // address _erc20LP
             750000000000000000000,                      // uint256 _erc20Base
             1000                                        // uint256 _erc20Fee
         );
-        */
-
+        console.log("lotto.question(): ", lotto.question());
     }
 
+    function consoleLogs() public view{
+        console.log("_____________________CONRCT_INFOM_____________________");
+        console.log("CNRT ADDR: ", address(lotto));
+
+        console.log("_____________________WALLET_INFOM_____________________");
+    }
+
+    function test_0_ConsoleLogs() public view{
+        consoleLogs();
+    }
+
+
+/*
     function testPass() public {
         assertTrue(true);
     }
@@ -47,9 +54,5 @@ contract Q2ETest is Test {
         game.guess("4");
         assertEq(address(this).balance, beginBalance + 1_000 ether);
     }
-
-    fallback() external payable{}
-    receive() external payable{}
-
-
+*/
 }

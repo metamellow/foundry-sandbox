@@ -36,7 +36,7 @@ contract Q2E {
         string memory _question, 
         bytes32 _hashedAnswer, 
         address _erc20contract, 
-        address _erc20LP;
+        address _erc20LP,
         uint256 _erc20Base, 
         uint256 _erc20Fee
         ){
