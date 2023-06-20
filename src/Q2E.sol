@@ -17,7 +17,7 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Router.sol";
+import "@Uniswap/v2-periphery/contracts/UniswapV2Router02.sol";
 
 contract Q2E {
     bytes32 private salt = bytes32("changeThisBeforeDeploying"); // --- CHANGE THIS BEFORE DEPOLY ---

@@ -1,4 +1,4 @@
 openzeppelin-contracts/=lib/openzeppelin-contracts/
 @openzeppelin/=lib/openzeppelin-contracts/
 
-@uniswap/=lib/v2-core/
+@Uniswap/v2-periphery/blob/master/=lib/v2-periphery/
