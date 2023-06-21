@@ -14,13 +14,12 @@ contract Q2ETest is Test {
         // salt is needed bc need to hash answer provided
         bytes32 _salt = bytes32("changeThisBeforeDeploying");
         bytes32 _hashedAnswer = keccak256(abi.encodePacked(_salt, _answer));
-        console.log("setUp _hashedAnswer: ", log_bytes32(_hashedAnswer));
 
         lotto = new Q2E(
             _question,                                  // string memory _question
             _hashedAnswer,                              // bytes32 _hashedAnswer
             0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f, // address _erc20contract
-            0x26432f7cf51e644c0adcaf3574216ee1c0a9af6d, // address _erc20LP
+            0x26432F7cF51e644C0ADcaf3574216Ee1C0a9aF6D, // address _erc20LP
             750000000000000000000,                      // uint256 _erc20Base
             1000                                        // uint256 _erc20Fee
         );
