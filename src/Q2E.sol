@@ -19,7 +19,6 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 //import "@Uniswap/v2-periphery/contracts/UniswapV2Router02.sol";
-import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Router.sol";
 
 contract Q2E is Ownable{
     bool public lottoOpen;
@@ -124,6 +123,7 @@ contract Q2E is Ownable{
     /*
 
     // this works for V2 pools https://etherscan.io/address/0x639aedc161d4f2a9a399100efbf294bed1432c0f#code
+    // https://docs.uniswap.org/contracts/v2/reference/smart-contracts/router-02#swapexactethfortokens
 
     // @dev --- contract(this) must have APPROVEd uniswap to use 'token0' before v-this-v can work
     function uniswapConvertToBase(uint256 amountIn) internal returns(bool){

@@ -3,3 +3,6 @@ openzeppelin-contracts/=lib/openzeppelin-contracts/
 
 v2-periphery/=lib/v2-periphery/
 @Uniswap/v2-periphery/=lib/v2-periphery/
+
+v2-core/=lib/v2-core/
+@Uniswap/v2-core/=lib/v2-core/
