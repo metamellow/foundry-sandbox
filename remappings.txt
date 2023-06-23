@@ -6,3 +6,6 @@ v2-periphery/=lib/v2-periphery/
 
 v2-core/=lib/v2-core/
 @Uniswap/v2-core/=lib/v2-core/
+
+airnode-protocol/=lib/airnode/packages/airnode-protocol/
+@api3/airnode-protocol/=lib/airnode/packages/airnode-protocol/

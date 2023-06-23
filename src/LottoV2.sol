@@ -1,93 +1,146 @@
-/*
-- focus on the 1v1 deposit then trigger a API3 airnode call
-    - see below for how to do the airnode call: https://docs.api3.org/guides/qrng/lottery-guide/#_1-coding-the-lottery-contract
-    - just have ONE (of each) lotto per time shown on the website and each finish calls up the lottoFactory
-- Make another that takes all bets and then releases the funds once its done
-    - make the betAmount variable
-    - make it 2 player and 3 player and 4 player
-    - P1 send a payment of 5 MATIC, dev gets 0.5, 4.5 goes into the pot
-    - then wait for P2 to also pay 5, 0.5 to dev, 4.5 in
-    - so total pot equals 9.0 matic
-    - then after all deposits trigger a API3 airnode call for a RNG ranged based on player numbers
-
-- figure out the uniswap conversions last 
-    (and just prank stock it with the erc20 for testing)
-*/
-
 // SPDX-License-Identifier: GNU
 pragma solidity ^0.8.0;
 
+
+
+
+
+
+
+
+
+
+
+// need to test
+// need to finish up claim process
+// ...
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.    BANK OF NOWHERE LOTTO  V2    .-.-.-.-. */
+/* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.01  .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
+
+/* .--------------------------------------------------. //
+- (1) Create 'sponsor wallet' with funds to fund the API3 QRNG system
+    - For identifiers, see: https://docs.api3.org/reference/qrng/chains.html#anu
+    - For tutorial, see: https://blog.developerdao.com/create-a-random-generated-number-on-chain-using-api3-tools-for-free 
+- (2) Call address(this).setRequestParameters()
+- (3) Set lottoOpen to 'true'
+*///--------------------------------------------------. //
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 //import "@Uniswap/v2-periphery/contracts/UniswapV2Router02.sol";
 import "@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
 
-contract LottoV2 is Ownable{
+contract LottoV2 is Ownable, RrpRequesterV0 {
+    
+    // LOTTO VARS
     address public erc20token;
     //address public erc20LP;
     address public treasury;
-
     address public player1W;
     address public player2W;
-
+    uint256 public betPrice;
+    uint256 public counter;
     bool public lottoOpen;
 
-    uint256 public betPrice;
+    mapping(uint256 => address) public pastLottoPlayer1;
+    mapping(uint256 => address) public pastLottoPlayer2;
+    mapping(uint256 => address) public pastLottoResults;
+    mapping(bytes32 => uint256) public pastLottoAPI3CallCounter;
+    mapping(uint256 => bool) public pastLottoClaimed;
 
-    mapping(uint256 => address) public pastLottoTxns;
+    event BetDetails (uint256 playersCounter);
+
+    // API3 VARS
+    address public airnode;
+    bytes32 public endpointIdUint256;
+    address public sponsorWallet;
+    mapping(bytes32 => bool) public expectingRequestWithIdToBeFulfilled;
 
     constructor(
         address _erc20token,
         //address _erc20LP,
         address _treasury,
-        bool _lottoOpen,
-        uint256 _betPrice
-        ){
+        uint256 _betPrice,
+        address _airnodeRrp             // POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
+        ) RrpRequesterV0(_airnodeRrp){
         erc20token = _erc20token;       // "0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f" (BON)
         //erc20LP = _erc20LP;           // "0x26432f7cf51e644c0adcaf3574216ee1c0a9af6d" (BON/WMATIC)
         treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
         player1W = address(0);          // "address(0)" (player slot is empty)
         player2W = address(0);          // "address(0)" (player slot is empty)
-        lottoOpen = _lottoOpen;         // "true" (lotto is open to play)
         betPrice = _betPrice;           // "30000000000000000000" (30 MATIC)
+        counter = 0;                    // "0" (counts the total new games)
+        lottoOpen = false;                // "true" (lotto is locked until admin setup)
     }
 
     // --- PUBLIC FUNCTIONS ---
 
-    function bet() external payable{
+    function bet() external payable returns(uint256){
         // REQUIREMENTS STAGE
         require(betPrice <= msg.value, "Need more gas to cover the current price");
         require(lottoOpen, "Lotto is not accepting bets");
         
-        // PAYMENTS STAGE
-        uint256 tax = betPrice * 10 / 100;
-        (bool transfer1, )  = payable(treasury).call{value: tax}("tax");
-        require(transfer1, "Transfer failed");
-
-        /*
-        uint256 lottoFunds = betPrice - tax;
-        require(uniswapConvertToBase(lottoFunds), "ERC20 conversion failed");
-        */
-
         // EVALUATE STAGE
-        if (player1W == address(0)){
+        if ((player1W == address(0)) && (player2W == address(0))){
+            // PAYMENT STAGE
+            uint256 tax = betPrice * 10 / 100;
+            (bool transfer1, )  = payable(treasury).call{value: tax}("tax");
+            require(transfer1, "Transfer failed");
+            
             // PLAYER'S 1 TURN
+            counter++;
             player1W = msg.sender;
+            pastLottoPlayer1[counter] = player1W;
+
+            emit BetDetails(counter);
         }
-        else{
+        else if ((player1W != address(0)) && (player2W == address(0))){
+            // PAYMENT STAGE
+            uint256 tax = betPrice * 10 / 100;
+            (bool transfer1, )  = payable(treasury).call{value: tax}("tax");
+            require(transfer1, "Transfer failed");
+            
             // PLAYER'S 2 TURN
             player2W = msg.sender;
+            pastLottoPlayer2[counter] = player2W;
 
-            uint256 chosenWinner = api3CallResults;
+            // API3 CALL
+            bytes32 requestId = airnodeRrp.makeFullRequest(
+                airnode,
+                endpointIdUint256,
+                address(this),
+                sponsorWallet,
+                address(this),
+                this.fulfillUint256.selector,
+                ""
+            );
+            expectingRequestWithIdToBeFulfilled[requestId] = true;
+            pastLottoAPI3CallCounter[requestId] = counter;
+            
+            emit BetDetails (counter);
+
+            // RESET LOTTO
+            player1W = address(0);
+            player2W = address(0);
         }
     }
 
-    function currentRewardsValue() public view returns(uint256 valueBON, uint valueMATIC){
+    function currentRewardsValue() public view returns(uint256 valueBON, uint256 valueMATIC){
         // return both values
         // one from the balanceOf
         // one from a uniswap price quote based on the pool
@@ -95,8 +148,43 @@ contract LottoV2 is Ownable{
         // valueMATIC = uniswapFunction(valueBON);
         valueMATIC = 696969696969696969696969696969;
     }
+
+    function claimLottoRewards(uint256 _counter) public returns(bool winner, uint256 rewards){
+        winner = false;
+        rewards = 0;
+        if(){
+
+        }
+        else{
+
+        }
+
+        return (winner, rewards);
+    }
     
     // --- DEV FUNCTIONS ---
+
+    function setRequestParameters(
+        address _airnode,               // POLY MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY TEST (0x6238772544f029ecaBfDED4300f13A3c4FE84E1D)
+        bytes32 _endpointIdUint256,     // POLY MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY TEST (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78)
+        address _sponsorWallet          // POLY MAIN (xxx) POLY TEST (xxx)
+        ) external onlyOwner {
+        airnode = _airnode;
+        endpointIdUint256 = _endpointIdUint256;
+        sponsorWallet = _sponsorWallet;
+    }
+
+
+    // AirnodeRrp will call back with a response
+    function fulfillUint256(bytes32 requestId, bytes calldata data) external onlyAirnodeRrp{
+        require(expectingRequestWithIdToBeFulfilled[requestId],"Request ID not known");
+        expectingRequestWithIdToBeFulfilled[requestId] = false;
+        uint256 qrngUint256 = abi.decode(data, (uint256));
+        
+        uint256 requestIdCounter = pastLottoAPI3CallCounter[requestId];
+        if(qrngUint256 % 2 == 0){pastLottoResults[requestIdCounter] = pastLottoPlayer2[requestIdCounter];}
+        else{pastLottoResults[requestIdCounter] = pastLottoPlayer1[requestIdCounter];}
+    }
 
     function closeLotto() external onlyOwner{
         uint256 erc20Balance = IERC20(erc20token).balanceOf(address(this));
