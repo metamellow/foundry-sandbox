@@ -1,13 +1,31 @@
 
-// users pay in matic, tax is taken, remainder is uniswapped to BON and held in contract as reward
-// -^- this will create steady upward value and then a drop on rewards sale, but volume is volume
 // - https://blog.chain.link/how-to-build-a-crypto-game/#connecting_your_wallet  
 
 /*
-NOTES
-- Lets just build everything and then add the converter system later
-*/
+- after thinking about this, I realized that people can easily look at my code to find the salt 
+    and then combine it with 1 to 100 in their own computers to see which one makes 
+    a combination the same as the hashed answer.
 
+    So the answer to this is I should focus on the 1v1 deposit then trigger a API3 airnode call
+    see below for how to do the airnode call
+
+    https://docs.api3.org/guides/qrng/lottery-guide/#_1-coding-the-lottery-contract
+
+    just have ONE lotto per time shown on the website and each finish calls up the lottoFactory
+    and the lotto factory can use quasi randomness to choose betAmount and numPlayers
+    this website could use something similar to the Svelte page earlier
+
+- Make another that takes all bets and then releases the funds once its done
+    - make the betAmount variable
+    - make it 2 player and 3 player and 4 player
+    - P1 send a payment of 5 MATIC, dev gets 0.5, 4.5 goes into the pot
+    - then wait for P2 to also pay 5, 0.5 to dev, 4.5 in
+    - so total pot equals 9.0 matic
+    - then after all deposits trigger a API3 airnode call for a RNG ranged based on player numbers
+
+- figure out the uniswap conversions last 
+    (and just prank stock it with the erc20 for testing)
+*/
 
 // SPDX-License-Identifier: GNU
 pragma solidity ^0.8.0;
@@ -21,48 +39,52 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 //import "@Uniswap/v2-periphery/contracts/UniswapV2Router02.sol";
 
 contract Q2E is Ownable{
-    bool public lottoOpen;
-    bytes32 private salt = bytes32("changeThisBeforeDeploying"); // --- CHANGE THIS BEFORE DEPOLY ---
-    bytes32 public hashedAnswer;
-    string public question;
-    address public devsW;
     address public erc20token;
     //address public erc20LP;
-    uint256 public baseFee;
-    uint256 public taxFee;
+    address public treasury;
+
+    uint256 public baseCost;
+    uint256 public taxRate;
+    uint256 public maxRounds;
     uint256 public counter;
+    bool public lottoOpen;
+
+    string public question;
+    bytes32 private salt = bytes32("changeThisBeforeDeploying"); // --- CHANGE THIS BEFORE DEPOLY ---
+    bytes32 public hashedAnswer;
 
     mapping(uint256 => string) public pastGuesses;
     
     event GuessResults(bool success, string guess, uint winnings);
 
-// maybe have two vars above to specify the main the two tokens and then use those in theuniswap incase the LP order is not what is expected
-
     constructor(
-        string memory _question, 
-        bytes32 _hashedAnswer,
-        address _devsW, 
         address _erc20token, 
         //address _erc20LP,
-        uint256 _baseFee, 
-        uint256 _taxFee
+        address _treasury, 
+        uint256 _baseCost, 
+        uint256 _taxRate,
+        uint256 _maxRounds,
+        bool _lottoOpen,
+        string memory _question, 
+        bytes32 _hashedAnswer
         ){
-        lottoOpen = true;               // true
+        lottoOpen = _lottoOpen;         // true
         question = _question;           // "xx?"
         hashedAnswer = _hashedAnswer;   // "xx"
-        devsW = _devsW;                 // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" DevsMultiS
+        treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" DevsMultiS
         erc20token = _erc20token;       // "0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f" BON
         //erc20LP = _erc20LP;           // "0x26432f7cf51e644c0adcaf3574216ee1c0a9af6d" BON/WMATIC
-        baseFee = _baseFee;             // "5000000000000000000" 5 Matic ~$3.50
-        taxFee = _taxFee;               // "1000" 10% of baseFee (1,000/10,000)
-        counter = 1;
+        baseCost = _baseCost;           // "5000000000000000000" 5 Matic ~$3.50
+        taxRate = _taxRate;             // "1000" 10% of baseFee (1,000/10,000)
+        maxRounds = _maxRounds;         // 100 rounds
+        counter = 1;                    //
     }
 
     // --- PUBLIC FUNCTIONS ---
 
     function currentPrice() public view returns(uint256){
         require(lottoOpen, "Lotto closed");
-        uint price = (counter * baseFee);
+        uint price = (counter * baseCost);
         return price;
     }
 
@@ -78,10 +100,10 @@ contract Q2E is Ownable{
         require(lottoOpen, "Lotto closed");
 
         uint256 price = currentPrice();
-        require(price <= msg.value, "Must send enough gas to cover the current price");
+        require(price <= msg.value, "Need more gas to cover the current price");
         
-        uint256 tax = price * taxFee / 10000;
-        ( bool transfer1, ) = payable(devsW).call{value: tax}("tax");
+        uint256 tax = price * taxRate / 10000;
+        ( bool transfer1, ) = payable(treasury).call{value: tax}("tax");
         require(transfer1, "Transfer failed");
 
         /*
@@ -89,8 +111,8 @@ contract Q2E is Ownable{
         require(uniswapConvertToBase(lottoFunds), "ERC20 conversion failed");
         */
 
-        counter++;
         pastGuesses[counter] = answer;
+        counter++;
         
         uint256 winnings = IERC20(erc20token).balanceOf(address(this));
         success = false;
@@ -98,8 +120,10 @@ contract Q2E is Ownable{
             success = true;
             lottoOpen = !lottoOpen;
             require(IERC20(erc20token).transferFrom(address(this), msg.sender, winnings), "transfer failed!");
-        }
-
+        } else {
+            if(counter==(maxRounds-1)){
+                lottoOpen = !lottoOpen;
+        }}
         emit GuessResults(success, answer, winnings);
         return success;
     }
@@ -110,11 +134,11 @@ contract Q2E is Ownable{
         uint256 erc20Balance = IERC20(erc20token).balanceOf(address(this));
         uint256 gasBalance = address(this).balance;
         if(erc20Balance > 0){
-            bool transferAOne = IERC20(erc20token).transfer(devsW, erc20Balance);
+            bool transferAOne = IERC20(erc20token).transfer(treasury, erc20Balance);
             require(transferAOne, "transfer failed!");
         }
         if(gasBalance > 0){
-            ( bool transferBOne, ) = payable(devsW).call{value: gasBalance}("");
+            ( bool transferBOne, ) = payable(treasury).call{value: gasBalance}("");
             require(transferBOne, "Transfer failed.");
         }
         lottoOpen = false;
