@@ -138,6 +138,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             // RESET LOTTO
             player1W = address(0);
             player2W = address(0);
+// betPrice = betPrice * 11 / 10
         }
     }
 
