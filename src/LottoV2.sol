@@ -9,7 +9,8 @@ pragma solidity ^0.8.0;
 
 
 
-
+//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
+// ----------------------  NOTES  ----------------------
 // --- contract ---
 // need to test
 // need to finish up claim process
@@ -19,7 +20,7 @@ pragma solidity ^0.8.0;
 // --- website ---
 // should add some cool wallet reading features on site with ethersJS
 // should display last rounds results above the current rounds options; like darts or
-// ...
+//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 
 
 
