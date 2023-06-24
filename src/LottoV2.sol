@@ -54,7 +54,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     // LOTTO VARS
     address public erc20token;
     //address public erc20LP;
-    address public treasury;
+    address private treasury;
     address public player1W;
     address public player2W;
     uint256 public betPrice;
