@@ -13,6 +13,7 @@ pragma solidity ^0.8.0;
 
 // need to test
 // need to finish up claim process
+// should add some cool wallet reading features on site with ethersJS
 // ...
 
 
@@ -33,12 +34,12 @@ pragma solidity ^0.8.0;
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 /* .--------------------------------------------------. //
-- (1) Create 'sponsor wallet' with funds to fund the API3 QRNG system
-    - For identifiers, see: https://docs.api3.org/reference/qrng/chains.html#anu
-    - For tutorial, see: https://blog.developerdao.com/create-a-random-generated-number-on-chain-using-api3-tools-for-free 
-- (2) Call address(this).setRequestParameters()
+- (1) Create 'sponsor wallet' for API3 QRNG system
+    - For details, see: https://docs.api3.org/reference/qrng/chains.html#anu
+    - For tutorial, see: https://.developerdao.com/create-a-random-generated-number-on-chain-using-api3-tools-for-free 
+- (2) Call (this).setRequestParameters()
 - (3) Set lottoOpen to 'true'
-*///--------------------------------------------------. //
+// .--------------------------------------------------. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
