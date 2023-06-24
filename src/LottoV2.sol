@@ -86,7 +86,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         player2W = address(0);          // "address(0)" (player slot is empty)
         betPrice = _betPrice;           // "30000000000000000000" (30 MATIC)
         counter = 0;                    // "0" (counts the total new games)
-        lottoOpen = false;                // "true" (lotto is locked until admin setup)
+        lottoOpen = false;                // "false" (lotto is locked until admin setup)
     }
 
     // --- PUBLIC FUNCTIONS ---
