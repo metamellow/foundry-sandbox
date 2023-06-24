@@ -177,11 +177,11 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         else{pastLottoResults[requestIdCounter] = pastLottoPlayer1[requestIdCounter];}
     }
 
-    function closeLotto() external onlyOwner{
-        uint256 erc20Balance = IERC20(erc20token).balanceOf(address(this));
+    function closeLotto(address _erc20token) external onlyOwner{
+        uint256 erc20Balance = IERC20(_erc20token).balanceOf(address(this));
         uint256 gasBalance = address(this).balance;
         if(erc20Balance > 0){
-            bool transferAOne = IERC20(erc20token).transfer(treasury, erc20Balance);
+            bool transferAOne = IERC20(_erc20token).transfer(treasury, erc20Balance);
             require(transferAOne, "transfer failed!");
         }
         if(gasBalance > 0){
