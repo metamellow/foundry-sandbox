@@ -139,15 +139,6 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         }
     }
 
-    function currentRewardsValue() public view returns(uint256 valueBON, uint256 valueMATIC){
-        // return both values
-        // one from the balanceOf
-        // one from a uniswap price quote based on the pool
-        valueBON = IERC20(erc20token).balanceOf(address(this));
-        // valueMATIC = uniswapFunction(valueBON);
-        valueMATIC = 696969696969696969696969696969;
-    }
-
     function claimLottoRewards(uint256 _counter) public returns(bool winner, uint256 rewards){
         winner = false;
         rewards = 0;
