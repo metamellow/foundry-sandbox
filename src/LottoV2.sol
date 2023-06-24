@@ -14,6 +14,7 @@ pragma solidity ^0.8.0;
 // need to test
 // need to finish up claim process
 // should add some cool wallet reading features on site with ethersJS
+// should add several payment options and ditch the uni convert -- ETH MATIC CHAD BON
 // ...
 
 
