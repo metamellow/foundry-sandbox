@@ -46,7 +46,6 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-//import "@Uniswap/v2-periphery/contracts/UniswapV2Router02.sol";
 import "@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
 
 contract LottoV2 is Ownable, RrpRequesterV0 {
