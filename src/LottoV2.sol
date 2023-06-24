@@ -10,11 +10,13 @@ pragma solidity ^0.8.0;
 
 
 
-
+// --- contract ---
 // need to test
 // need to finish up claim process
+// --- website ---
 // should add some cool wallet reading features on site with ethersJS
 // should add several payment options and ditch the uni convert -- ETH MATIC CHAD BON
+// should display last rounds results above the current rounds options; like pokemon?
 // ...
 
 
