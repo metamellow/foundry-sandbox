@@ -133,7 +133,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             expectingRequestWithIdToBeFulfilled[requestId] = true;
             pastLottoAPI3CallCounter[requestId] = counter;
             
-            emit BetDetails (counter);
+            emit BetDetails(counter);
 
             // RESET LOTTO
             player1W = address(0);
