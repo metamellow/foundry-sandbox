@@ -52,7 +52,6 @@ import "@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
 contract LottoV2 is Ownable, RrpRequesterV0 {
     
     // LOTTO VARS
-    address public erc20token;
     address private treasury;
     address public player1W;
     address public player2W;
@@ -75,12 +74,10 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     mapping(bytes32 => bool) public expectingRequestWithIdToBeFulfilled;
 
     constructor(
-        address _erc20token,
         address _treasury,
         uint256 _betPrice,
         address _airnodeRrp             // POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
         ) RrpRequesterV0(_airnodeRrp){
-        erc20token = _erc20token;       // "0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f" (BON)
         treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
         player1W = address(0);          // "address(0)" (player slot is empty)
         player2W = address(0);          // "address(0)" (player slot is empty)
@@ -201,30 +198,6 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         }
         lottoOpen = false;
     }
-    
-    /*
-
-    // this works for V2 pools https://etherscan.io/address/0x639aedc161d4f2a9a399100efbf294bed1432c0f#code
-    // https://docs.uniswap.org/contracts/v2/reference/smart-contracts/router-02#swapexactethfortokens
-
-    // @dev --- contract(this) must have APPROVEd uniswap to use 'token0' before v-this-v can work
-    function uniswapConvertToBase(uint256 amountIn) internal returns(bool){
-        // tax token swap payment process
-        address[] memory path = new address[](2);
-        path[0] = erc20LP.token0();
-        path[1] = erc20LP.token1();
-        oracleData[] = erc20LP.getReserves();
-        amountOutMinBeforeSlip = (oracleData[0] / oracleData[1] * amountIn);
-        amountOutMin = amountOutMinBeforeSlip - (amountOutMinBeforeSlip * 30/1000);
-        require(UniswapV2Router02.swapExactTokensForETH(amountIn, amountOutMin, path, address(this), block.timestamp), "transfer failed!");
-        return true;
-    }
-
-    function approveUni() external onlyOwner{
-        // maybe this APPROVAL is needed to let the LOTTO CONTRACT approve Uni to transfer tokens?
-        uint256 blah = 2;
-    }
-    */
 
     fallback() external payable{
     }
