@@ -81,7 +81,6 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         address _airnodeRrp             // POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
         ) RrpRequesterV0(_airnodeRrp){
         erc20token = _erc20token;       // "0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f" (BON)
-        //erc20LP = _erc20LP;           // "0x26432f7cf51e644c0adcaf3574216ee1c0a9af6d" (BON/WMATIC)
         treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
         player1W = address(0);          // "address(0)" (player slot is empty)
         player2W = address(0);          // "address(0)" (player slot is empty)
