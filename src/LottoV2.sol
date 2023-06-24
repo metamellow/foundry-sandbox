@@ -12,14 +12,14 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 // ----------------------  NOTES  ----------------------
 // --- contract ---
-// need to test
-// need to finish up claim process
-// the payment stage needs a look through
-// consider adding in a parabolic cost feature; betPrice * 11 / 10
-// closeLotto need a lot of work now; make it into a general purpose reset button
+// - need to test
+// - need to finish up claim process
+// - the payment stage needs a look through
+// - consider adding in a parabolic cost feature; betPrice * 11 / 10
+// - closeLotto need a lot of work now; make it into a general purpose reset button
 // --- website ---
-// should add some cool wallet reading features on site with ethersJS
-// should display last rounds results above the current rounds options; like darts or
+// - should add some cool wallet reading features on site with ethersJS
+// - should display last rounds results above the current rounds options; like darts or
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 
 
