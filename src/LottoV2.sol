@@ -43,7 +43,7 @@ pragma solidity ^0.8.0;
     - For details, see: https://docs.api3.org/reference/qrng/chains.html#anu
     - For tutorial, see: https://.developerdao.com/create-a-random-generated-number-on-chain-using-api3-tools-for-free 
 - (2) Call address(this).setRequestParameters()
-- (3) Set lottoOpen to 'true'
+- (3) Set lottoOpen = !lottoOpen
 // .--------------------------------------------------. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
