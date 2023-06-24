@@ -84,7 +84,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
         player1W = address(0);          // "address(0)" (player slot is empty)
         player2W = address(0);          // "address(0)" (player slot is empty)
-        betPrice = _betPrice;           // "30000000000000000000" (30 MATIC)
+        betPrice = _betPrice;           // "10000000000000000000" (10 MATIC)
         counter = 0;                    // "0" (counts the total new games)
         lottoOpen = false;                // "false" (lotto is locked until admin setup)
     }
