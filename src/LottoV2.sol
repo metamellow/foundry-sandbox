@@ -75,7 +75,6 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
 
     constructor(
         address _erc20token,
-        //address _erc20LP,
         address _treasury,
         uint256 _betPrice,
         address _airnodeRrp             // POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
