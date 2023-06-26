@@ -12,14 +12,29 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 // ----------------------  NOTES  ----------------------
 // --- contract ---
-// - need to test
-// - the payment stage needs a look through
-// - consider adding in a parabolic cost feature; betPrice * 11 / 10
-// - closeLotto need a lot of work now; make it into a general purpose reset button
+// - need to add a requirement that P1 isnt P2
 // --- website ---
 // - should add some cool wallet reading features on site with ethersJS
 // - should display last rounds results above the current rounds options; like darts or
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
+
+
+/*
+// GENERATE SPONSOR WALLET
+	
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
+--airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
+--sponsor-address 0x8ee4476C9bf4Cc9A1F870914a4Dc575A84a3cf2C
+	
+# // >> beta Sponsor wallet address: 0x237b3FA45BEE1f77Fd816684e8c4A7B9c307069A
+# // >> beta lotto contract: 0x8ee4476C9bf4Cc9A1F870914a4Dc575A84a3cf2C
+
+
+need to redeploy so that I can add a lottoOpen function 
+--- and/or use the resetLotto func to test this one
+
+*/
 
 
 

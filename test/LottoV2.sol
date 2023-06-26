@@ -18,32 +18,9 @@ contract contractTest is Test {
         // --- TOKENS ---
         vm.deal(address(69), 1_000_000 ether);
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
         // --- CONTRACTS ---
         lotto = new LottoV2(
-            address(token),
+            "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede",
             248400, //69 hours
             420, //percent of pool
             50, //burn rate
