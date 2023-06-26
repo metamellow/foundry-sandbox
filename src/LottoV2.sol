@@ -13,7 +13,6 @@ pragma solidity ^0.8.0;
 // ----------------------  NOTES  ----------------------
 // --- contract ---
 // - need to test
-// - need to finish up claim process
 // - the payment stage needs a look through
 // - consider adding in a parabolic cost feature; betPrice * 11 / 10
 // - closeLotto need a lot of work now; make it into a general purpose reset button
@@ -21,9 +20,6 @@ pragma solidity ^0.8.0;
 // - should add some cool wallet reading features on site with ethersJS
 // - should display last rounds results above the current rounds options; like darts or
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
-
-
-
 
 
 
@@ -61,13 +57,14 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     uint256 public counter;
     bool public lottoOpen;
 
+    mapping(uint256 => bool) public pastLottoClaimed;
     mapping(uint256 => address) public pastLottoPlayer1;
     mapping(uint256 => address) public pastLottoPlayer2;
     mapping(uint256 => address) public pastLottoResults;
+    mapping(uint256 => uint256) public pastLottoRewards;
     mapping(bytes32 => uint256) public pastLottoAPI3CallCounter;
-    mapping(uint256 => bool) public pastLottoClaimed;
 
-    event BetDetails (uint256 playersCounter);
+    event BetDetails (uint256 playersCounter, uint256 counterReward);
 
     // API3 VARS
     address public airnode;
@@ -85,12 +82,12 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         player2W = address(0);          // "address(0)" (player slot is empty)
         betPrice = _betPrice;           // "10000000000000000000" (10 MATIC)
         counter = 0;                    // "0" (counts the total new games)
-        lottoOpen = false;                // "false" (lotto is locked until admin setup)
+        lottoOpen = false;              // "false" (lotto is locked until admin setup)
     }
 
     // --- PUBLIC FUNCTIONS ---
 
-    function bet() external payable returns(uint256){
+    function bet() external payable returns(bool success){
         // REQUIREMENTS STAGE
         require(betPrice <= msg.value, "Need more gas to cover the current price");
         require(lottoOpen, "Lotto is not accepting bets");
@@ -106,8 +103,10 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             counter++;
             player1W = msg.sender;
             pastLottoPlayer1[counter] = player1W;
+            pastLottoRewards[counter] = (betPrice - (betPrice * 10 / 100)) *2;
 
-            emit BetDetails(counter);
+            emit BetDetails(counter, pastLottoRewards[counter]);
+            return success = true;
         }
         else if ((player1W != address(0)) && (player2W == address(0))){
             // PAYMENT STAGE
@@ -131,31 +130,71 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             );
             expectingRequestWithIdToBeFulfilled[requestId] = true;
             pastLottoAPI3CallCounter[requestId] = counter;
-            
-            emit BetDetails(counter);
 
             // RESET LOTTO
             player1W = address(0);
             player2W = address(0);
-// betPrice = betPrice * 11 / 10
+            betPrice = betPrice * 11 / 10;
+
+            emit BetDetails(counter, pastLottoRewards[counter]);
+            return success = true;
         }
     }
 
-    function claimLottoRewards(uint256 _counter) public returns(bool winner, uint256 rewards){
-        winner = false;
-        rewards = 0;
-        if(){
+    function checkLotto(uint256 _counter) public view returns(
+        address winner, 
+        uint256 rewards, 
+        bool claimed){
+        require(lottoOpen, "Lotto is not open");
+        winner = pastLottoResults[_counter];
+        rewards = pastLottoRewards[_counter];
+        claimed = pastLottoClaimed[_counter];
+        return (winner, rewards, claimed);
+    }
+    
+    function claimLotto(uint256 _counter) public returns(uint256 rewards){
+        require(pastLottoResults[_counter] == msg.sender);
+        require(pastLottoClaimed[_counter] != true);
+        require(lottoOpen, "Lotto is not open");
 
-        }
-        else{
+        pastLottoClaimed[_counter] = true;
+        rewards = pastLottoRewards[_counter];
+        (bool transfer1, )  = payable(msg.sender).call{value: rewards}("rewards");
+        require(transfer1, "Transfer failed");
 
-        }
-
-        return (winner, rewards);
+        return (rewards);
     }
     
     // --- DEV FUNCTIONS ---
-
+    function resetLotto(
+        address _treasury, 
+        address _player1W, 
+        address _player2W, 
+        uint256 _betPrice, 
+        uint256 _counter,
+        bool _lottoOpen,
+        address _erc20token
+        ) external onlyOwner{
+        treasury = _treasury;
+        player1W = _player1W;
+        player2W = _player2W;
+        betPrice = _betPrice; 
+        counter = _counter;
+        lottoOpen = _lottoOpen;
+        
+        uint256 erc20Balance = IERC20(_erc20token).balanceOf(address(this));
+        uint256 gasBalance = address(this).balance;
+        if(erc20Balance > 0){
+            bool transferAOne = IERC20(_erc20token).transfer(treasury, erc20Balance);
+            require(transferAOne, "transfer failed!");
+        }
+        if(gasBalance > 0){
+            ( bool transferBOne, ) = payable(treasury).call{value: gasBalance}("");
+            require(transferBOne, "Transfer failed.");
+        }
+    }
+    
+    // --- API3 FUNCTIONS ---
     function setRequestParameters(
         address _airnode,               // POLY MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY TEST (0x6238772544f029ecaBfDED4300f13A3c4FE84E1D)
         bytes32 _endpointIdUint256,     // POLY MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY TEST (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78)
@@ -165,7 +204,6 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         endpointIdUint256 = _endpointIdUint256;
         sponsorWallet = _sponsorWallet;
     }
-
 
     // AirnodeRrp will call back with a response
     function fulfillUint256(bytes32 requestId, bytes calldata data) external onlyAirnodeRrp{
@@ -177,21 +215,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         if(qrngUint256 % 2 == 0){pastLottoResults[requestIdCounter] = pastLottoPlayer2[requestIdCounter];}
         else{pastLottoResults[requestIdCounter] = pastLottoPlayer1[requestIdCounter];}
     }
-
-    function closeLotto(address _erc20token) external onlyOwner{
-        uint256 erc20Balance = IERC20(_erc20token).balanceOf(address(this));
-        uint256 gasBalance = address(this).balance;
-        if(erc20Balance > 0){
-            bool transferAOne = IERC20(_erc20token).transfer(treasury, erc20Balance);
-            require(transferAOne, "transfer failed!");
-        }
-        if(gasBalance > 0){
-            ( bool transferBOne, ) = payable(treasury).call{value: gasBalance}("");
-            require(transferBOne, "Transfer failed.");
-        }
-        lottoOpen = false;
-    }
-
+    
     fallback() external payable{
     }
     receive() external payable{

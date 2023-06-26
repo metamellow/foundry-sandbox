@@ -71,7 +71,7 @@
 
 # **DEV NOTES**
 
-- For forked testing: forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/elpiyNU3HOchYaeMMpCteXolAFqJYTEi --match-contract <test contract name> -vvv
+- For forked testing: forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/elpiyNU3HOchYaeMMpCteXolAFqJYTEi -vvv
 - For specific test names: forge test --match-contract <test contract name>- vvv
 - xxxxxxxxxxxxxxx
 
