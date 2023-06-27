@@ -12,29 +12,16 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 
 
-/* v2.02
-// GENERATE SPONSOR WALLET
+/* v2.03
+// GENERATE SPONSOR WALLET MUMBAI
 	
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
 --airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address 0xF140d368dA4983d6872b0fdBF32A43d2f96009b4
+--sponsor-address 0x3f11BDcdE912d6A868D011a9dE238813BC400056
 	
-# // >> beta Sponsor wallet address: 0xf1a0c5f845C06918AAbb2364457aF74Dcd712298
-# // >> beta lotto contract: 0xF140d368dA4983d6872b0fdBF32A43d2f96009b4
-
-*/
-
-/* v2.01
-// GENERATE SPONSOR WALLET
-	
-npx @api3/airnode-admin derive-sponsor-wallet-address \
---airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
---airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address 0x8ee4476C9bf4Cc9A1F870914a4Dc575A84a3cf2C
-	
-# // >> beta Sponsor wallet address: 0x237b3FA45BEE1f77Fd816684e8c4A7B9c307069A
-# // >> beta lotto contract: 0x8ee4476C9bf4Cc9A1F870914a4Dc575A84a3cf2C
+# // >> beta Sponsor wallet address: 
+# // >> beta lotto contract: 0x3f11BDcdE912d6A868D011a9dE238813BC400056
 
 */
 
