@@ -18,10 +18,10 @@ pragma solidity ^0.8.0;
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
 --airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+--sponsor-address 0x1dc47D2ec5FAD3E9D744D437eE5eb2f2A8A0F498
 	
-# // >> Sponsor wallet address: 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-# // >> lotto contract: 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+# // >> Sponsor wallet address: 0xA0F82e86C2025e61797EfA2541C0373eA71149B8
+# // >> lotto contract: 0x1dc47D2ec5FAD3E9D744D437eE5eb2f2A8A0F498
 
 */
 
