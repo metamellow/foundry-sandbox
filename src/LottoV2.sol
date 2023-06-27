@@ -12,16 +12,16 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 
 
-/* v2.03
+/* v2.04
 // GENERATE SPONSOR WALLET MUMBAI
 	
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
 --airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address 0x3f11BDcdE912d6A868D011a9dE238813BC400056
+--sponsor-address 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 	
-# // >> beta Sponsor wallet address: 
-# // >> beta lotto contract: 0x3f11BDcdE912d6A868D011a9dE238813BC400056
+# // >> Sponsor wallet address: 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+# // >> lotto contract: 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
 */
 
@@ -42,19 +42,20 @@ npx @api3/airnode-admin derive-sponsor-wallet-address \
 // $PDX-License-Identifier: GNU
 // pragma solidity ^0.8.0;
 
-// --- BETA TESTING VERSION ---
+// --- TESTING VERSION ---
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.03  .-.-.-.-. */
+/* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.04  .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
-/* .--------------------------------------------------. //
-- (1) Create 'sponsor wallet' for API3 QRNG system
+/* .---------------------- setup ---------------------. //
+- (1) Deploy contract
+- (2) Create 'sponsor wallet' for API3 QRNG system
     - For details, see: https://docs.api3.org/reference/qrng/chains.html#anu
     - For tutorial, see: https://blog.developerdao.com/create-a-random-generated-number-on-chain-using-api3-tools-for-free
-- (2) Call address(this).setRequestParameters()
-- (3) Set lottoOpen = !lottoOpen
+- (3) Fund sponsor wallet with MATIC
+- (4) Call address(this).setRequestParameters()
 // .--------------------------------------------------. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -94,7 +95,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
         player1W = address(0);          // "address(0)" (player slot is empty)
         player2W = address(0);          // "address(0)" (player slot is empty)
-        betPrice = _betPrice;           // "10000000000000000000" (10 MATIC)
+        betPrice = _betPrice;           // "10000000000000000" (0.01 MATIC)
         counter = 0;                    // "0" (counts the total new games)
         lottoOpen = true;              // "true" (unlocked)
     }
@@ -123,7 +124,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             return success = true;
         }
         else if ((player1W != address(0)) && (player2W == address(0))){
-            require(msg.sender == player1W, "You shall not pass");
+            require(msg.sender != player1W, "You shall not pass");
 
             // PAYMENT STAGE
             uint256 tax = betPrice * 10 / 100;
