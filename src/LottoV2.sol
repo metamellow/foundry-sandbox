@@ -2,13 +2,6 @@
 pragma solidity ^0.8.0;
 
 
-
-
-
-
-
-
-
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 // ----------------------  NOTES  ----------------------
 // --- contract ---
@@ -19,7 +12,20 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 
 
-/*
+/* v2.02
+// GENERATE SPONSOR WALLET
+	
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
+--airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
+--sponsor-address 0xF140d368dA4983d6872b0fdBF32A43d2f96009b4
+	
+# // >> beta Sponsor wallet address: 0xf1a0c5f845C06918AAbb2364457aF74Dcd712298
+# // >> beta lotto contract: 0xF140d368dA4983d6872b0fdBF32A43d2f96009b4
+
+*/
+
+/* v2.01
 // GENERATE SPONSOR WALLET
 	
 npx @api3/airnode-admin derive-sponsor-wallet-address \
@@ -30,10 +36,6 @@ npx @api3/airnode-admin derive-sponsor-wallet-address \
 # // >> beta Sponsor wallet address: 0x237b3FA45BEE1f77Fd816684e8c4A7B9c307069A
 # // >> beta lotto contract: 0x8ee4476C9bf4Cc9A1F870914a4Dc575A84a3cf2C
 
-
-need to redeploy so that I can add a lottoOpen function 
---- and/or use the resetLotto func to test this one
-
 */
 
 
@@ -41,12 +43,22 @@ need to redeploy so that I can add a lottoOpen function
 
 
 
+// _______________________________________________________
+// _______________________________________________________
+// _______________________________________________________
+// _______________________________________________________
+// _______________________________________________________
+// _______________________________________________________
+// _______________________________________________________
+// _______________________________________________________
+// _______________________________________________________
+// $PDX-License-Identifier: GNU
+// pragma solidity ^0.8.0;
 
-
-
+// --- BETA TESTING VERSION ---
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.01  .-.-.-.-. */
+/* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.03  .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -97,12 +109,12 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         player2W = address(0);          // "address(0)" (player slot is empty)
         betPrice = _betPrice;           // "10000000000000000000" (10 MATIC)
         counter = 0;                    // "0" (counts the total new games)
-        lottoOpen = false;              // "false" (lotto is locked until admin setup)
+        lottoOpen = true;              // "true" (unlocked)
     }
 
     // --- PUBLIC FUNCTIONS ---
 
-    function bet() external payable returns(bool success){
+    function bet() public payable returns(bool success){
         // REQUIREMENTS STAGE
         require(betPrice <= msg.value, "Need more gas to cover the current price");
         require(lottoOpen, "Lotto is not accepting bets");
@@ -124,6 +136,8 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             return success = true;
         }
         else if ((player1W != address(0)) && (player2W == address(0))){
+            require(msg.sender == player1W, "You shall not pass");
+
             // PAYMENT STAGE
             uint256 tax = betPrice * 10 / 100;
             (bool transfer1, )  = payable(treasury).call{value: tax}("tax");
@@ -207,6 +221,10 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             ( bool transferBOne, ) = payable(treasury).call{value: gasBalance}("");
             require(transferBOne, "Transfer failed.");
         }
+    }
+
+    function openLotto(bool _lottoOpen ) external onlyOwner{
+        lottoOpen = _lottoOpen;
     }
     
     // --- API3 FUNCTIONS ---
