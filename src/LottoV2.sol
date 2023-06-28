@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 // ----------------------  NOTES  ----------------------
 // --- contract ---
-// - should split 1% of tax to myne
+// - should split off 1% merp and 1% soc
 // - should add a qrng results log
 // --- website ---
 // - should add some cool wallet reading features on site with ethersJS
