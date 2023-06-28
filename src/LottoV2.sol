@@ -5,7 +5,8 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 // ----------------------  NOTES  ----------------------
 // --- contract ---
-// - need to add a requirement that P1 isnt P2
+// - should split 1% of tax to myne
+// - should add a qrng results log
 // --- website ---
 // - should add some cool wallet reading features on site with ethersJS
 // - should display last rounds results above the current rounds options; like darts or
