@@ -5,8 +5,8 @@ pragma solidity ^0.8.0;
 //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//
 // ----------------------  NOTES  ----------------------
 // --- contract ---
-// - should split off 1% merp and 1% soc
-// - should add a qrng results log
+// - ((1)) should split off 1% merp and 1% soc
+// - ((2)) should add a qrng results log
 // --- website ---
 // - should add some cool wallet reading features on site with ethersJS
 // - should display last rounds results above the current rounds options; like darts or
@@ -67,6 +67,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     
     // LOTTO VARS
     address private treasury;
+    // ------------------------------------------------------------ ((1)) should split off 1% merp and 1% soc
     address public player1W;
     address public player2W;
     uint256 public betPrice;
@@ -79,6 +80,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     mapping(uint256 => address) public pastLottoResults;
     mapping(uint256 => uint256) public pastLottoRewards;
     mapping(bytes32 => uint256) public pastLottoAPI3CallCounter;
+    // ------------------------------------------------------------ ((2)) should add a qrng results log
 
     event BetDetails (uint256 playersCounter, uint256 counterReward);
 
@@ -94,6 +96,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         address _airnodeRrp             // POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
         ) RrpRequesterV0(_airnodeRrp){
         treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
+        // ------------------------------------------------------------ ((1)) should split off 1% merp and 1% soc
         player1W = address(0);          // "address(0)" (player slot is empty)
         player2W = address(0);          // "address(0)" (player slot is empty)
         betPrice = _betPrice;           // "10000000000000000" (0.01 MATIC)
@@ -114,7 +117,8 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             uint256 tax = betPrice * 10 / 100;
             (bool transfer1, )  = payable(treasury).call{value: tax}("tax");
             require(transfer1, "Transfer failed");
-            
+            // ------------------------------------------------------------ ((1)) should split off 1% merp and 1% soc
+
             // PLAYER'S 1 TURN
             counter++;
             player1W = msg.sender;
@@ -131,6 +135,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             uint256 tax = betPrice * 10 / 100;
             (bool transfer1, )  = payable(treasury).call{value: tax}("tax");
             require(transfer1, "Transfer failed");
+            // ------------------------------------------------------------ ((1)) should split off 1% merp and 1% soc
             
             // PLAYER'S 2 TURN
             player2W = msg.sender;
@@ -232,7 +237,8 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         require(expectingRequestWithIdToBeFulfilled[requestId],"Request ID not known");
         expectingRequestWithIdToBeFulfilled[requestId] = false;
         uint256 qrngUint256 = abi.decode(data, (uint256));
-        
+
+        // ------------------------------------------------------------ ((2)) should add a qrng results log
         uint256 requestIdCounter = pastLottoAPI3CallCounter[requestId];
         if(qrngUint256 % 2 == 0){pastLottoResults[requestIdCounter] = pastLottoPlayer2[requestIdCounter];}
         else{pastLottoResults[requestIdCounter] = pastLottoPlayer1[requestIdCounter];}
