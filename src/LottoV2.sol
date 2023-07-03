@@ -7,6 +7,7 @@ pragma solidity ^0.8.0;
 // --- contract ---
 // - ((1)) should split off 1% merp and 1% soc
 // - ((2)) should add a qrng results log
+// - ((3)) should add an easy mint NFT receipt to winner using an onlyOwner Transferfrom NFT id to claim
 // --- website ---
 // - should add some cool wallet reading features on site with ethersJS
 // - should display last rounds results above the current rounds options; like darts or
