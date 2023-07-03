@@ -7,7 +7,7 @@ pragma solidity ^0.8.0;
 // --- contract ---
 // - ((1)) should split off 1% merp and 1% soc
 // - ((2)) should add a qrng results log
-// - ((3)) should add an easy mint NFT receipt towinner using an onlyOwner Transferfrom NFT id to claim
+// - ((3)) should add an easy mint NFT receipt towinner using an onlyOwner Transferfrom NFT id to claim and give NFT and empty uri for now so its open for future
 // - ((4)) should deploy main net with tresor
 // --- website ---
 // - should add some cool wallet reading features on site with ethersJS
