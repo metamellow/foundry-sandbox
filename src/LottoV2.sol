@@ -12,15 +12,15 @@ pragma solidity ^0.8.0;
 
 
 /* v2.05
-// GENERATE SPONSOR WALLET *******MUMBAI********
+// GENERATE SPONSOR WALLET *******MAINNET********
 	
 npx @api3/airnode-admin derive-sponsor-wallet-address \
---airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
---airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address xxAx
+--airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
+--airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
+--sponsor-address 0x14b43f1b22b47c401dec863883b32e715313061e
 	
-# // >> Sponsor wallet address: xxAx
-# // >> lotto contract: xxBx
+# // >> Sponsor wallet address: 0x03f35AcF9bF1C7A0c8a824bBbdEA4421A4f34ea8
+# // >> lotto contract: 0x14b43f1b22b47c401dec863883b32e715313061e
 
 */
 
@@ -112,9 +112,9 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         // EVALUATE STAGE
         if ((player1W == address(0)) && (player2W == address(0))){
             // PAYMENT STAGE
-            uint256 tax1 = betPrice * 8 / 100;
-            uint256 tax2 = betPrice * 1 / 100;
-            uint256 tax3 = betPrice * 1 / 100;
+            uint256 tax1 = betPrice * 6 / 100;
+            uint256 tax2 = betPrice * 2 / 100;
+            uint256 tax3 = betPrice * 2 / 100;
             (bool transfer1, )  = payable(treasury).call{value: tax1}("tax1");
             (bool transfer2, )  = payable(treasury).call{value: tax2}("tax2");
             (bool transfer3, )  = payable(treasury).call{value: tax3}("tax3");
@@ -133,9 +133,9 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             require(msg.sender != player1W, "You shall not pass");
 
             // PAYMENT STAGE
-            uint256 tax1 = betPrice * 8 / 100;
-            uint256 tax2 = betPrice * 1 / 100;
-            uint256 tax3 = betPrice * 1 / 100;
+            uint256 tax1 = betPrice * 6 / 100;
+            uint256 tax2 = betPrice * 2 / 100;
+            uint256 tax3 = betPrice * 2 / 100;
             (bool transfer1, )  = payable(treasury).call{value: tax1}("tax1");
             (bool transfer2, )  = payable(treasury).call{value: tax2}("tax2");
             (bool transfer3, )  = payable(treasury).call{value: tax3}("tax3");
