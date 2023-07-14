@@ -1,0 +1,1 @@
+make public 1v1 bets on real world stuff like temperature and then back it up with API3 data
