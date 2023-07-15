@@ -1,1 +1,4 @@
-some sort ofpeople or horse race or racing bwtting game where groups of racing work in teams to beat the other team (web3 style) and winners take the pot
+/*
+- some sort of people or horse race or racing betting game
+- groups work in teams to beat the other team (web3 style) and winners take the pot
+*/

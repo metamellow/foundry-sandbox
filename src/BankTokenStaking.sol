@@ -2,11 +2,15 @@
 pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-. BANK OF NOWHERE $BANK STAKING POOL -.-.-.-. */
+/* -.-.- BANK OF NOWHERE $BANK STAKING POOL v0.1 -.-.-. */
+/* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
+/* .---------------------- setup ---------------------. //
+- (1) 
+// .--------------------------------------------------. */
+
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-// ^^^^^^^^^^^^^ how can I delete this?????????
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -154,13 +158,4 @@ contract bankTokenStaking is ERC20, Ownable{
     function transferFrom(address from, address to, uint256 amount) public override onlyOwner returns (bool success) {
         return super.transferFrom(from, to, amount);
     }
-
-    // ^^^^^^^^^^^^^^^^^^^can delete?
-    // -------------------why doesnt this work?
-    /*
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override onlyOwner {
-        return super._beforeTokenTransfer(from, to, amount);
-    }
-    */
-    
 }
