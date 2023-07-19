@@ -126,3 +126,106 @@ contract DiceGame {
         return score;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract DiceGame {
+    struct Player {
+        address payable addr;
+        uint256 bet;
+        uint256 score;
+        uint256 diceKept;
+        uint256[] dice;
+    }
+
+    uint256 public constant NUM_DICE = 6;
+    uint256 public constant NUM_PLAYERS = 3;
+    uint256 public pot;
+
+    Player[NUM_PLAYERS] public players;
+    uint256 public currentPlayer;
+
+    constructor() {
+        currentPlayer = 0;
+    }
+
+    function joinGame() public payable {
+        require(msg.value > 0, "Must send Ether to join game");
+        require(currentPlayer < NUM_PLAYERS, "Game is full");
+
+        players[currentPlayer].addr = payable(msg.sender);
+        players[currentPlayer].bet = msg.value;
+        currentPlayer++;
+    }
+
+    function rollDice() public {
+        require(currentPlayer == NUM_PLAYERS, "Not all players have joined");
+
+        for(uint i = 0; i < NUM_PLAYERS; i++) {
+            for(uint j = 0; j < NUM_DICE; j++) {
+                players[i].dice.push(uint256(keccak256(abi.encodePacked(i, j, block.timestamp))) % 6 + 1);
+            }
+        }
+    }
+
+    function keepDice(uint8[] calldata _keptDice) external {
+        for(uint i = 0; i < NUM_PLAYERS; i++) {
+            if(players[i].addr == msg.sender) {
+                require(_keptDice.length >= 1, "Must keep at least 1 dice");
+                require(_keptDice.length <= NUM_DICE - players[i].diceKept, "Can't keep more dice");
+
+                for(uint j = 0; j < _keptDice.length; j++) {
+                    players[i].score += players[i].dice[_keptDice[j]-1];
+                    players[i].dice[_keptDice[j]-1] = 0;
+                    players[i].diceKept++;
+                }
+                return;
+            }
+        }
+
+        revert("Not a player");
+    }
+
+    function endGame() public {
+        require(players[0].diceKept == NUM_DICE, "Game not over yet");
+
+        uint256 bestScore = 0;
+        uint256 winnerIndex;
+        for(uint i = 0; i < NUM_PLAYERS; i++) {
+            if(players[i].score > bestScore && checkQualification(players[i].dice)) {
+                bestScore = players[i].score;
+                winnerIndex = i;
+            }
+        }
+
+        players[winnerIndex].addr.transfer(pot);
+
+        delete players;
+        pot = 0;
+        currentPlayer = 0;
+    }
+
+    function checkQualification(uint256[] memory dice) public pure returns (bool) {
+        bool hasFour = false;
+        bool hasSix = false;
+        for(uint i = 0; i < dice.length; i++) {
+            if(dice[i] == 4) hasFour = true;
+            if(dice[i] == 6) hasSix = true;
+        }
+        return hasFour && hasSix;
+    }
+}
