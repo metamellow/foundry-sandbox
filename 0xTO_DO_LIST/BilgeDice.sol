@@ -3,9 +3,137 @@
 
 
 
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
+contract DiceGame {
+    uint256 public constant MAX_SCORE = 24;
+    uint256 public constant MAX_PLAYERS = 3;
+    uint256 public constant DICE_SIDES = 6;
+    uint256 public constant BET_AMOUNT = 10;
 
+    struct Player {
+        address playerAddress;
+        uint256 score;
+        bool qualified;
+        bool finished;
+        uint256[] dice;
+    }
 
+    Player[MAX_PLAYERS] public players;
+    uint256 public currentPlayerIndex;
+    bool public gameActive;
+    uint256 public totalBets;
+
+    event GameFinished(address winner, uint256 winnings);
+
+    constructor() {
+        currentPlayerIndex = 0;
+        gameActive = false;
+        totalBets = 0;
+    }
+
+    function startGame() public payable {
+        require(!gameActive, "Game is already active");
+        require(msg.value == BET_AMOUNT, "Incorrect bet amount");
+        require(currentPlayerIndex < MAX_PLAYERS, "Maximum players reached");
+
+        players[currentPlayerIndex] = Player({
+            playerAddress: msg.sender,
+            score: 0,
+            qualified: false,
+            finished: false,
+            dice: new uint256[](6)
+        });
+
+        totalBets += msg.value;
+        currentPlayerIndex++;
+
+        if (currentPlayerIndex == MAX_PLAYERS) {
+            gameActive = true;
+            currentPlayerIndex = 0;
+            distributeDice();
+        }
+    }
+
+    function distributeDice() private {
+        for (uint256 i = 0; i < 6; i++) {
+            players[currentPlayerIndex].dice[i] = getRandomNumber();
+        }
+    }
+
+    function getRandomNumber() private view returns (uint256) {
+        uint256 randomNumber = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, currentPlayerIndex))) % DICE_SIDES + 1;
+        return randomNumber;
+    }
+
+    function chooseDice(uint256[] memory selectedDice) public {
+        require(gameActive, "Game is not active");
+        require(msg.sender == players[currentPlayerIndex].playerAddress, "Not your turn");
+        require(selectedDice.length > 0 && selectedDice.length <= 6, "Invalid number of dice");
+
+        Player storage currentPlayer = players[currentPlayerIndex];
+
+        for (uint256 i = 0; i < selectedDice.length; i++) {
+            require(selectedDice[i] >= 1 && selectedDice[i] <= DICE_SIDES, "Invalid dice value");
+            currentPlayer.score += selectedDice[i];
+        }
+
+        for (uint256 i = 0; i < 6; i++) {
+            if (!contains(selectedDice, currentPlayer.dice[i])) {
+                currentPlayer.dice[i] = getRandomNumber();
+            }
+        }
+
+        if (currentPlayer.score >= MAX_SCORE) {
+            currentPlayer.qualified = true;
+        }
+
+        currentPlayer.finished = true;
+        currentPlayerIndex++;
+
+        if (currentPlayerIndex == MAX_PLAYERS) {
+            endGame();
+        }
+    }
+
+    function contains(uint256[] memory array, uint256 element) private pure returns (bool) {
+        for (uint256 i = 0; i < array.length; i++) {
+            if (array[i] == element) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function endGame() private {
+        uint256 highestScore = 0;
+        address winner;
+
+        for (uint256 i = 0; i < MAX_PLAYERS; i++) {
+            Player storage player = players[i];
+
+            if (player.qualified && player.score > highestScore) {
+                highestScore = player.score;
+                winner = player.playerAddress;
+            }
+
+            player.score = 0;
+            player.qualified = false;
+            player.finished = false;
+        }
+
+        gameActive = false;
+        totalBets = 0;
+
+        if (winner != address(0)) {
+            uint256 winnings = totalBets;
+            emit GameFinished(winner, winnings);
+            payable(winner).transfer(winnings);
+        }
+    }
+}
+```
 
 
 
