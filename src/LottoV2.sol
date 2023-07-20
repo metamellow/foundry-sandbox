@@ -6,13 +6,20 @@ pragma solidity ^0.8.0;
 // --- GENERATE SPONSOR WALLET PROCESS ---
 // run in terminal, after entering data ( https://docs.api3.org/reference/qrng/chains.html#anu )
 // deployed contract == sponsor-address
+// Examples:
 
+// Poly Mainnet
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
 --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
 --sponsor-address 0x14b43f1b22b47c401dec863883b32e715313061e
+
+// Poly Mumbai
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
+--airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
+--sponsor-address 0xd4ab4F6c54eF926Dd6b4e41411c190dFae64eb58
 	
-// >> v2.05 result >> Sponsor wallet address: 0x03f35AcF9bF1C7A0c8a824bBbdEA4421A4f34ea8
 */
 // _______________________________________________________
 
