@@ -75,9 +75,9 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         address _dev1,
         address _dev2,
         uint256 _betPrice,
-        address _airnodeRrp            // POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
+        address _airnodeRrp            // ETH MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
         ) RrpRequesterV0(_airnodeRrp){
-        treasury = _treasury;           // "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
+        treasury = _treasury;           // ETH MAIN "0xCff8339DA421c465d4325268799300952B55FAd0" POLY MAIN "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
         dev1 = _dev1;                   // "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c)
         dev2 = _dev2;                   // "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP)
         player1W = address(0);          // "address(0)" (player slot is empty)
@@ -216,8 +216,8 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     
     // --- API3 FUNCTIONS ---
     function setRequestParameters(
-        address _airnode,               // POLY MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY TEST (0x6238772544f029ecaBfDED4300f13A3c4FE84E1D)
-        bytes32 _endpointIdUint256,     // POLY MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY TEST (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78)
+        address _airnode,               // ETH MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY TEST (0x6238772544f029ecaBfDED4300f13A3c4FE84E1D)
+        bytes32 _endpointIdUint256,     // ETH MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY TEST (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78)
         address _sponsorWallet          // Created after contract deploy and filled with some gas
         ) external onlyOwner {
         airnode = _airnode;
