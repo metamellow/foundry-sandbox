@@ -24,7 +24,7 @@ npx @api3/airnode-admin derive-sponsor-wallet-address \
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
 --airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address 0xd4ab4F6c54eF926Dd6b4e41411c190dFae64eb58
+--sponsor-address 0xf530871a7830110420561647cc0048d1cc4ca82c
 	
 */
 // _______________________________________________________
