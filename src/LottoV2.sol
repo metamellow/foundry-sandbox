@@ -31,7 +31,7 @@ npx @api3/airnode-admin derive-sponsor-wallet-address \
 
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.05  .-.-.-.-. */
+/* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.06  .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -69,6 +69,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     mapping(uint256 => uint256) public pastLottoAPI3CallResult;
 
     event BetDetails (uint256 playersCounter, uint256 counterReward);
+    event ClaimDetails (uint256 claimedCounter, uint256 claimedRewards);
 
     // API3 VARS
     address public airnode;
@@ -95,7 +96,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
 
     // --- PUBLIC FUNCTIONS ---
 
-    function bet() public payable returns(bool success){
+    function bet() public payable{
         // REQUIREMENTS STAGE
         require(betPrice <= msg.value, "Need more gas to cover the current price");
         require(lottoOpen, "Lotto is not accepting bets");
@@ -103,13 +104,13 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         // EVALUATE STAGE
         if ((player1W == address(0)) && (player2W == address(0))){
             // PAYMENT STAGE
-            uint256 tax1 = betPrice * 6 / 100;
-            uint256 tax2 = betPrice * 2 / 100;
-            uint256 tax3 = betPrice * 2 / 100;
-            (bool transfer1, )  = payable(treasury).call{value: tax1}("tax1");
-            (bool transfer2, )  = payable(treasury).call{value: tax2}("tax2");
-            (bool transfer3, )  = payable(treasury).call{value: tax3}("tax3");
-            require(transfer1 && transfer2 && transfer3,  "Transfer failed");
+            uint256 p1tax1 = betPrice * 6 / 100;
+            uint256 p1tax2 = betPrice * 2 / 100;
+            uint256 p1tax3 = betPrice * 2 / 100;
+            (bool p1transfer1, ) = payable(treasury).call{value: p1tax1}("p1tax1");
+            (bool p1transfer2, ) = payable(dev1).call{value: p1tax2}("p1tax2");
+            (bool p1transfer3, ) = payable(dev2).call{value: p1tax3}("p1tax3");
+            require(p1transfer1 && p1transfer2 && p1transfer3, "Transfer failed");
 
             // PLAYER'S 1 TURN
             counter++;
@@ -118,19 +119,18 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             pastLottoRewards[counter] = (betPrice - (betPrice * 10 / 100)) *2;
 
             emit BetDetails(counter, pastLottoRewards[counter]);
-            return success = true;
         }
         else if ((player1W != address(0)) && (player2W == address(0))){
             require(msg.sender != player1W, "You shall not pass");
 
             // PAYMENT STAGE
-            uint256 tax1 = betPrice * 6 / 100;
-            uint256 tax2 = betPrice * 2 / 100;
-            uint256 tax3 = betPrice * 2 / 100;
-            (bool transfer1, )  = payable(treasury).call{value: tax1}("tax1");
-            (bool transfer2, )  = payable(treasury).call{value: tax2}("tax2");
-            (bool transfer3, )  = payable(treasury).call{value: tax3}("tax3");
-            require(transfer1 && transfer2 && transfer3,  "Transfer failed");
+            uint256 p2tax1 = betPrice * 6 / 100;
+            uint256 p2tax2 = betPrice * 2 / 100;
+            uint256 p2tax3 = betPrice * 2 / 100;
+            (bool p2transfer1, ) = payable(treasury).call{value: p2tax1}("p2tax1");
+            (bool p2transfer2, ) = payable(dev1).call{value: p2tax2}("p2tax2");
+            (bool p2transfer3, ) = payable(dev2).call{value: p2tax3}("p2tax3");
+            require(p2transfer1 && p2transfer2 && p2transfer3,  "Transfer failed");
             
             // PLAYER'S 2 TURN
             player2W = msg.sender;
@@ -155,7 +155,6 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
             betPrice = betPrice * 11 / 10;
 
             emit BetDetails(counter, pastLottoRewards[counter]);
-            return success = true;
         }
     }
 
@@ -180,6 +179,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         (bool transfer1, )  = payable(msg.sender).call{value: rewards}("rewards");
         require(transfer1, "Transfer failed");
 
+        emit ClaimDetails(_counter, rewards);
         return (rewards);
     }
     
