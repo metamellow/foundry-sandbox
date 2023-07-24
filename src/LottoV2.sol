@@ -14,10 +14,16 @@ npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
 --sponsor-address 0x14b43F1b22b47c401dEC863883B32e715313061E
 
-// Poly Mainnet
+// Poly Mainnet ANU
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
 --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
+--sponsor-address 0x14d1e21657557ac43a94f2ffbd104c8dadce1b9a
+
+// Poly Mainnet Quintessence
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6CyZcaXvbnbqGfqqZWvWNUbGvdd5PAJRrBeAhy9rz1bbnFmpVLg2wPj1h6TyndFrWLUG3kHWBYpwacgCTGWAHFTbUrXEg6LdLxoEBny2YDz \
+--airnode-address 0x224e030f03Cd3440D88BD78C9BF5Ed36458A1A25 \
 --sponsor-address 0x14d1e21657557ac43a94f2ffbd104c8dadce1b9a
 
 // Poly Mumbai
