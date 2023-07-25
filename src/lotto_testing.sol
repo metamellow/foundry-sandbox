@@ -1,54 +1,10 @@
 // SPDX-License-Identifier: GNU
 pragma solidity ^0.8.0;
 
-// _______________________________________________________
-/*
-// --- GENERATE SPONSOR WALLET PROCESS ---
-// run in terminal, after entering data ( https://docs.api3.org/reference/qrng/chains.html#anu )
-// deployed contract == sponsor-address
-// Examples:
-
-// Eth Mainnet
-npx @api3/airnode-admin derive-sponsor-wallet-address \
---airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
---airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
---sponsor-address 0x14b43F1b22b47c401dEC863883B32e715313061E
-
-// Poly Mainnet ANU
-npx @api3/airnode-admin derive-sponsor-wallet-address \
---airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
---airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
---sponsor-address 0x14d1e21657557ac43a94f2ffbd104c8dadce1b9a
-
-// Poly Mainnet Quintessence
-npx @api3/airnode-admin derive-sponsor-wallet-address \
---airnode-xpub xpub6CyZcaXvbnbqGfqqZWvWNUbGvdd5PAJRrBeAhy9rz1bbnFmpVLg2wPj1h6TyndFrWLUG3kHWBYpwacgCTGWAHFTbUrXEg6LdLxoEBny2YDz \
---airnode-address 0x224e030f03Cd3440D88BD78C9BF5Ed36458A1A25 \
---sponsor-address 0x14d1e21657557ac43a94f2ffbd104c8dadce1b9a
-
-// Poly Mumbai
-npx @api3/airnode-admin derive-sponsor-wallet-address \
---airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
---airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address 0xf530871a7830110420561647cc0048d1cc4ca82c
-	
-*/
-// _______________________________________________________
-
-
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V2.07  .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-
-/* .---------------------- setup ---------------------. //
-- (1) Deploy contract
-- (2) Create 'sponsor wallet' for API3 QRNG system
-    - For details, see: https://docs.api3.org/reference/qrng/chains.html#anu
-    - For tutorial, see: https://blog.developerdao.com/create-a-random-generated-number-on-chain-using-api3-tools-for-free
-- (3) Fund sponsor wallet with MATIC
-- (4) Call address(this).setRequestParameters()
-// .--------------------------------------------------. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -218,6 +174,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
     }
     
     // --- API3 FUNCTIONS ---
+    // Setting the params, done right after deployment
     function setRequestParameters(
         address _airnode,               // ETH MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY TEST (0x6238772544f029ecaBfDED4300f13A3c4FE84E1D)
         bytes32 _endpointIdUint256,     // ETH MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY TEST (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78)
@@ -228,6 +185,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         sponsorWallet = _sponsorWallet;
     }
 
+    // called from wihtin the bet() call from P2
     function _makeAPICall() private{
         bytes32 requestId = airnodeRrp.makeFullRequest(
             airnode,
@@ -250,15 +208,13 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
 
         uint256 requestIdCounter = pastLottoAPI3CallCounter[requestId];
         pastLottoAPI3CallResult[requestIdCounter] = qrngUint256;
-        if(qrngUint256 % 2 == 0){
-            pastLottoResults[requestIdCounter] = pastLottoPlayer2[requestIdCounter];
-        } else{
-            pastLottoResults[requestIdCounter] = pastLottoPlayer1[requestIdCounter];
-        }
+        if(qrngUint256 % 2 == 0){pastLottoResults[requestIdCounter] = pastLottoPlayer2[requestIdCounter];}
+        else{pastLottoResults[requestIdCounter] = pastLottoPlayer1[requestIdCounter];}
     }
     
     fallback() external payable{
     }
     receive() external payable{
     }
+
 }
