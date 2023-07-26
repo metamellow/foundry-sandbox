@@ -12,7 +12,8 @@ pragma solidity ^0.8.0;
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
 --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
---sponsor-address 0x14b43F1b22b47c401dEC863883B32e715313061E
+--sponsor-address 0x14d1e21657557ac43a94f2ffbd104c8dadce1b9a
+//Sponsor wallet address: 0x0c01FF0978423A557D1271e717e3b80AC8C7E50F
 
 // Poly Mainnet ANU
 npx @api3/airnode-admin derive-sponsor-wallet-address \
