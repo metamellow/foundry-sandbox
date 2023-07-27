@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GNU
+// SPDX-License-Identifier: GNU-3.0
 pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
@@ -13,7 +13,6 @@ contract NFT is ERC721, Ownable{
     using Strings for uint256;
 
     uint256 public totalSupply;
-    uint256 private reserved;
 
     string public baseUri = "ipfs://bafybeifvuftc456ml5yj6crrvckklevddnipizzeb6op7prdjmauefsggu/";
     string public baseExtension = ".json";
