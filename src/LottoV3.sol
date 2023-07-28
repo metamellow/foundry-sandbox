@@ -20,7 +20,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
 
-contract LottoV2 is Ownable, RrpRequesterV0 {
+contract LottoV3 is Ownable, RrpRequesterV0 {
     
     // LOTTO VARS
     address private treasury;
