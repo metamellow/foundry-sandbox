@@ -21,7 +21,7 @@ pragma solidity ^0.8.0;
 
         emit RewardsEmit(msg.sender, userBalance, rewards);
     }
--
+- I can make a QRNG call internally and place the result in a secret internal box and then that is the key
 */
 
 
