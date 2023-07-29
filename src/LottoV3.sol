@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: GNU-3.0
 pragma solidity ^0.8.0;
 
+/*
+- need to fix the erc tax issue on collection
+- need to make lotto reset to base after 2 weeks
+- need to change tax percentages to 4 3 3
+*/
+
+
+
+
+
+
+
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V3.01  .-.-.-.-. */
