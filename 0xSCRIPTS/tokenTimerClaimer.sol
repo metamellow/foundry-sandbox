@@ -1,6 +1,13 @@
 // SPDX-License-Identifier: GNU-3.0
 pragma solidity ^0.8.0;
 
+
+/*
+- need to add an NFT checker owner blocker
+*/
+
+
+
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.  BON TOKEN TIMER CLAIMER  V1.02 .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
