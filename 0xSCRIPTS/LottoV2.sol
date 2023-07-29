@@ -94,7 +94,7 @@ contract LottoV2 is Ownable, RrpRequesterV0 {
         uint256 _betPrice,
         address _airnodeRrp            // ETH MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY MAIN (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd) POLY TEST (0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd)
         ) RrpRequesterV0(_airnodeRrp){
-        treasury = _treasury;           // ETH MAIN "0xCff8339DA421c465d4325268799300952B55FAd0" POLY MAIN "0xb1a23cD1dcB4F07C9d766f2776CAa81d33fa0Ede" (DevsMultiS)
+        treasury = _treasury;           // 
         dev1 = _dev1;                   // "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c)
         dev2 = _dev2;                   // "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP)
         player1W = address(0);          // "address(0)" (player slot is empty) - technically this is unneeded in constr

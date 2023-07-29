@@ -4,6 +4,24 @@ pragma solidity ^0.8.0;
 
 /*
 - need to add an NFT checker owner blocker
+- make one of the following for a tax and a burn (if on):
+        if(burnOn == true){
+        uint burnAmount = rewards * brnRate / 10000;
+        try ERC20Burnable(tokenAddr).burn(burnAmount){}
+        catch {IERC20(tokenAddr).transfer(address(0), burnAmount);}
+
+        uint userReward = rewards - (burnAmount);
+        bool success = IERC20(tokenAddr).transfer(msg.sender, userReward);
+        require(success == true, "transfer failed!");
+
+        emit RewardsEmit(msg.sender, userBalance, userReward);
+    } else {
+        bool success = IERC20(tokenAddr).transfer(msg.sender, rewards);
+        require(success == true, "transfer failed!");
+
+        emit RewardsEmit(msg.sender, userBalance, rewards);
+    }
+-
 */
 
 
