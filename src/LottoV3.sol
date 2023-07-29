@@ -88,6 +88,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
 
     // --- PUBLIC FUNCTIONS ---
 
+// - maybe return a unit4 to say if sendToApprove (and listeningOn), betSuccess, betFailed
     function bet() public payable{
         // --- REQUIREMENTS STAGE ---
         require(lottoOpen == true, "Lotto is not accepting bets");
