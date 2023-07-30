@@ -64,7 +64,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         address _dev1, // "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c)
         address _dev2, // "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP)
         uint256 _betBase, // "10000000000000000" (0.01 MATIC)
-        uint256 _restartDuration, // "1209600"
+        uint256 _restartDuration, // "1209600" or two weeks
         uint256 _taxRate, //"10" over 100 or 10%
         address _airnodeRrp // ETH MAIN "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" POLY MAIN "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" POLY TEST "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd"
         ) RrpRequesterV0(_airnodeRrp)
