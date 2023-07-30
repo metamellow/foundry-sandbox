@@ -68,7 +68,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         uint256 _taxRate, //"10" over 100 or 10%
         address _airnodeRrp // ETH MAIN "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" POLY MAIN "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" POLY TEST "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd"
         ) RrpRequesterV0(_airnodeRrp)
-        ERC721("BON.Lotto.V3 Rewards Voucher", "LOTTOv3"){
+        ERC721("BON.Lotto.V3 Winner Voucher", "LOTTOv3"){
         erc20Token = _erc20Token;
         treasury = _treasury;
         staking = _staking;
