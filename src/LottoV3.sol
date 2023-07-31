@@ -145,6 +145,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             betPrice = betPrice * 11 / 10;
 
             // LOTTO RESTART CHECK
+            // ----------------------------------------------------------------- maybe move this out to another function
             uint256 timePast = block.timestamp - restartTimer;
             if(timePast >= restartDuration){
             restartTimer = block.timestamp;
