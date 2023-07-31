@@ -103,23 +103,18 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             // GAS PAYMENT
             require(betPrice <= msg.value, "Need more gas to pay the betPrice");
             payment = betPrice;
-            if(taxSwitch == true){
-                if(_sendGas(payment) == false ){ /* ERROR */ return betData = 3;}
-            }
+            if(taxSwitch){_sendGas(payment);}
 
         } else {
             // ERC20 PAYMENT
             uint256 userAllowance = IERC20(erc20Token).allowance(msg.sender, address(this));
-            if(userAllowance < betPrice){
-                if(_approveERC20Tokens()){ /* END */ return betData = 0;}
-                else { /* ERROR */ return betData = 3;}
-            }
+            if(userAllowance < betPrice){/* END */ return betData = 0;}
+
             uint256 beforeBal = IERC20(erc20Token).balanceOf(address(this));
             IERC20(erc20Token).transferFrom(msg.sender, address(this), betPrice);
             payment = IERC20(erc20Token).balanceOf(address(this)) - beforeBal;
-            if(taxSwitch == true){
-                if(_sendERC20(payment) == false ){ /* ERROR */ return betData = 3;}
-            }
+
+            if(taxSwitch){_sendERC20(payment);}
         }
         
         // --- EVALUATE STAGE ---
@@ -197,45 +192,28 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     }
     
     // --- DEV FUNCTIONS ---
-    function _approveERC20Tokens() internal returns(bool){
-        uint256 totalAmount = IERC20(erc20Token).totalSupply();
-        if (IERC20(erc20Token).approve(address(this), totalAmount)) {
-            emit ApprovalDetails(true);
-            return true;
-        } else {
-            emit ApprovalDetails(false);
-            return false;
-        }
-    }
-
-    function _sendERC20(uint256 _payment) internal returns(bool){
+    function _sendERC20(uint256 _payment) internal {
         uint256 tt = _payment * taxRate / 100;
         uint256 t1 = tt * 40 / 1000;
         uint256 t2 = tt * 30 / 1000;
         uint256 t3 = tt * 15 / 1000;
         uint256 t4 = tt * 15 / 1000;
-        bool txn1 = IERC20(erc20Token).transfer(treasury, t1);
-        bool txn2 = IERC20(erc20Token).transfer(staking, t2);
-        bool txn3 = IERC20(erc20Token).transfer(dev1, t3);
-        bool txn4 = IERC20(erc20Token).transfer(dev2, t4);
-
-        if( txn1 && txn2 && txn3 && txn4){ return true; }
-        else{ return false; }
+        IERC20(erc20Token).transfer(treasury, t1);
+        IERC20(erc20Token).transfer(staking, t2);
+        IERC20(erc20Token).transfer(dev1, t3);
+        IERC20(erc20Token).transfer(dev2, t4);
     }
 
-    function _sendGas(uint256 _payment) internal returns(bool){
+    function _sendGas(uint256 _payment) internal {
         uint256 tt = _payment * taxRate / 100;
         uint256 t1 = tt * 40 / 1000;
         uint256 t2 = tt * 30 / 1000;
         uint256 t3 = tt * 15 / 1000;
         uint256 t4 = tt * 15 / 1000;
-        ( bool txn1, ) = payable(treasury).call{value: t1}("");
-        ( bool txn2, ) = payable(staking).call{value: t2}("");
-        ( bool txn3, ) = payable(dev1).call{value: t3}("");
-        ( bool txn4, ) = payable(dev2).call{value: t4}("");
-
-        if( txn1 && txn2 && txn3 && txn4){ return true; }
-        else{ return false; }
+        payable(treasury).transfer(t1);
+        payable(staking).transfer(t2);
+        payable(dev1).transfer(t3);
+        payable(dev2).transfer(t4);
     }
 
     function resetLotto(
