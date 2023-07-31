@@ -61,15 +61,21 @@ contract contractTest is Test {
     }
 
     function test_1_Bet() public {
+
+        vm.stopPrank();
         vm.startPrank(user1);
+        ERC20(ERC20token).approve(address(LottoV3Contract), 1_000_000_000 ether);
         LottoV3Contract.bet();
         consoleLogs();
+
+        vm.stopPrank();
         vm.startPrank(user2);
+        ERC20(ERC20token).approve(address(LottoV3Contract), 1_000_000_000 ether);
         LottoV3Contract.bet();
         consoleLogs();
 
         address results;
-        results = LottoV3Contract.pastLottoResults(1);
+        array results[] = LottoV3Contract.checkLotto(1);
         console.log("RESULTS: ", results);
 
     }
