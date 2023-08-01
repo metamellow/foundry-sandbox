@@ -92,7 +92,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     // --- PUBLIC FUNCTIONS ---
 
     // @Dev Returns: 0 approve, 1 player one, 2 player two, 3 error
-    // @Dev Turn JS listener on on bet() call
+    // @Dev Turn JS listener on bet() call
     function bet() public payable returns(uint8 betData){
         // --- REQUIREMENTS STAGE ---
         require(lottoOpen == true, "Lotto is not accepting bets");
@@ -150,10 +150,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             // LOTTO RESTART CHECK
             // ----------------------------------------------------------------- maybe move this out to another function
             uint256 timePast = block.timestamp - restartTimer;
-            if(timePast >= restartDuration){
-            restartTimer = block.timestamp;
-            betPrice = betBase;
-            }
+            _checkLottoTimer(timePast);
 
             /* END */
             emit BetDetails(counter, pastLottoRewards[counter]);
@@ -218,6 +215,13 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         payable(staking).transfer(t2);
         payable(dev1).transfer(t3);
         payable(dev2).transfer(t4);
+    }
+
+    function _checkLottoTimer(uint256 timePast) internal{
+        if(timePast >= restartDuration){
+        restartTimer = block.timestamp;
+        betPrice = betBase;
+        }
     }
 
     function resetLotto(
