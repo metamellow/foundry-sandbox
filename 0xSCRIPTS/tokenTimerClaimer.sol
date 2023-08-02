@@ -48,9 +48,9 @@ contract Claimer is Ownable {
 
     event ClaimDetails (uint256 claimAmount);
     
-    constructor(address _tokenAddress, uint256 _claimRate, uint256 _claimPace) {
+    constructor(address _tokenAddress, address _nftAddress, uint256 _claimPace) {
         token = IERC20(_tokenAddress);          // "0x123", erc20 token addr
-        claimRate = _claimRate;                 // "4"/1000 = 0.4%
+        nfts = IERC721(_nftAddress);          // "0x123", erc721 nft addr
         claimPace = _claimPace;                 // "604800", 7 day
     }
 
