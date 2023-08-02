@@ -41,26 +41,27 @@ contract Claimer is Ownable {
     IERC20 public token;
     uint256 public claimRate;
     uint256 public claimPace;
-    uint256 public claimKey;
 
     mapping(address => uint256) public lastClaimTime;
     mapping(address => uint256) public totalClaimed;
 
     event ClaimDetails (uint256 claimAmount);
     
-    constructor(address _tokenAddress, uint256 _claimRate, uint256 _claimPace, uint256 _claimKey) {
+    constructor(address _tokenAddress, uint256 _claimRate, uint256 _claimPace) {
         token = IERC20(_tokenAddress);          // "0x123", erc20 token addr
         claimRate = _claimRate;                 // "10"/1000 = 1%
-        claimPace = _claimPace;                 // "604800", 7 days
-        claimKey = _claimKey;                   // "420", can be anything, RNG after 1st
+        claimPace = _claimPace;                 // "604800", 7 day
     }
 
-    function claim(uint256 _claimKey) external {
-        require(_claimKey >= 1 && _claimKey <= 1000, "Invalid key value");
-        require(_claimKey == claimKey, "Invalid key value");
+    function claim() external {
         require(lastClaimTime[msg.sender] + claimPace <= block.timestamp, "Time passed in not enough");
+        unit256 nftsHeld;
+        // set the func below equal to this var
+        // call to see how many NFTs are held at established address above
+        // require that its greater than 0
 
         uint256 availableTokens = token.balanceOf(address(this));
+        unit256 userRate = claimRate * (115**nftsHeld) / (100**nftsHeld);
         uint256 claimAmount = availableTokens * claimRate / 1000;
         require(claimAmount <= availableTokens, "Insufficient tokens in the pool");
 
@@ -68,7 +69,6 @@ contract Claimer is Ownable {
         totalClaimed[msg.sender] += claimAmount;
 
         token.transfer(msg.sender, claimAmount);
-        claimKey = _updateClaimKey();
 
         emit ClaimDetails(claimAmount);
     }
