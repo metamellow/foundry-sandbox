@@ -5,6 +5,7 @@ pragma solidity ^0.8.0;
 /*
 - need to add an NFT checker owner blocker, should be turnoffable 
 - make RebelLabs on twit
+- temporarily keep BONNFT address as 'placeholder'
 - i can just do all this and use it as my NFT staker, *1.1 on base rate per
 - make one of the following for a tax and a burn (if on):
         if(burnOn == true){
