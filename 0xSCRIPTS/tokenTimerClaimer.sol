@@ -5,6 +5,7 @@ pragma solidity ^0.8.0;
 /*
 - need to add an NFT checker owner blocker, should be turnoffable 
 - make RebelLabs on twit
+- timer check should be set PER NFT not per wallet, but all held are NftS are checked which means if they buy a new one the timer for the new one would differ from the rest of the group until it naturally aligns 
 - temporarily keep BONNFT address as 'placeholder'
 - i can just do all this and use it as my NFT staker, *1.1 on base rate per
 - make one of the following for a tax and a burn (if on):
@@ -39,7 +40,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Claimer is Ownable {
     IERC20 public token;
-    uint256 public claimRate;
+    IERC721 public nfts;
     uint256 public claimPace;
 
     mapping(address => uint256) public lastClaimTime;
@@ -49,7 +50,7 @@ contract Claimer is Ownable {
     
     constructor(address _tokenAddress, uint256 _claimRate, uint256 _claimPace) {
         token = IERC20(_tokenAddress);          // "0x123", erc20 token addr
-        claimRate = _claimRate;                 // "10"/1000 = 1%
+        claimRate = _claimRate;                 // "4"/1000 = 0.4%
         claimPace = _claimPace;                 // "604800", 7 day
     }
 
@@ -61,8 +62,7 @@ contract Claimer is Ownable {
         // require that its greater than 0
 
         uint256 availableTokens = token.balanceOf(address(this));
-        unit256 userRate = claimRate * (115**nftsHeld) / (100**nftsHeld);
-        uint256 claimAmount = availableTokens * claimRate / 1000;
+        uint256 claimAmount = availableTokens * nftsHeld / 1000;
         require(claimAmount <= availableTokens, "Insufficient tokens in the pool");
 
         lastClaimTime[msg.sender] = block.timestamp;
