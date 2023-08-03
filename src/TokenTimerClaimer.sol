@@ -46,7 +46,6 @@ contract Claimer is Ownable {
 
         uint256 availableTokens = token.balanceOf(address(this));
         uint256 claimAmount = availableTokens * claimRate / 1000;
-        require(claimAmount <= availableTokens, "Insufficient tokens in the pool");
 
         lastClaimTime[_tokenID] = block.timestamp;
         totalClaimed[msg.sender] += claimAmount;
@@ -60,8 +59,6 @@ contract Claimer is Ownable {
         } else {
             token.transfer(msg.sender, claimAmount);
         }
-
-        token.transfer(msg.sender, claimAmount);
 
         emit ClaimDetails(claimAmount);
     }
