@@ -34,7 +34,10 @@ contract contractTest is Test {
         ClaimerContract = new Claimer(
             /* token */ 0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f,
             /* nft */   0x88421bc1C0734048f80639BE6EF367f634c33804,
-            /* pace */  604800
+            /* pace */  604800,
+            /* claim */ 5,
+            /* burn */  5
+
         );
 
         // --- TOKENS ---

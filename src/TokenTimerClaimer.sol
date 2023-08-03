@@ -15,6 +15,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Claimer is Ownable {
@@ -30,11 +31,13 @@ contract Claimer is Ownable {
 
     event ClaimDetails (uint256 claimAmount);
     
-    constructor(address _tokenAddress, address _nftAddress, uint256 _claimPace, uint256 _claimRate) {
+    constructor(address _tokenAddress, address _nftAddress, uint256 _claimPace, uint256 _claimRate, uint256 _burnRate) {
         token = IERC20(_tokenAddress);      // "0x123", erc20 token addr
         nfts = IERC721(_nftAddress);        // "0x123", erc721 nft addr
         claimPace = _claimPace;             // "604800", 7 day
         claimRate = _claimRate;             // "5", 0.5%
+        burnRate = _burnRate;             // "5", 0.5%
+
     }
 
     function claim(uint256 _tokenID) external {
@@ -48,46 +51,15 @@ contract Claimer is Ownable {
         lastClaimTime[_tokenID] = block.timestamp;
         totalClaimed[msg.sender] += claimAmount;
 
-
-
-
-
-
-
-
-
-
-
-
         if(burnOn == true){
-            uint burnAmount = claimAmount * burnRate / 1000;
-            try ERC20Burnable(tokenAddr).burn(burnAmount){}
-            catch {IERC20(tokenAddr).transfer(address(0), burnAmount);}
-
-            uint userReward = claimAmount - (burnAmount);
-            bool success = IERC20(tokenAddr).transfer(msg.sender, userReward);
-            require(success == true, "transfer failed!");
-
-            emit RewardsEmit(msg.sender, userBalance, userReward);
+            uint256 burnAmount = claimAmount * burnRate / 1000;
+            try ERC20Burnable(address(token)).burn(burnAmount){}
+            catch {token.transfer(address(0), burnAmount);}
+            uint userReward = claimAmount - burnAmount;
+            token.transfer(msg.sender, userReward);
         } else {
-            bool success = IERC20(tokenAddr).transfer(msg.sender, claimAmount);
-            require(success == true, "transfer failed!");
-
-            emit RewardsEmit(msg.sender, userBalance, claimAmount);
+            token.transfer(msg.sender, claimAmount);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         token.transfer(msg.sender, claimAmount);
 
