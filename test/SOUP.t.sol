@@ -6,71 +6,84 @@ import "../src/SOUP.sol";
 
 
 contract contractTest is Test {
+    // hard coded testing vars
     SOUP public contractTested;
+
+    //address public ERC20token = 0xc2132D05D31c914a87C6611C10748AEb04B58e8F; //USDT
+    address public cnctOwner = address(420);
+    address public user1 = address(69);
+    address public user2 = address(70);
+    address public user3 = address(71);
+    address public treasury = address(1001);
+    address public staking = address(1002);
+    address public dev1 = address(1003);
+    address public dev2 = address(1004);
+    uint256 public maxtokens = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
 
     function setUp() public{
         // --- WALLETS ---
-        vm.startPrank(address(69));
-        address[] memory testAddresses = new address[](5);
-            testAddresses[0] = address(101);
-            testAddresses[1] = address(102);
-            testAddresses[2] = address(103);
-            testAddresses[3] = address(104);
-            testAddresses[4] = address(105);
-            /* 
-                ["0x3645eA6c6C47034c556C5A03bB61Ede3123b40bD",
-                "0xCff8339DA421c465d4325268799300952B55FAd0",
-                "0x0cCC6d80204809C0AE67eA74dA087277300aD469",
-                "0xF441eA0cE8BB80849216bB614137563bE3f86248",
-                "0xEF538a11FB3441eB9b5444654a8075cd63afDdfF"]
-            */
+        vm.startPrank(cnctOwner);
+        address[] memory testAddresses = new address[](3);
+            testAddresses[0] = user1;
+            testAddresses[1] = user2;
+            testAddresses[2] = user3;
+        //
 
-        // --- TOKENS ---
-        vm.deal(address(69), 1_000_000 ether);
-        
         // --- CONTRACTS ---
-        contractTested = new GAYG(
-            "Gay Gary Gensler", 
-            "GAYG",
-            address(420), 
-            450, 
+        contractTested = new SOUP(
+            "SOUP KITCHEN", 
+            "SOUP",
+            treasury,
+            dev1,
+            dev2,
+            18,
+            2,
+            20,
+            150_000_000_000,
             testAddresses
         );
+
+        // --- TOKENS ---
+        vm.deal(user1, 1_000_000 ether);
+        vm.deal(user2, 1_000_000 ether);
+        vm.deal(user3, 1_000_000 ether);
     }
 
-    function testFail_0xSetUpLogs() public{
-        console.log("NAME: ", contractTested.name());
-        console.log("SYMBOL: ", contractTested.symbol());
-        console.log("TTL SPPL: ", contractTested.totalSupply());
-        console.log("DECIML: ", contractTested.decimals());
-        console.log("TAX: ", contractTested.tax());
-        console.log("CNRT ADDR: ", address(contractTested));
-        console.log("OWNR: ", contractTested.owner());
-        console.log("OWNR BAL: ", IERC20(contractTested).balanceOf(address(69)));
-        console.log("DEVS: ", contractTested.devs());
-        console.log("DEVS BAL: ", IERC20(contractTested).balanceOf(address(420)));
-        console.log("AD1 BAL: ", IERC20(contractTested).balanceOf(address(101)));
-        console.log("AD2 BAL: ", IERC20(contractTested).balanceOf(address(102)));
-        console.log("AD3 BAL: ", IERC20(contractTested).balanceOf(address(103)));
-        console.log("AD4 BAL: ", IERC20(contractTested).balanceOf(address(104)));
-        console.log("AD5 BAL: ", IERC20(contractTested).balanceOf(address(105)));
-        assertFalse(0 == 0);
+    function consoleLogs() public view{
+        console.log("_____________________CONTRT_INFOM_____________________");
+        console.log("CNCT OWNR: ", address(cnctOwner));
+        console.log("CNCT ADDR: ", address(contractTested));
+        console.log("CNCT CNTR: ", contractTested.totalSupply());
+        console.log("OWNR TBAL: ", address(cnctOwner).balance);
+
+        console.log("_____________________WALLET_INFOM_____________________");
+        console.log("TRSY WLLT: ", address(treasury));
+        console.log("TRSY ERCB: ", contractTested.balanceOf(treasury));
+        console.log("DEV1 WLLT: ", address(dev1));
+        console.log("DEV1 ERCB: ", contractTested.balanceOf(dev1));
+        console.log("DEV2 WLLT: ", address(dev2));
+        console.log("DEV2 ERCB: ", contractTested.balanceOf(dev2));
+        console.log("USR1 WLLT: ", address(user1));
+        console.log("USR1 ERCB: ", contractTested.balanceOf(user1));
+        console.log("USR1 WLLT: ", address(user2));
+        console.log("USR1 ERCB: ", contractTested.balanceOf(user2));
+        console.log("USR1 WLLT: ", address(user3));
+        console.log("USR1 ERCB: ", contractTested.balanceOf(user3));
+
     }
 
-    function test_5TransferNEW() public{
-        contractTested.transfer(address(1001), 1_000_000);
-        console.log("Supply b4: ", contractTested.totalSupply());
-        console.log("DEV WLLT b4: ", IERC20(contractTested).balanceOf(address(420)));
-        console.log("1001 b4: ", IERC20(contractTested).balanceOf(address(1001)));
-        console.log("1002 b4: ", IERC20(contractTested).balanceOf(address(1002)));
+    function test_0_ConsoleLogs() public view{
+        consoleLogs();
+    }
 
+    function transfer() public {
         vm.stopPrank();
-        vm.startPrank(address(1001));
-        contractTested.transfer(address(1002), 1_000_000);
+        vm.startPrank(user1);
+        contractTested.transfer(user2, 10_000_000_000_000_000_000_000_000_000);
+    }
 
-        console.log("Supply af: ", contractTested.totalSupply());
-        console.log("DEV WLLT af: ", IERC20(contractTested).balanceOf(address(420)));
-        console.log("1001 af: ", IERC20(contractTested).balanceOf(address(1001)));
-        console.log("1002 af: ", IERC20(contractTested).balanceOf(address(1002)));
+    function test_1_RunNormalProcedure() public{
+        transfer();
+        consoleLogs();
     }
 }
