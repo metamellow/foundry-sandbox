@@ -18,10 +18,11 @@ contract contractTest is Test {
 
         // contract setup
         NFTcontract = new NFT(
-            address(69),        // receiving wallet
-            380,                // reserved amount
-            "Modulusverse 3D",  // name
-            "MV3D"              // symbol
+            /* reciever */      address(69),
+            /* reserved */      380,
+            /* NFT name */      "Modulusverse 3D",
+            /* NFT symb */      "MV3D",
+            /* freeMint */      true
         );
     }
 
@@ -38,6 +39,11 @@ contract contractTest is Test {
     }
 
     function test_0_ConsoleLogs() public view{
+        consoleLogs();
+    }
+
+    function test_1_FreeMint() public {
+        NFTcontract.freeMint();
         consoleLogs();
     }
 

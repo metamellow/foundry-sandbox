@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-. MODULUSVERSE 3D NFT COLLECTION  .-.-.-.-. */
+/* -.-.-.-.-. ERC721 STANDARD NFT COLLECTION  .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -13,6 +13,7 @@ contract NFT is ERC721, Ownable{
     using Strings for uint256;
 
     uint256 public totalSupply;
+    bool public freeMintSwitch;
 
     string public baseUri = "ipfs://bafybeifvuftc456ml5yj6crrvckklevddnipizzeb6op7prdjmauefsggu/";
     string public baseExtension = ".json";
@@ -25,14 +26,21 @@ contract NFT is ERC721, Ownable{
         address _receiver,
         uint256 _reserved,
         string memory _Name,
-        string memory _Symbol
+        string memory _Symbol,
+        bool _freeMintSwitch
         ) ERC721(_Name, _Symbol) {
             for (uint256 i; i < _reserved; ) {
                 _safeMint(_receiver, ++totalSupply);
                 unchecked { ++i; }
             }
+
+            freeMintSwitch = _freeMintSwitch;
     }
 
+    function freeMint() external {
+        _safeMint(msg.sender, ++totalSupply);
+    }
+    
     function setBaseUri(string memory _baseUri) external onlyOwner {
         baseUri = _baseUri;
     }
