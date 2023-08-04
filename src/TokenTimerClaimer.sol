@@ -1,15 +1,8 @@
 // SPDX-License-Identifier: GNU-3.0
 pragma solidity ^0.8.0;
 
-
-/*
-
-*/
-
-
-
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.02 .-.-.-.-. */
+/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.03 .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -42,8 +35,9 @@ contract Claimer is Ownable {
 
     function claim(uint256 _tokenID) external {
         require(nfts.ownerOf(_tokenID) == msg.sender, "You do not own that NFT");
-        require(lastClaimTime[_tokenID] + claimPace <= block.timestamp, "Time passed in not enough");
-
+        if(lastClaimTime[_tokenID] != 0){
+            require(lastClaimTime[_tokenID] + claimPace <= block.timestamp, "Time passed in not enough");
+        }
         uint256 availableTokens = token.balanceOf(address(this));
         uint256 claimAmount = availableTokens * claimRate / 1000;
 
