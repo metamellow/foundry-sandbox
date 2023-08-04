@@ -31,13 +31,13 @@ contract Claimer is Ownable {
 
     event ClaimDetails (uint256 claimAmount);
     
-    constructor(address _tokenAddress, address _nftAddress, uint256 _claimPace, uint256 _claimRate, uint256 _burnRate) {
+    constructor(address _tokenAddress, address _nftAddress, uint256 _claimPace, uint256 _claimRate, uint256 _burnRate, bool _burnOn) {
         token = IERC20(_tokenAddress);      // "0x123", erc20 token addr
         nfts = IERC721(_nftAddress);        // "0x123", erc721 nft addr
         claimPace = _claimPace;             // "604800", 7 day
         claimRate = _claimRate;             // "5", 0.5%
         burnRate = _burnRate;             // "5", 0.5%
-
+        burnOn = _burnOn;                // "true"
     }
 
     function claim(uint256 _tokenID) external {
@@ -46,7 +46,6 @@ contract Claimer is Ownable {
 
         uint256 availableTokens = token.balanceOf(address(this));
         uint256 claimAmount = availableTokens * claimRate / 1000;
-        require(claimAmount <= availableTokens, "Insufficient tokens in the pool");
 
         lastClaimTime[_tokenID] = block.timestamp;
         totalClaimed[msg.sender] += claimAmount;
@@ -60,8 +59,6 @@ contract Claimer is Ownable {
         } else {
             token.transfer(msg.sender, claimAmount);
         }
-
-        token.transfer(msg.sender, claimAmount);
 
         emit ClaimDetails(claimAmount);
     }
