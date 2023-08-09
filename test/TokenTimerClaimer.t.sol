@@ -68,7 +68,8 @@ contract contractTest is Test {
             /* pace */  604800,
             /* claim */ 5,
             /* burn */  5,
-            /* brnOn*/  true
+            /* brnOn*/  true,
+            /* burnWal*/ 0x000000000000000000000000000000000000dEaD
         );
 
         // --- TOKENS ---

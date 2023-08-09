@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.03 .-.-.-.-. */
+/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.04 .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -18,19 +18,29 @@ contract Claimer is Ownable {
     uint256 public claimRate;
     uint256 public burnRate;
     bool public burnOn;
+    address public burnWallet;
 
     mapping(uint256 => uint256) public lastClaimTime;
     mapping(address => uint256) public totalClaimed;
 
     event ClaimDetails (uint256 claimAmount);
     
-    constructor(address _tokenAddress, address _nftAddress, uint256 _claimPace, uint256 _claimRate, uint256 _burnRate, bool _burnOn) {
-        token = IERC20(_tokenAddress);      // "0x123", erc20 token addr
-        nfts = IERC721(_nftAddress);        // "0x123", erc721 nft addr
-        claimPace = _claimPace;             // "604800", 7 day
-        claimRate = _claimRate;             // "5", 0.5%
-        burnRate = _burnRate;             // "5", 0.5%
-        burnOn = _burnOn;                // "true"
+    constructor(
+        address _tokenAddress, 
+        address _nftAddress, 
+        uint256 _claimPace, 
+        uint256 _claimRate, 
+        uint256 _burnRate, 
+        bool _burnOn, 
+        address _burnWallet
+        ) {
+        /* "0x123", erc20 */        token = IERC20(_tokenAddress);
+        /* "0x123", erc721 */       nfts = IERC721(_nftAddress);
+        /* "604800", 7 day */       claimPace = _claimPace;
+        /* "5", 0.5% */             claimRate = _claimRate;
+        /* "5", 0.5% */             burnRate = _burnRate;
+        /* "true" */                burnOn = _burnOn;
+        /* "0x000000000000000000000000000000000000dEaD" */  burnWallet = _burnWallet;
     }
 
     function claim(uint256 _tokenID) external {
@@ -47,7 +57,7 @@ contract Claimer is Ownable {
         if(burnOn == true){
             uint256 burnAmount = claimAmount * burnRate / 1000;
             try ERC20Burnable(address(token)).burn(burnAmount){}
-            catch {token.transfer(address(0), burnAmount);}
+            catch {token.transfer(address(burnWallet), burnAmount);}
             uint userReward = claimAmount - burnAmount;
             token.transfer(msg.sender, userReward);
         } else {
