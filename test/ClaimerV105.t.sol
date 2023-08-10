@@ -63,14 +63,16 @@ contract contractTest is Test {
         );
 
         ClaimerContract = new Claimer(
-            /* token */ address(TokenContract),
-            /* nft */   address(NftContract),
-            /* pace */  604800,
-            /* claim */ 5,
-            /* burn */  5,
-            /* brnOn*/  true,
-            /* burnWal*/ address(0)
-            ///* burnWal*/ 0x000000000000000000000000000000000000dEaD
+            /* token */     address(TokenContract),
+            /* nft */       address(NftContract),
+            /* dev */       address(1003),
+            /* burn */      address(0),
+            ///* burn */    0x000000000000000000000000000000000000dEaD,
+            /* devr */      1,
+            /* burnr */     2,
+            /* pace */      604800,
+            /* claim */     10,
+            /* taxOn */     true
         );
 
         // --- TOKENS ---
@@ -104,7 +106,6 @@ contract contractTest is Test {
         console.log("CNCT OWNR: ", address(cnctOwner));
         console.log("TOKN ADDR: ", address(TokenContract));
         console.log("TOKN SUPL: ", TokenContract.totalSupply());
-        console.log("TOKN OWNR: ", TokenContract.balanceOf(cnctOwner));
         console.log("NFTS ADDR: ", address(NftContract));
         console.log("NFTS SUPL: ", NftContract.totalSupply());
         console.log("DAPP ADDR: ", address(ClaimerContract));
@@ -123,10 +124,8 @@ contract contractTest is Test {
         console.log("USR3 GASB: ", address(user3).balance);
         console.log("USR3 ERCB: ", TokenContract.balanceOf(address(user3)));
         console.log("USR3 NFTS: ", NftContract.balanceOf(address(user3)));
-    }
-
-    function test_0_ConsoleLogs() public view{
-        consoleLogs();
+        console.log("DEV1 WLLT: ", address(1003));
+        console.log("DEV1 ERCB: ", TokenContract.balanceOf(address(1003)));
     }
 
     function transfer() public {
@@ -157,6 +156,7 @@ contract contractTest is Test {
     }
 
     function test_1_RunNormalProcedure() public{
+        consoleLogs();
         transfer();
         consoleLogs();
         claim();

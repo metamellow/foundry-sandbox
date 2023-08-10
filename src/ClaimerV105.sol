@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GNU-3.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.17;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.05 .-.-.-.-. */
@@ -14,11 +14,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Claimer is Ownable {
     IERC20 public token;
     IERC721 public nfts;
-    uint256 public claimPace;
-    uint256 public claimRate;
-    uint256 public burnRate;
-    bool public burnOn;
+    address private devWallet;
     address public burnWallet;
+    uint256 private devRate;
+    uint256 public burnRate;
+    uint256 public claimRate;
+    uint256 public claimPace;
+    bool public taxOn;
 
     mapping(uint256 => uint256) public lastClaimTime;
     mapping(address => uint256) public totalClaimed;
@@ -27,20 +29,24 @@ contract Claimer is Ownable {
     
     constructor(
         address _tokenAddress, 
-        address _nftAddress, 
+        address _nftsAddress, 
+        address _devWallet,
+        address _burnWallet,
+        uint256 _devRate, 
+        uint256 _burnRate, 
         uint256 _claimPace, 
         uint256 _claimRate, 
-        uint256 _burnRate, 
-        bool _burnOn, 
-        address _burnWallet
+        bool _taxOn 
         ) {
-        /* "0x123", erc20 */        token = IERC20(_tokenAddress);
-        /* "0x123", erc721 */       nfts = IERC721(_nftAddress);
+        /* "0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f", erc20 */           token = IERC20(_tokenAddress);
+        /* "0x88421bc1C0734048f80639BE6EF367f634c33804", erc721 */          nfts = IERC721(_nftsAddress);
+        /* "0xEF538a11FB3441eB9b5444654a8075cd63afDdfF" or address(0) */    devWallet = _devWallet;
+        /* "0x000000000000000000000000000000000000dEaD" or address(0) */    burnWallet = _burnWallet;
+        /* "1", 0.1% */             devRate = _devRate;
+        /* "2", 0.2% */             burnRate = _burnRate;
         /* "604800", 7 day */       claimPace = _claimPace;
-        /* "5", 0.5% */             claimRate = _claimRate;
-        /* "5", 0.5% */             burnRate = _burnRate;
-        /* "true" */                burnOn = _burnOn;
-        /* "0x000000000000000000000000000000000000dEaD" or address(0) for burnable*/  burnWallet = _burnWallet;
+        /* "10", 1% */              claimRate = _claimRate;
+        /* "true" */                taxOn = _taxOn;
     }
 
     function claim(uint256 _tokenID) external {
@@ -54,15 +60,15 @@ contract Claimer is Ownable {
         lastClaimTime[_tokenID] = block.timestamp;
         totalClaimed[msg.sender] += claimAmount;
 
-        if(burnOn == true){
+        if(taxOn == true){
             uint256 burnAmount = claimAmount * burnRate / 1000;
+            uint256 devAmount = claimAmount * devRate / 1000;
+
             if(burnWallet == address(0)){ERC20Burnable(address(token)).burn(burnAmount);}
             else{token.transfer(address(burnWallet), burnAmount);}
-            /*
-            try ERC20Burnable(address(token)).burn(burnAmount){}
-            catch {token.transfer(address(burnWallet), burnAmount);}
-            */
-            uint userReward = claimAmount - burnAmount;
+            if(devWallet != address(0)){token.transfer(address(devWallet), devAmount);}
+
+            uint userReward = claimAmount - burnAmount - devAmount;
             token.transfer(msg.sender, userReward);
         } else {
             token.transfer(msg.sender, claimAmount);
@@ -71,29 +77,41 @@ contract Claimer is Ownable {
         emit ClaimDetails(claimAmount);
     }
 
-    function updateTokenAddress(address _tokenAddress) public onlyOwner{
-        token = IERC20(_tokenAddress);
-    }
-
-    function updateClaimRate(uint256 _claimRate) public onlyOwner{
+    function updateClaim(
+        address _tokenAddress, 
+        address _nftAddress,
+        uint256 _claimRate,
+        uint256 _claimPace
+        ) public onlyOwner {
         require(_claimRate > 0 && _claimRate < 1000, "Invalid claimRate range");
-        claimRate = _claimRate;
-    }
-
-    function updateClaimPace(uint256 _claimPace) public onlyOwner{
         require(_claimPace > 0, "Invalid claimPace range");
+        claimRate = _claimRate;
         claimPace = _claimPace;
+        token = IERC20(_tokenAddress);
+        nfts = IERC721(_nftAddress);
     }
 
-    function updateBurn(uint256 _burnRate, bool _trueFalse) public onlyOwner{
+    function updateTax(
+        address _devWallet, 
+        address _burnWallet, 
+        uint256 _devRate, 
+        uint256 _burnRate, 
+        bool _trueFalse
+        ) public onlyOwner{
+        require(_devRate > 0 && _devRate < 1000, "Invalid devRate range");
         require(_burnRate > 0 && _burnRate < 1000, "Invalid burnRate range");
+        devWallet = _devWallet;
+        burnWallet = _burnWallet;
+        devRate = _devRate;
         burnRate = _burnRate;
-        burnOn = _trueFalse;
+        taxOn = _trueFalse;
     }
 
-    function withdrawTokens(address _tokenAddress) public onlyOwner{
+    function withdrawBalances(address _tokenAddress) public onlyOwner{
         IERC20 tokenAddress = IERC20(_tokenAddress);
-        uint256 availableTokens = tokenAddress.balanceOf(address(this));
-        tokenAddress.transfer(msg.sender, availableTokens);
+        uint256 availableERC = tokenAddress.balanceOf(address(this));
+        uint256 availableGas = address(this).balance;
+        if(availableERC > 0){tokenAddress.transfer(msg.sender, availableERC);}
+        if(availableGas > 0){payable(msg.sender).transfer(availableGas);}
     }
 }
