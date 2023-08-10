@@ -8,7 +8,7 @@ forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHR
 */
 
 import "forge-std/Test.sol";
-import "../src/TokenTimerClaimer.sol";
+import "../src/ClaimerV105.sol";
 import "../src/SOUP.sol";
 import "../src/Standard721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -69,7 +69,8 @@ contract contractTest is Test {
             /* claim */ 5,
             /* burn */  5,
             /* brnOn*/  true,
-            /* burnWal*/ 0x000000000000000000000000000000000000dEaD
+            /* burnWal*/ address(0)
+            ///* burnWal*/ 0x000000000000000000000000000000000000dEaD
         );
 
         // --- TOKENS ---

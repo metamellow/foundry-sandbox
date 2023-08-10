@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.04 .-.-.-.-. */
+/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.05 .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -40,7 +40,7 @@ contract Claimer is Ownable {
         /* "5", 0.5% */             claimRate = _claimRate;
         /* "5", 0.5% */             burnRate = _burnRate;
         /* "true" */                burnOn = _burnOn;
-        /* "0x000000000000000000000000000000000000dEaD" */  burnWallet = _burnWallet;
+        /* "0x000000000000000000000000000000000000dEaD" or address(0) for burnable*/  burnWallet = _burnWallet;
     }
 
     function claim(uint256 _tokenID) external {
@@ -56,8 +56,12 @@ contract Claimer is Ownable {
 
         if(burnOn == true){
             uint256 burnAmount = claimAmount * burnRate / 1000;
+            if(burnWallet == address(0)){ERC20Burnable(address(token)).burn(burnAmount);}
+            else{token.transfer(address(burnWallet), burnAmount);}
+            /*
             try ERC20Burnable(address(token)).burn(burnAmount){}
             catch {token.transfer(address(burnWallet), burnAmount);}
+            */
             uint userReward = claimAmount - burnAmount;
             token.transfer(msg.sender, userReward);
         } else {
