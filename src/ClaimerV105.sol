@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GNU-3.0
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.19;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.05 .-.-.-.-. */
