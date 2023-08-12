@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.05 .-.-.-.-. */
+/* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.06 .-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -14,9 +14,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Claimer is Ownable {
     IERC20 public token;
     IERC721 public nfts;
-    address private devWallet;
+    address private taxWallet;
     address public burnWallet;
-    uint256 private devRate;
+    uint256 private taxRate;
     uint256 public burnRate;
     uint256 public claimRate;
     uint256 public claimPace;
@@ -30,9 +30,9 @@ contract Claimer is Ownable {
     constructor(
         address _tokenAddress, 
         address _nftsAddress, 
-        address _devWallet,
+        address _taxWallet,
         address _burnWallet,
-        uint256 _devRate, 
+        uint256 _taxRate, 
         uint256 _burnRate, 
         uint256 _claimPace, 
         uint256 _claimRate, 
@@ -40,9 +40,9 @@ contract Claimer is Ownable {
         ) {
         /* "0x47E53f0Ddf71210F2C45dc832732aA188F78AA4f", erc20 */           token = IERC20(_tokenAddress);
         /* "0x88421bc1C0734048f80639BE6EF367f634c33804", erc721 */          nfts = IERC721(_nftsAddress);
-        /* "0xEF538a11FB3441eB9b5444654a8075cd63afDdfF" or address(0) */    devWallet = _devWallet;
+        /* "0xEF538a11FB3441eB9b5444654a8075cd63afDdfF" or address(0) */    taxWallet = _taxWallet;
         /* "0x000000000000000000000000000000000000dEaD" or address(0) */    burnWallet = _burnWallet;
-        /* "1", 0.1% */             devRate = _devRate;
+        /* "1", 0.1% */             taxRate = _taxRate;
         /* "2", 0.2% */             burnRate = _burnRate;
         /* "604800", 7 day */       claimPace = _claimPace;
         /* "10", 1% */              claimRate = _claimRate;
@@ -62,13 +62,13 @@ contract Claimer is Ownable {
 
         if(taxOn == true){
             uint256 burnAmount = claimAmount * burnRate / 1000;
-            uint256 devAmount = claimAmount * devRate / 1000;
+            uint256 taxAmount = claimAmount * taxRate / 1000;
 
             if(burnWallet == address(0)){ERC20Burnable(address(token)).burn(burnAmount);}
             else{token.transfer(address(burnWallet), burnAmount);}
-            if(devWallet != address(0)){token.transfer(address(devWallet), devAmount);}
+            if(taxWallet != address(0)){token.transfer(address(taxWallet), taxAmount);}
 
-            uint userReward = claimAmount - burnAmount - devAmount;
+            uint userReward = claimAmount - burnAmount - taxAmount;
             token.transfer(msg.sender, userReward);
         } else {
             token.transfer(msg.sender, claimAmount);
@@ -92,17 +92,17 @@ contract Claimer is Ownable {
     }
 
     function updateTax(
-        address _devWallet, 
+        address _tqxWallet, 
         address _burnWallet, 
-        uint256 _devRate, 
+        uint256 _taxRate, 
         uint256 _burnRate, 
         bool _trueFalse
         ) public onlyOwner{
-        require(_devRate > 0 && _devRate < 1000, "Invalid devRate range");
+        require(_taxRate > 0 && _taxRate < 1000, "Invalid taxRate range");
         require(_burnRate > 0 && _burnRate < 1000, "Invalid burnRate range");
-        devWallet = _devWallet;
+        taxWallet = _taxWallet;
         burnWallet = _burnWallet;
-        devRate = _devRate;
+        taxRate = _taxRate;
         burnRate = _burnRate;
         taxOn = _trueFalse;
     }
