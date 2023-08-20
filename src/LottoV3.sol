@@ -50,8 +50,6 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     mapping(bytes32 => uint256) public pastLottoAPI3CallCounter;
     mapping(uint256 => uint256) public pastLottoAPI3CallResult;
 
-    event APICallDetails (uint256 callSent);
-    event ApprovalDetails (bool approvalSuccess);
     event BetDetails (uint256 playersCounter, uint256 counterReward);
     event ClaimDetails (uint256 claimedCounter, uint256 claimedRewards);
     event WinnerResults (uint256 counterNumber, address winnerWallet);
@@ -204,36 +202,36 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         }
     }
 
-    function pauseLotto(bool _lottoOpen) external onlyOwner{
-        lottoOpen = _lottoOpen;
+    function resetGame(
+        address _player1W, 
+        address _player2W, 
+        uint256 _betPrice, 
+        uint256 _counter
+        ) external onlyOwner{
+        player1W = _player1W;
+        player2W = _player2W;
+        betPrice = _betPrice; 
+        counter = _counter;
     }
 
     function resetLotto(
+        bool _lottoOpen,
         address _erc20token, 
         address _treasury, 
         address _staking, 
         address _dev1, 
         address _dev2, 
-        address _player1W, 
-        address _player2W, 
-        uint256 _betPrice, 
-        uint256 _counter,
         uint256 _taxRate,
-        bool _lottoOpen,
         bool _taxSwitch,
         bool _resetFunds 
         ) external onlyOwner{
+        lottoOpen = _lottoOpen;
         erc20Token = _erc20token;
         treasury = _treasury;
         staking = _staking;
         dev1 = _dev1;
         dev2 = _dev2;
-        player1W = _player1W;
-        player2W = _player2W;
-        betPrice = _betPrice; 
-        counter = _counter;
         taxRate = _taxRate;
-        lottoOpen = _lottoOpen;
         taxSwitch = _taxSwitch;
         
         if(_resetFunds == true){
@@ -293,7 +291,6 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         expectingRequestWithIdToBeFulfilled[requestId] = true;
         //
         pastLottoAPI3CallCounter[requestId] = counter;
-        emit APICallDetails(counter);
     }
 
     function fulfillUint256(bytes32 requestId, bytes calldata data) external onlyAirnodeRrp{

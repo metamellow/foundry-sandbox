@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
-/* -.-.-.-.-.- $SOUP KITCHEN COMMUNITY TOKEN -.-.-.-.-. */
+/* -.-.-.-.-.-       CUSTOM ERC20 TOKEN      -.-.-.-.-. */
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-contract SOUP is Ownable, ERC20, ERC20Burnable{
+contract Token is Ownable, ERC20, ERC20Burnable{
     
     address private treasury;
     address private dev1;

@@ -11,12 +11,13 @@ forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHR
 
 import "forge-std/Test.sol";
 import "../src/LottoV3.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "../src/CustomERC20.sol";
+//import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract contractTest is Test {
     // hard coded testing vars
     LottoV3 public LottoV3Contract;
-    address public ERC20token = 0xc2132D05D31c914a87C6611C10748AEb04B58e8F; //USDT
+    Token public CustomERC20;
     address public cnctOwner = address(420);
     address public user1 = address(69);
     address public user2 = address(70);
@@ -30,9 +31,29 @@ contract contractTest is Test {
     function setUp() public{
         vm.startPrank(cnctOwner);
 
+        address[] memory testAddresses = new address[](3);
+            testAddresses[0] = user1;
+            testAddresses[1] = user2;
+            testAddresses[2] = user3;
+        //
+        
+        // --- CONTRACTS ---
+        CustomERC20 = new Token(
+            "Test Token",
+            "TEST",
+            treasury,
+            dev1,
+            dev2,
+            200,
+            200,
+            200,
+            1000,
+            testAddresses
+        );
+
         // --- CONTRACTS ---
         LottoV3Contract = new LottoV3(
-            /*ERC20token, */0x0000000000000000000000000000000000000000,
+            address(CustomERC20),
             treasury,
             staking,
             dev1,
@@ -50,8 +71,8 @@ contract contractTest is Test {
 
         vm.stopPrank();
         vm.startPrank(user1);
-        deal(ERC20token, user1, 1_000_000_000_069 ether);
-        require(IERC20(ERC20token).approve(
+        //deal(CustomERC20, user1, 1_000_000_000_069 ether);
+        require(IERC20(CustomERC20).approve(
             address(LottoV3Contract), 
             maxtokens), 
             "Approve failed!"
@@ -59,8 +80,8 @@ contract contractTest is Test {
 
         vm.stopPrank();
         vm.startPrank(user2);
-        deal(ERC20token, user2, 1_000_000_000_069 ether);
-        require(IERC20(ERC20token).approve(
+        //deal(CustomERC20, user2, 1_000_000_000_069 ether);
+        require(IERC20(CustomERC20).approve(
             address(LottoV3Contract), 
             maxtokens), 
             "Approve failed!"
@@ -68,8 +89,8 @@ contract contractTest is Test {
 
         vm.stopPrank();
         vm.startPrank(user3);
-        deal(ERC20token, user3, 1_000_000_000_069 ether);
-        require(IERC20(ERC20token).approve(
+        //deal(CustomERC20, user3, 1_000_000_000_069 ether);
+        require(IERC20(CustomERC20).approve(
             address(LottoV3Contract), 
             maxtokens), 
             "Approve failed!"
@@ -87,13 +108,13 @@ contract contractTest is Test {
         console.log("_____________________WALLET_INFOM_____________________");
         console.log("USR1 WLLT: ", address(user1));
         console.log("USR1 GASB: ", address(user1).balance);
-        console.log("USR1 ERCB: ", ERC20(ERC20token).balanceOf(address(user1)));
+        console.log("USR1 ERCB: ", ERC20(CustomERC20).balanceOf(address(user1)));
         console.log("USR2 WLLT: ", address(user2));
         console.log("USR2 GASB: ", address(user2).balance);
-        console.log("USR2 ERCB: ", ERC20(ERC20token).balanceOf(address(user2)));
+        console.log("USR2 ERCB: ", ERC20(CustomERC20).balanceOf(address(user2)));
         console.log("USR3 WLLT: ", address(user3));
         console.log("USR3 GASB: ", address(user3).balance);
-        console.log("USR3 ERCB: ", ERC20(ERC20token).balanceOf(address(user3)));
+        console.log("USR3 ERCB: ", ERC20(CustomERC20).balanceOf(address(user3)));
 
     }
 

@@ -2,12 +2,12 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import "../src/SOUP.sol";
+import "../src/CustomERC20.sol";
 
 
 contract contractTest is Test {
     // hard coded testing vars
-    SOUP public contractTested;
+    Token public contractTested;
 
     //address public ERC20token = 0xc2132D05D31c914a87C6611C10748AEb04B58e8F; //USDT
     address public cnctOwner = address(420);
