@@ -22,7 +22,8 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
 
 contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
-    
+    using Strings for uint256;
+
     // LOTTO VARS
     address private treasury;
     address private staking;
@@ -40,7 +41,9 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     bool public lottoOpen;
     bool public taxSwitch;
 
-    mapping(uint256 => bool) public pastLottoClaimed;
+    string public baseUri = "ipfs://xxx/";
+    string public baseExtension = ".json";
+
     mapping(uint256 => address) public pastLottoPlayer1;
     mapping(uint256 => address) public pastLottoPlayer2;
     mapping(uint256 => uint256) public pastLottoRewards;
@@ -60,25 +63,25 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     address public sponsorWallet;
     mapping(bytes32 => bool) public expectingRequestWithIdToBeFulfilled;
 
+    // "0x0000000000000000000000000000000000000000"
+
     constructor(
-        address _erc20Token, // "0x47e53f0ddf71210f2c45dc832732aa188f78aa4f" or "0x0000000000000000000000000000000000000000"
-        address _treasury, // 
-        address _staking, // 
-        address _dev1, // "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c)
-        address _dev2, // "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP)
-        uint256 _betBase, // "10000000000000000" (0.01 MATIC)
-        uint256 _restartDuration, // "1209600" or two weeks
-        uint256 _taxRate, //"10" over 100 or 10%
-        address _airnodeRrp // ETH MAIN "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" POLY MAIN "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" POLY TEST "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd"
+        /* "0x47e53f0ddf71210f2c45dc832732aa188f78aa4f" (BON) */        address _erc20Token,
+        /* xxx */                                                       address _treasury,
+        /* xxx */                                                       address _staking,
+        /* "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c) */        address _dev1,
+        /* "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP) */       address _dev2,
+        /* "10000000000000000" (0.01 MATIC) */                          uint256 _betBase,
+        /* "1209600" or two weeks */                                    uint256 _restartDuration,
+        /* "100" over 1000 or 10% */                                    uint256 _taxRate,
+        /* "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" */              address _airnodeRrp
         ) RrpRequesterV0(_airnodeRrp)
-        ERC721("BON.Lotto.V3 Winner Voucher", "LOTTOv3"){
+        ERC721("BON.Lotto Winner Voucher", "LOTTOv3"){
         erc20Token = _erc20Token;
         treasury = _treasury;
         staking = _staking;
         dev1 = _dev1;
         dev2 = _dev2;
-        player1W = address(0);
-        player2W = address(0);
         betBase = _betBase;
         betPrice = betBase;
         restartDuration = _restartDuration;
@@ -92,7 +95,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     // --- PUBLIC FUNCTIONS ---
 
     // @Dev Returns: 0 approve, 1 player one, 2 player two, 3 error
-    // @Dev Turn JS listener on bet() call
+    // @Dev Turn JS listener on return (1 or 2)
     function bet() public payable returns(uint8 betData){
         // --- REQUIREMENTS STAGE ---
         require(lottoOpen == true, "Lotto is not accepting bets");
@@ -104,22 +107,19 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             // GAS PAYMENT
             require(betPrice <= msg.value, "Need more gas to pay the betPrice");
             payment = betPrice;
-
-            // TAX
-            if(taxSwitch){_sendGas(payment);}
         } else {
             // ERC20 ALLOWANCE
             uint256 userAllowance = IERC20(erc20Token).allowance(msg.sender, address(this));
             if(userAllowance < betPrice){/* END */ return betData = 0;}
             
-            // ERC20 PAYMENT
+            // ERC20 PAYMENT (erc20 token tax compatible)
             uint256 beforeBal = IERC20(erc20Token).balanceOf(address(this));
             IERC20(erc20Token).transferFrom(msg.sender, address(this), betPrice);
             payment = IERC20(erc20Token).balanceOf(address(this)) - beforeBal;
-
-            // TAX
-            if(taxSwitch){ _sendERC20(payment);}
         }
+
+        // --- TAX STAGE ---
+        if(taxSwitch){_sendTaxes(payment);}
         
         // --- EVALUATE STAGE ---
         if ((player1W == address(0)) && (player2W == address(0))){
@@ -127,7 +127,8 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             counter++;
             player1W = msg.sender;
             pastLottoPlayer1[counter] = player1W;
-            pastLottoRewards[counter] = (payment - (payment * 10 / 100)) *2;
+            uint256 paymentAfterTax = payment * taxRate / 1000;
+            pastLottoRewards[counter] = (payment - paymentAfterTax) *2;
 
             /* END */
             emit BetDetails(counter, pastLottoRewards[counter]);
@@ -138,9 +139,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             pastLottoPlayer2[counter] = player2W;
 
             // API3 QRNG CALL
-            //_makeAPICall();
-            // -----------------------------------------temp--------------------------------------------------
-            _mint(player2W, counter);
+            _makeAPICall();
 
             // RESET LOTTO
             player1W = address(0);
@@ -148,7 +147,6 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             betPrice = betPrice * 11 / 10;
 
             // LOTTO RESTART CHECK
-            // ----------------------------------------------------------------- maybe move this out to another function
             uint256 timePast = block.timestamp - restartTimer;
             _checkLottoTimer(timePast);
 
@@ -161,31 +159,18 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         }
     }
 
-    function checkLotto(uint256 _counter) public view returns(
-        address winner, 
-        uint256 rewards, 
-        bool claimed){
-        require(lottoOpen, "Lotto is not open");
-        winner = ownerOf(_counter);
-        rewards = pastLottoRewards[_counter];
-        claimed = pastLottoClaimed[_counter];
-        return (winner, rewards, claimed);
-    }
-    
-    // @Dev Turn JS listener on on claimLotto() call
-    function claimLotto(uint256 _counter) public returns(uint256 rewards){
+    // @Dev Turn JS listener on returns (numb > 0)
+    function claim(uint256 _counter) public returns(uint256 rewards){
         require(ownerOf(_counter) == msg.sender, "You do not hold the NFT bet receipt");
-        require(pastLottoClaimed[_counter] != true, "This reward has already been claimed");
         require(lottoOpen, "Lotto is not open");
 
-        pastLottoClaimed[_counter] = true;
         rewards = pastLottoRewards[_counter];
         _burn(_counter);
 
-        if(erc20Token != address(0)){
-            IERC20(erc20Token).transfer(msg.sender, rewards);
-        } else {
+        if(erc20Token == address(0)){
             payable(msg.sender).transfer(rewards);
+        } else {
+            IERC20(erc20Token).transfer(msg.sender, rewards);
         }
 
         emit ClaimDetails(_counter, rewards);
@@ -193,28 +178,23 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     }
     
     // --- DEV FUNCTIONS ---
-    function _sendERC20(uint256 _payment) internal {
-        uint256 tt = _payment * taxRate / 100;
-        uint256 t1 = tt * 40 / 1000;
-        uint256 t2 = tt * 30 / 1000;
-        uint256 t3 = tt * 15 / 1000;
-        uint256 t4 = tt * 15 / 1000;
-        IERC20(erc20Token).transfer(treasury, t1);
-        IERC20(erc20Token).transfer(staking, t2);
-        IERC20(erc20Token).transfer(dev1, t3);
-        IERC20(erc20Token).transfer(dev2, t4);
-    }
-
-    function _sendGas(uint256 _payment) internal {
-        uint256 tt = _payment * taxRate / 100;
-        uint256 t1 = tt * 40 / 1000;
-        uint256 t2 = tt * 30 / 1000;
-        uint256 t3 = tt * 15 / 1000;
-        uint256 t4 = tt * 15 / 1000;
-        payable(treasury).transfer(t1);
-        payable(staking).transfer(t2);
-        payable(dev1).transfer(t3);
-        payable(dev2).transfer(t4);
+    function _sendTaxes(uint256 _payment) internal {
+        uint256 tt = _payment * taxRate / 1000;
+        uint256 t1 = tt * 40 / 100;
+        uint256 t2 = tt * 40 / 100;
+        uint256 t3 = tt * 10 / 100;
+        uint256 t4 = tt * 10 / 100;
+        if(erc20Token == address(0)){
+            payable(treasury).transfer(t1);
+            payable(staking).transfer(t2);
+            payable(dev1).transfer(t3);
+            payable(dev2).transfer(t4);
+        } else {
+            IERC20(erc20Token).transfer(treasury, t1);
+            IERC20(erc20Token).transfer(staking, t2);
+            IERC20(erc20Token).transfer(dev1, t3);
+            IERC20(erc20Token).transfer(dev2, t4);
+        }
     }
 
     function _checkLottoTimer(uint256 timePast) internal{
@@ -222,6 +202,10 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         restartTimer = block.timestamp;
         betPrice = betBase;
         }
+    }
+
+    function pauseLotto(bool _lottoOpen) external onlyOwner{
+        lottoOpen = _lottoOpen;
     }
 
     function resetLotto(
@@ -267,8 +251,22 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
 
     }
 
-    function pauseLotto(bool _lottoOpen) external onlyOwner{
-        lottoOpen = _lottoOpen;
+    // --- NFT FUNCTIONS ---
+    function setBaseUri(string memory _baseUri) external onlyOwner {
+        baseUri = _baseUri;
+    }
+
+	function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+ 
+        string memory currentBaseURI = _baseURI();
+        return bytes(currentBaseURI).length > 0
+            ? string(abi.encodePacked(currentBaseURI, tokenId.toString(), baseExtension))
+            : "";
+    }
+ 
+    function _baseURI() internal view virtual override returns (string memory) {
+        return baseUri;
     }
     
     // --- API3 FUNCTIONS ---
@@ -298,7 +296,6 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         emit APICallDetails(counter);
     }
 
-    // AirnodeRrp will call back with a response
     function fulfillUint256(bytes32 requestId, bytes calldata data) external onlyAirnodeRrp{
         require(expectingRequestWithIdToBeFulfilled[requestId],"Request ID not known");
         expectingRequestWithIdToBeFulfilled[requestId] = false;
@@ -315,6 +312,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         }
     }
     
+    // --- OTHER ---
     fallback() external payable{
     }
     receive() external payable{

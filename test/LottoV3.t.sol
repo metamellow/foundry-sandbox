@@ -39,7 +39,7 @@ contract contractTest is Test {
             dev2,
             10000000000000000,
             1209600,
-            10,
+            100,
             0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd //polymain airnode
         );
 
@@ -97,44 +97,12 @@ contract contractTest is Test {
 
     }
 
-    function test_0_ConsoleLogs() public view{
-        consoleLogs();
-    }
-
     function bet() public {
-        uint256 betPrice = LottoV3Contract.betPrice();
-        
-        vm.stopPrank();
-        vm.startPrank(user1);
-        //LottoV3Contract.bet();
-        LottoV3Contract.bet{value: betPrice}();
 
-        vm.stopPrank();
-        // fail check // vm.startPrank(user1);
-        vm.startPrank(user2);
-        //LottoV3Contract.bet();
-        LottoV3Contract.bet{value: betPrice}();
-
-        (address winnerAddr, uint256 winnerAmnt, bool winnerClm) = LottoV3Contract.checkLotto(1);
-        console.log("_____________________BETFNC_INFOM_____________________");
-        console.log("winnerAddr: ", winnerAddr);
-        console.log("winnerAmnt: ", winnerAmnt);
-        console.log("winnerClm: ", winnerClm);
-        console.log("USR2 NFTS: ", LottoV3Contract.ownerOf(1));
     }
 
     function claim() public {
-        vm.stopPrank();
-        // fail check // vm.startPrank(user1);
-        vm.startPrank(user2);
-        LottoV3Contract.claimLotto(1);
 
-        console.log("_____________________CLAIM_INFOM_____________________");
-        // fail check // console.log("USR2 NFTS: ", LottoV3Contract.ownerOf(1));
-        console.log("USR2 GASB: ", address(user2).balance);
-        console.log("USR2 ERCB: ", ERC20(ERC20token).balanceOf(address(user2)));
-
-        // fail check // LottoV3Contract.claimLotto(1);
     }
 
     function test_1_RunNormalProcedure() public{
