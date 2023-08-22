@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 /*
 NOTES:
 - test needs to be run via Alchemy rpc:
-forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHRN21NJaX1Z87jtli -vvvv
+forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHRN21NJaX1Z87jtli -vvv
 -
 
 */
@@ -100,10 +100,10 @@ contract contractTest is Test {
     function consoleLogs() public view{
         console.log("_____________________CONTRT_INFOM_____________________");
         console.log("CNCT OWNR: ", address(cnctOwner));
-        console.log("CNCT ADDR: ", address(LottoV3Contract));
-        console.log("CNCT COUT: ", LottoV3Contract.counter());
-        console.log("CNCT BPRC: ", LottoV3Contract.betPrice());
-        console.log("CNCT RTMR: ", LottoV3Contract.restartTimer());
+        console.log("LOTO ADDR: ", address(LottoV3Contract));
+        console.log("LOTO COUT: ", LottoV3Contract.counter());
+        console.log("LOTO BPRC: ", LottoV3Contract.betPrice());
+        console.log("TOKN TSUP: ", CustomERC20.totalSupply());
 
         console.log("_____________________WALLET_INFOM_____________________");
         console.log("USR1 WLLT: ", address(user1));
@@ -130,8 +130,20 @@ contract contractTest is Test {
         LottoV3Contract.bet();
     }
 
-    function claim() public {
+    function betDetails() public view{
+        console.log("_____________________LTOBET_DETLS_____________________");
+        uint counter = (LottoV3Contract.counter()) - 1;
+        console.log("PAST CNTR: ", counter);
+        console.log("PAST PLY1: ", LottoV3Contract.pastLottoPlayer1(counter));
+        console.log("PAST PLY2: ", LottoV3Contract.pastLottoPlayer2(counter));
+        console.log("PAST RWDS: ", LottoV3Contract.pastLottoRewards(counter));
+        console.log("NFTS OWNR: ", LottoV3Contract.ownerOf(counter));
+    }
 
+    function claim() public {
+        vm.stopPrank();
+        vm.startPrank(user2);
+        LottoV3Contract.claim(1);
     }
 
     function test_1_RunNormalProcedure() public{
@@ -139,6 +151,13 @@ contract contractTest is Test {
         bet1();
         bet2();
         consoleLogs();
-        //claim();
+        betDetails();
+
+        claim();
+        consoleLogs();
+
+        bet1();
+        bet2();
+        console.log("NFTS OWNR: ", LottoV3Contract.ownerOf(2));
     }
 }

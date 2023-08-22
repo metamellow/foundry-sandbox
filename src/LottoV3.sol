@@ -85,7 +85,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         restartDuration = _restartDuration;
         restartTimer = block.timestamp;
         taxRate = _taxRate;
-        counter = 0;
+        counter = 1;
         lottoOpen = true;
         taxSwitch = true;
     }
@@ -122,7 +122,6 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         // --- EVALUATE STAGE ---
         if ((player1W == address(0)) && (player2W == address(0))){
             // PLAYER'S 1 TURN
-            counter++;
             player1W = msg.sender;
             pastLottoPlayer1[counter] = player1W;
             uint256 paymentAfterTax = payment * taxRate / 1000;
@@ -142,18 +141,17 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             */
             _mint(player2W, counter);
 
+            emit BetDetails(counter, pastLottoRewards[counter]);
 
-            // RESET LOTTO
+            // UPDATE LOTTO
+            counter++;
             player1W = address(0);
             player2W = address(0);
             betPrice = betPrice * 11 / 10;
-
-            // LOTTO RESTART CHECK
             uint256 timePast = block.timestamp - restartTimer;
             _checkLottoTimer(timePast);
 
             /* END */
-            emit BetDetails(counter, pastLottoRewards[counter]);
             return betData = 2;
         } else {
             // ERROR
