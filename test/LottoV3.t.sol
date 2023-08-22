@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 /*
 NOTES:
 - test needs to be run via Alchemy rpc:
-forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHRN21NJaX1Z87jtli --via-ir -vv
+forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHRN21NJaX1Z87jtli -vvvv
 -
 
 */
@@ -101,9 +101,9 @@ contract contractTest is Test {
         console.log("_____________________CONTRT_INFOM_____________________");
         console.log("CNCT OWNR: ", address(cnctOwner));
         console.log("CNCT ADDR: ", address(LottoV3Contract));
-        console.log("CNCT CNTR: ", LottoV3Contract.counter());
-        console.log("CNCT CNTR: ", LottoV3Contract.betPrice());
-        console.log("CNCT CNTR: ", LottoV3Contract.restartTimer());
+        console.log("CNCT COUT: ", LottoV3Contract.counter());
+        console.log("CNCT BPRC: ", LottoV3Contract.betPrice());
+        console.log("CNCT RTMR: ", LottoV3Contract.restartTimer());
 
         console.log("_____________________WALLET_INFOM_____________________");
         console.log("USR1 WLLT: ", address(user1));
@@ -118,8 +118,16 @@ contract contractTest is Test {
 
     }
 
-    function bet() public {
+    function bet1() public {
+        vm.stopPrank();
+        vm.startPrank(user1);
+        LottoV3Contract.bet();
+    }
 
+    function bet2() public {
+        vm.stopPrank();
+        vm.startPrank(user2);
+        LottoV3Contract.bet();
     }
 
     function claim() public {
@@ -128,7 +136,9 @@ contract contractTest is Test {
 
     function test_1_RunNormalProcedure() public{
         consoleLogs();
-        bet();
-        claim();
+        bet1();
+        bet2();
+        consoleLogs();
+        //claim();
     }
 }

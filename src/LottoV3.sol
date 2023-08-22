@@ -136,8 +136,12 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             player2W = msg.sender;
             pastLottoPlayer2[counter] = player2W;
 
+            /*
             // API3 QRNG CALL
             _makeAPICall();
+            */
+            _mint(player2W, counter);
+
 
             // RESET LOTTO
             player1W = address(0);

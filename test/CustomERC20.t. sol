@@ -30,7 +30,7 @@ contract contractTest is Test {
         //
 
         // --- CONTRACTS ---
-        contractTested = new SOUP(
+        contractTested = new Token(
             "SOUP KITCHEN", 
             "SOUP",
             treasury,
@@ -65,10 +65,10 @@ contract contractTest is Test {
         console.log("DEV2 ERCB: ", contractTested.balanceOf(dev2));
         console.log("USR1 WLLT: ", address(user1));
         console.log("USR1 ERCB: ", contractTested.balanceOf(user1));
-        console.log("USR1 WLLT: ", address(user2));
-        console.log("USR1 ERCB: ", contractTested.balanceOf(user2));
-        console.log("USR1 WLLT: ", address(user3));
-        console.log("USR1 ERCB: ", contractTested.balanceOf(user3));
+        console.log("USR2 WLLT: ", address(user2));
+        console.log("USR2 ERCB: ", contractTested.balanceOf(user2));
+        console.log("USR3 WLLT: ", address(user3));
+        console.log("USR3 ERCB: ", contractTested.balanceOf(user3));
 
     }
 
