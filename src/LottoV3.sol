@@ -148,8 +148,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             player1W = address(0);
             player2W = address(0);
             betPrice = betPrice * 11 / 10;
-            uint256 timePast = block.timestamp - restartTimer;
-            _checkLottoTimer(timePast);
+            _checkRestartTimer();
 
             /* END */
             return betData = 2;
@@ -197,10 +196,11 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         }
     }
 
-    function _checkLottoTimer(uint256 timePast) internal{
+    function _checkRestartTimer() internal{
+        uint256 timePast = block.timestamp - restartTimer;
         if(timePast >= restartDuration){
-        restartTimer = block.timestamp;
-        betPrice = betBase;
+            restartTimer = block.timestamp;
+            betPrice = betBase;
         }
     }
 
@@ -239,13 +239,11 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         if(_resetFunds == true){
             uint256 erc20Balance = IERC20(erc20Token).balanceOf(address(this));
             if(erc20Balance > 0){
-                bool transferAOne = IERC20(erc20Token).transfer(treasury, erc20Balance);
-                require(transferAOne, "transfer failed!");
+                IERC20(erc20Token).transfer(treasury, erc20Balance);
             }
             uint256 gasBalance = address(this).balance;
             if(gasBalance > 0){
-                ( bool transferBOne, ) = payable(treasury).call{value: gasBalance}("");
-                require(transferBOne, "Transfer failed.");
+                payable(treasury).transfer(gasBalance);
             }
         }
 

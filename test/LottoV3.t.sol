@@ -106,15 +106,18 @@ contract contractTest is Test {
         console.log("TOKN TSUP: ", CustomERC20.totalSupply());
 
         console.log("_____________________WALLET_INFOM_____________________");
-        console.log("USR1 WLLT: ", address(user1));
         console.log("USR1 GASB: ", address(user1).balance);
         console.log("USR1 ERCB: ", ERC20(CustomERC20).balanceOf(address(user1)));
-        console.log("USR2 WLLT: ", address(user2));
         console.log("USR2 GASB: ", address(user2).balance);
         console.log("USR2 ERCB: ", ERC20(CustomERC20).balanceOf(address(user2)));
-        console.log("USR3 WLLT: ", address(user3));
         console.log("USR3 GASB: ", address(user3).balance);
         console.log("USR3 ERCB: ", ERC20(CustomERC20).balanceOf(address(user3)));
+        console.log("TRES GASB: ", address(treasury).balance);
+        console.log("TRES ERCB: ", ERC20(CustomERC20).balanceOf(address(treasury)));
+        console.log("DEV1 GASB: ", address(dev1).balance);
+        console.log("USR2 ERCB: ", ERC20(CustomERC20).balanceOf(address(dev1)));
+        console.log("USR3 GASB: ", address(dev2).balance);
+        console.log("USR3 ERCB: ", ERC20(CustomERC20).balanceOf(address(dev2)));
 
     }
 
@@ -140,10 +143,10 @@ contract contractTest is Test {
         console.log("NFTS OWNR: ", LottoV3Contract.ownerOf(counter));
     }
 
-    function claim() public {
+    function claim(uint round) public {
         vm.stopPrank();
         vm.startPrank(user2);
-        LottoV3Contract.claim(1);
+        LottoV3Contract.claim(round);
     }
 
     function test_1_RunNormalProcedure() public{
@@ -153,11 +156,51 @@ contract contractTest is Test {
         consoleLogs();
         betDetails();
 
-        claim();
+        claim(1);
         consoleLogs();
 
         bet1();
         bet2();
         console.log("NFTS OWNR: ", LottoV3Contract.ownerOf(2));
+    }
+
+    function test_2_DevFunctions() public{
+        bet1();
+        bet2();
+        claim(1);
+        bet1();
+        bet2();
+
+        /* Test the restart timer */
+        /*
+        consoleLogs();
+        uint256 restartTriggerTime = block.timestamp + 1209600;
+        vm.warp(restartTriggerTime);
+        claim(2);
+        bet1();
+        bet2();
+        consoleLogs();
+        */
+
+        /* Test the resetGame */
+
+        consoleLogs();
+        address p1 = LottoV3Contract.player1W();
+        address p2 = LottoV3Contract.player2W();
+        uint256 bet = LottoV3Contract.betPrice();
+        bet = bet + 10101010101;
+        uint256 cnt = LottoV3Contract.counter();
+        cnt = cnt + 1010101010;
+        vm.startPrank(cnctOwner);
+        LottoV3Contract.resetGame(p1, p2, bet, cnt);
+        claim(2);
+        bet1();
+        bet2();
+        consoleLogs();
+
+
+
+
+
     }
 }

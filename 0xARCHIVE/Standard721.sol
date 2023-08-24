@@ -38,6 +38,7 @@ contract NFT is ERC721, Ownable{
     }
 
     function freeMint() external {
+        require(freeMintSwitch == true, "Free mint not true");
         _safeMint(msg.sender, ++totalSupply);
     }
     
