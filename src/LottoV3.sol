@@ -41,7 +41,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     bool public lottoOpen;
     bool public taxSwitch;
 
-    string public baseUri = "ipfs://xxx/";
+    string public baseUri = "ipfs://bafybeiep3p2qvgvxnivrihmkvmfnphg2md3xntsvp63dzxfcekehblles4/";
     string public baseExtension = ".json";
 
     mapping(uint256 => address) public pastLottoPlayer1;
