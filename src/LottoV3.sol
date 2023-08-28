@@ -65,8 +65,8 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
 
     constructor(
         /* "0x47e53f0ddf71210f2c45dc832732aa188f78aa4f" (BON) */        address _erc20Token,
-        /* xxx */                                                       address _treasury,
-        /* xxx */                                                       address _staking,
+        /* "0xd02b97b0B3439bf032a237f712a5fa5B161D89d3" */              address _treasury,
+        /* "0xad87F2c6934e6C777D95aF2204653B2082c453de" */              address _staking,
         /* "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c) */        address _dev1,
         /* "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP) */       address _dev2,
         /* "10000000000000000" (0.01 MATIC) */                          uint256 _betBase,
