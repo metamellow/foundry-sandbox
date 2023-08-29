@@ -65,7 +65,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
 
     constructor(
         /* "0x47e53f0ddf71210f2c45dc832732aa188f78aa4f" (BON) */        address _erc20Token,
-        /* "0xd02b97b0B3439bf032a237f712a5fa5B161D89d3" */              address _treasury,
+        /* "0x99c9c0394a30FA2Ce7956FB7240B415228Fb8eA3" */              address _treasury,
         /* "0xad87F2c6934e6C777D95aF2204653B2082c453de" */              address _staking,
         /* "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c) */        address _dev1,
         /* "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP) */       address _dev2,
@@ -179,10 +179,10 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     // --- DEV FUNCTIONS ---
     function _sendTaxes(uint256 _payment) internal {
         uint256 tt = _payment * taxRate / 1000;
-        uint256 t1 = tt * 40 / 100;
+        uint256 t1 = tt * 50 / 100;
         uint256 t2 = tt * 40 / 100;
-        uint256 t3 = tt * 10 / 100;
-        uint256 t4 = tt * 10 / 100;
+        uint256 t3 = tt * 5 / 100;
+        uint256 t4 = tt * 5 / 100;
         if(erc20Token == address(0)){
             payable(treasury).transfer(t1);
             payable(staking).transfer(t2);

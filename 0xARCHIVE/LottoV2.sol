@@ -32,7 +32,7 @@ npx @api3/airnode-admin derive-sponsor-wallet-address \
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
 --airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
---sponsor-address 0x78a7406e89159594670B7E4dA0b76b2C3276234d
+--sponsor-address 0x2a5816582b998d517363aa83f1eba61b1c372ece
 // Sponsor wallet address: 0xe2105726a2c6e97c5c5eC87043d7fDb62741BAD7
 	
 */
