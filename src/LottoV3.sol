@@ -6,14 +6,6 @@ pragma solidity ^0.8.0;
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
-/* .---------------------- setup ---------------------. //
-- (1) Deploy contract
-- (2) Create 'sponsor wallet' for API3 QRNG system
-    - For details, see: https://docs.api3.org/reference/qrng/chains.html#anu
-- (3) Fund sponsor wallet with MATIC
-- (4) Call address(this).setRequestParameters()
-// .--------------------------------------------------. */
-
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
