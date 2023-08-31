@@ -40,7 +40,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     mapping(uint256 => address) public pastLottoPlayer2;
     mapping(uint256 => uint256) public pastLottoRewards;
     mapping(bytes32 => uint256) public pastLottoAPI3CallCounter;
-    mapping(uint256 => uint256) public pastLottoAPI3CallResult;
+    mapping(uint256 => uint256) public pastLottoAPI3CallResult; // dont really need this because its shown on the forfil emit
 
     event BetDetails (uint256 playersCounter, uint256 counterReward);
     event ClaimDetails (uint256 claimedCounter, uint256 claimedRewards);
