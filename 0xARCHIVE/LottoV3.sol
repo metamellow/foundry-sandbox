@@ -43,15 +43,23 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     mapping(uint256 => uint256) public pastLottoRewards;
     mapping(bytes32 => uint256) public pastLottoAPI3CallCounter;
 
-    event BetDetails (uint256 playersCounter, uint256 counterReward);
-    event ClaimDetails (uint256 claimedCounter, address walletClaimed, uint256 claimedRewards);
-    event WinnerResults (
-        uint256 wr_counter, 
-        address wr_playerOne, 
-        address wr_playerTwo, 
-        address wr_winner, 
-        uint256 wr_winAmount,
-        uint256 wr_qrng
+    event BetDetails (
+        uint256 bd_counter,
+        address bd_wallet,
+        uint256 bd_reward
+    );
+    event ClaimDetails (
+        uint256 cd_counter, 
+        address cd_wallet, 
+        uint256 cd_rewards
+    );
+    event WinnerDetails (
+        uint256 wd_counter, 
+        address wd_playerOne, 
+        address wd_playerTwo, 
+        address wd_winner, 
+        uint256 wd_winAmount,
+        uint256 wd_qrng
     );
 
     // API3 VARS
@@ -119,7 +127,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             pastLottoRewards[counter] = (payment - paymentAfterTax) *2;
 
             /* END */
-            emit BetDetails(counter, pastLottoRewards[counter]);
+            emit BetDetails(counter, msg.sender, pastLottoRewards[counter]);
 
         } else if ((player1W != address(0)) && (player2W == address(0))){
             // PLAYER'S 2 TURN
@@ -135,7 +143,8 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             _checkRestartTimer();
 
             /* END */
-            emit BetDetails((counter-1), pastLottoRewards[counter-1]);
+            uint256 ctr = counter-1;
+            emit BetDetails(ctr, msg.sender, pastLottoRewards[ctr]);
         }
     }
 
@@ -248,9 +257,9 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     
     // --- API3 FUNCTIONS ---
     function setRequestParameters(
-        address _airnode,               // ETH MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY MAIN (0x9d3C147cA16DB954873A498e0af5852AB39139f2) POLY TEST (0x6238772544f029ecaBfDED4300f13A3c4FE84E1D)
-        bytes32 _endpointIdUint256,     // ETH MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY MAIN (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78) POLY TEST (0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78)
-        address _sponsorWallet          // Created after contract deploy and filled with some gas
+        address _airnode,
+        bytes32 _endpointIdUint256,
+        address _sponsorWallet
         ) external onlyOwner {
         airnode = _airnode;
         endpointIdUint256 = _endpointIdUint256;
@@ -282,7 +291,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         if(qrngUint256 % 2 == 0){winner = pastLottoPlayer2[requestIdCounter];}
         else {winner = pastLottoPlayer1[requestIdCounter];}
         _mint(winner, requestIdCounter);
-        emit WinnerResults(
+        emit WinnerDetails(
             requestIdCounter, 
             pastLottoPlayer1[requestIdCounter], 
             pastLottoPlayer2[requestIdCounter], 
