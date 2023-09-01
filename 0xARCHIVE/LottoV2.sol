@@ -19,7 +19,7 @@ npx @api3/airnode-admin derive-sponsor-wallet-address \
 npx @api3/airnode-admin derive-sponsor-wallet-address \
 --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
 --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
---sponsor-address 0xbfac8df3fa1c2c1478b5afe4137564b54b0dbbf4
+--sponsor-address 0x0055fad55c4820133334cfc8238613f79fe160b0
 // Sponsor wallet address: 0x2008dB89D2f64e20DE344F3BaA080D84b4E1F861
 
 // Poly Mainnet Quintessence
