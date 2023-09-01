@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 /*
 NOTES:
 - test needs to be run via Alchemy rpc:
-forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHRN21NJaX1Z87jtli -vvv
+forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHRN21NJaX1Z87jtli -vvvv
 -
 
 */
@@ -53,15 +53,15 @@ contract contractTest is Test {
 
         // --- CONTRACTS ---
         LottoV3Contract = new LottoV3(
-            address(CustomERC20),
-            treasury,
-            staking,
-            dev1,
-            dev2,
-            10000000000000000,
-            1209600,
-            100,
-            0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd //polymain airnode
+            address(CustomERC20),                   /* "0x47e53f0ddf71210f2c45dc832732aa188f78aa4f" (BON erc) "0x0000000000000000000000000000000000000000" */
+            treasury,                               /* "0x99c9c0394a30FA2Ce7956FB7240B415228Fb8eA3" (treasury multi)*/              
+            staking,                                /* "0xad87F2c6934e6C777D95aF2204653B2082c453de" (staking multi)*/              
+            dev1,                                   /* "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c) */        
+            dev2,                                   /* "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP) */       
+            10000000000000000,                      /* "10000000000000000" (0.01 MATIC) */                          
+            1209600,                                /* "2419200" or four weeks */                                    
+            1,                                      /* "1" over 1000 or 0.1% */                                    
+            0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd  /* "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" (polygon airnode) */              
         );
 
         // --- TOKENS ---

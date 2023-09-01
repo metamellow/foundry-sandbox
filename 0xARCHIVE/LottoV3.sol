@@ -6,6 +6,8 @@ pragma solidity ^0.8.0;
 /* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
+/* PS. We love you all! Stay happy, healthy, and wealthy!*/
+
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -40,12 +42,17 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     mapping(uint256 => address) public pastLottoPlayer2;
     mapping(uint256 => uint256) public pastLottoRewards;
     mapping(bytes32 => uint256) public pastLottoAPI3CallCounter;
-    mapping(uint256 => uint256) public pastLottoAPI3CallResult; // dont really need this because its shown on the forfil emit
 
     event BetDetails (uint256 playersCounter, uint256 counterReward);
-    event ClaimDetails (uint256 claimedCounter, uint256 claimedRewards);
-    event WinnerResults (uint256 counterNumber, address winnerWallet);
-
+    event ClaimDetails (uint256 claimedCounter, address walletClaimed, uint256 claimedRewards);
+    event WinnerResults (
+        uint256 wr_counter, 
+        address wr_playerOne, 
+        address wr_playerTwo, 
+        address wr_winner, 
+        uint256 wr_winAmount,
+        uint256 wr_qrng
+    );
 
     // API3 VARS
     address public airnode;
@@ -53,18 +60,16 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
     address public sponsorWallet;
     mapping(bytes32 => bool) public expectingRequestWithIdToBeFulfilled;
 
-    // "0x0000000000000000000000000000000000000000"
-
     constructor(
-        /* "0x47e53f0ddf71210f2c45dc832732aa188f78aa4f" (BON) */        address _erc20Token,
-        /* "0x99c9c0394a30FA2Ce7956FB7240B415228Fb8eA3" */              address _treasury,
-        /* "0xad87F2c6934e6C777D95aF2204653B2082c453de" */              address _staking,
-        /* "0xc70C1a847EE38883179A2eC0767868257B18BD67" (s0c) */        address _dev1,
-        /* "0x2B5fF8Cba8ED3A6E7813CD5e55ecd95B87791cee" (MERP) */       address _dev2,
-        /* "10000000000000000" (0.01 MATIC) */                          uint256 _betBase,
-        /* "1209600" or two weeks */                                    uint256 _restartDuration,
-        /* "100" over 1000 or 10% */                                    uint256 _taxRate,
-        /* "0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd" */              address _airnodeRrp
+        address _erc20Token,
+        address _treasury,
+        address _staking,
+        address _dev1,
+        address _dev2,
+        uint256 _betBase,
+        uint256 _restartDuration,
+        uint256 _taxRate,
+        address _airnodeRrp
         ) RrpRequesterV0(_airnodeRrp)
         ERC721("BON.Lotto Winner", "LOTTO"){
         erc20Token = _erc20Token;
@@ -84,9 +89,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
 
     // --- PUBLIC FUNCTIONS ---
 
-    // @Dev Returns: 0 approve, 1 player one, 2 player two, 3 error
-    // @Dev Turn JS listener on return (1 or 2)
-    function bet() public payable returns(uint8 betData){
+    function bet() public payable {
         // --- REQUIREMENTS STAGE ---
         require(lottoOpen == true, "Lotto is not accepting bets");
         require(player1W != msg.sender, "Can not bet twice");
@@ -98,11 +101,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             require(betPrice <= msg.value, "Need more gas to pay the betPrice");
             payment = betPrice;
         } else {
-            // ERC20 ALLOWANCE
-            uint256 userAllowance = IERC20(erc20Token).allowance(msg.sender, address(this));
-            if(userAllowance < betPrice){/* END */ return betData = 0;}
-            
-            // ERC20 PAYMENT (erc20 token tax compatible)
+            // ERC20 PAYMENT
             uint256 beforeBal = IERC20(erc20Token).balanceOf(address(this));
             IERC20(erc20Token).transferFrom(msg.sender, address(this), betPrice);
             payment = IERC20(erc20Token).balanceOf(address(this)) - beforeBal;
@@ -121,36 +120,25 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
 
             /* END */
             emit BetDetails(counter, pastLottoRewards[counter]);
-            return betData = 1;
+
         } else if ((player1W != address(0)) && (player2W == address(0))){
             // PLAYER'S 2 TURN
             player2W = msg.sender;
             pastLottoPlayer2[counter] = player2W;
-
-            /*
-            // API3 QRNG CALL
             _makeAPICall();
-            */
-            _mint(player2W, counter);
-
-            emit BetDetails(counter, pastLottoRewards[counter]);
 
             // UPDATE LOTTO
             counter++;
             player1W = address(0);
             player2W = address(0);
-            betPrice = betPrice * 11 / 10;
+            betPrice = betPrice * 12 / 10;
             _checkRestartTimer();
 
             /* END */
-            return betData = 2;
-        } else {
-            // ERROR
-            return betData = 3;
+            emit BetDetails((counter-1), pastLottoRewards[counter-1]);
         }
     }
 
-    // @Dev Turn JS listener on returns (numb > 0)
     function claim(uint256 _counter) public returns(uint256 rewards){
         require(ownerOf(_counter) == msg.sender, "You do not hold the NFT bet receipt");
         require(lottoOpen, "Lotto is not open");
@@ -164,8 +152,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
             IERC20(erc20Token).transfer(msg.sender, rewards);
         }
 
-        emit ClaimDetails(_counter, rewards);
-        return (rewards);
+        emit ClaimDetails(_counter, msg.sender, rewards);
     }
     
     // --- DEV FUNCTIONS ---
@@ -291,14 +278,18 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         uint256 qrngUint256 = abi.decode(data, (uint256));
         //
         uint256 requestIdCounter = pastLottoAPI3CallCounter[requestId];
-        pastLottoAPI3CallResult[requestIdCounter] = qrngUint256;
-        if(qrngUint256 % 2 == 0){
-            _mint(pastLottoPlayer2[requestIdCounter], requestIdCounter);
-            emit WinnerResults(requestIdCounter, pastLottoPlayer2[requestIdCounter]);
-        } else{
-            _mint(pastLottoPlayer1[requestIdCounter], requestIdCounter);
-            emit WinnerResults(requestIdCounter, pastLottoPlayer1[requestIdCounter]);
-        }
+        address winner;
+        if(qrngUint256 % 2 == 0){winner = pastLottoPlayer2[requestIdCounter];}
+        else {winner = pastLottoPlayer1[requestIdCounter];}
+        _mint(winner, requestIdCounter);
+        emit WinnerResults(
+            requestIdCounter, 
+            pastLottoPlayer1[requestIdCounter], 
+            pastLottoPlayer2[requestIdCounter], 
+            winner, 
+            pastLottoRewards[requestIdCounter],
+            qrngUint256
+        );
     }
     
     // --- OTHER ---
