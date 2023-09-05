@@ -1,0 +1,6 @@
+Learn
+- https://learnweb3.io/lessons/introduction-to-account-abstraction/
+- https://learnweb3.io/lessons/account-abstraction-on-ethereum-erc-4337-breakdown/
+
+Build
+- https://learnweb3.io/lessons/build-an-entire-aa-wallet-from-scratch/
