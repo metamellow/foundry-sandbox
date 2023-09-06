@@ -43,9 +43,14 @@ contract contractTest is Test {
         );
         
         NFTcontract = new NFT(
+            1,
+            0,
+            //0x0000000000000000000000000000000000000000,
+            address(CustomERC20),
+            address(cnctOwner),
+            5,
             "Test NFT Collection",
-            "T721",
-            //////////////////////////////////////////////
+            "T721"
         );
 
         // --- TOKENS ---
@@ -57,7 +62,7 @@ contract contractTest is Test {
         vm.startPrank(user1);
         //deal(CustomERC20, user1, 1_000_000_000_069 ether);
         require(IERC20(CustomERC20).approve(
-            address(LottoV3Contract), 
+            address(NFTcontract), 
             maxtokens), 
             "Approve failed!"
         );
@@ -66,7 +71,7 @@ contract contractTest is Test {
         vm.startPrank(user2);
         //deal(CustomERC20, user2, 1_000_000_000_069 ether);
         require(IERC20(CustomERC20).approve(
-            address(LottoV3Contract), 
+            address(NFTcontract), 
             maxtokens), 
             "Approve failed!"
         );
@@ -75,7 +80,7 @@ contract contractTest is Test {
         vm.startPrank(user3);
         //deal(CustomERC20, user3, 1_000_000_000_069 ether);
         require(IERC20(CustomERC20).approve(
-            address(LottoV3Contract), 
+            address(NFTcontract), 
             maxtokens), 
             "Approve failed!"
         );
@@ -90,16 +95,63 @@ contract contractTest is Test {
         console.log("NFTS BURI: ", NFTcontract.baseUri());
 
         console.log("_____________________WALLET_INFOM_____________________");
-        console.log("OWNR NFTB: ", NFTcontract.balanceOf(address(69)));
+        console.log("OWNR GASB: ", address(cnctOwner).balance);
+        console.log("USR1 GASB: ", address(user1).balance);
+        console.log("USR2 GASB: ", address(user2).balance);
+        console.log("USR3 GASB: ", address(user3).balance);
+        console.log("OWNR ERC2: ", CustomERC20.balanceOf(cnctOwner));
+        console.log("USR1 ERC2: ", CustomERC20.balanceOf(user1));
+        console.log("USR2 ERC2: ", CustomERC20.balanceOf(user2));
+        console.log("USR3 ERC2: ", CustomERC20.balanceOf(user3));
+        console.log("OWNR NFTB: ", NFTcontract.balanceOf(cnctOwner));
+        console.log("USR1 NFTB: ", NFTcontract.balanceOf(user1));
+        console.log("USR2 NFTB: ", NFTcontract.balanceOf(user2));
+        console.log("USR3 NFTB: ", NFTcontract.balanceOf(user3));
     }
 
-    function test_0_ConsoleLogs() public view{
-        consoleLogs();
+    function devActions(
+        bool _pullFunds, 
+        uint256 _walletMax, 
+        uint256 _mintPrice, 
+        address _paymentToken) public {
+        NFTcontract.devActions(
+            _pullFunds, 
+            _walletMax, 
+            _mintPrice, 
+            _paymentToken
+        );
     }
 
-    function test_1_FreeMint() public {
-        NFTcontract.freeMint();
+    function freeMint() public {
+        NFTcontract.mint();
+    }
+
+    function gasMint(uint cost) public {
+        NFTcontract.mint{value: cost}();
+    }
+    
+    function ercMint() public {
+        NFTcontract.mint();
+    }
+
+    function burn(uint tokid) public {
+        NFTcontract.burn(tokid);
+    }
+
+    function test() public {
         consoleLogs();
+        vm.stopPrank();
+        vm.startPrank(cnctOwner);
+        //devActions(false, 1, 1000000000000000000, address(0));
+        devActions(false, 1, 1000000000000000000, address(CustomERC20));
+        vm.stopPrank();
+        vm.startPrank(user1);
+        //gasMint(1000000000000000000);
+        ercMint();
+        consoleLogs();
+        //ercMint();
+        //burn(6);
+        //consoleLogs();
     }
 
     // TEST: devActions (make it reusable for the other tests)

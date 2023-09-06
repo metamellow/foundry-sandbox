@@ -45,23 +45,21 @@ contract NFT is ERC721, Ownable, ERC721Burnable{
     }
 
     // --- USER ACTIONS ---
-    function freeMint() external {
-        require(mintPrice == 0, "Free mint not active");
-        require(mintedPerWallet[msg.sender] < walletMax, "Already wallet maximum");
-        mintedPerWallet[msg.sender] = mintedPerWallet[msg.sender]++;
-        _safeMint(msg.sender, ++totalSupply);
-    }
-
-    function paidMint() external payable{
-        require(mintedPerWallet[msg.sender] < walletMax, "Already wallet maximum");
-        if(paymentToken == address(0)){
-            require(mintPrice <= msg.value, "Need more gas to mint");
+    function mint() external payable{
+        require(mintedPerWallet[msg.sender] < walletMax, "Already at wallet maximum");
+        if(mintPrice == 0){
+            mintedPerWallet[msg.sender] = mintedPerWallet[msg.sender] += 1;
+            _safeMint(msg.sender, ++totalSupply);
         } else {
-            // users must APPROVE before this
-            IERC20(paymentToken).transfer(address(this), mintPrice);
+            if(paymentToken == address(0)){
+                require(mintPrice <= msg.value, "Need more gas to mint");
+            } else {
+                // users must APPROVE before this
+                IERC20(paymentToken).transferFrom(msg.sender, address(this), mintPrice);
+            }
+            mintedPerWallet[msg.sender] = mintedPerWallet[msg.sender] += 1;
+            _safeMint(msg.sender, ++totalSupply);
         }
-        mintedPerWallet[msg.sender] = mintedPerWallet[msg.sender] += 1;
-        _safeMint(msg.sender, ++totalSupply);
     }
 
     // --- DEV ACTIONS ---
