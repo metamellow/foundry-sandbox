@@ -9,6 +9,41 @@ forge test --fork-url https://polygon-mainnet.g.alchemy.com/v2/v4B-uiSecIHqGvzHR
 
 */
 
+/*
+// --- GENERATE SPONSOR WALLET PROCESS ---
+// run in terminal, after entering data ( https://docs.api3.org/reference/qrng/chains.html#anu )
+// deployed contract == sponsor-address
+// Examples:
+
+// Eth Mainnet
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
+--airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
+--sponsor-address 0x14d1e21657557ac43a94f2ffbd104c8dadce1b9a
+//Sponsor wallet address: 0x0c01FF0978423A557D1271e717e3b80AC8C7E50F
+
+// Poly Mainnet ANU
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
+--airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
+--sponsor-address 0x61332ac332c859a0c2360fbe44d888cddda53676
+// Sponsor wallet address: 0xC754e9963690424F2b2A02701eb6828a4c6d06a7
+
+// Poly Mainnet Quintessence
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6CyZcaXvbnbqGfqqZWvWNUbGvdd5PAJRrBeAhy9rz1bbnFmpVLg2wPj1h6TyndFrWLUG3kHWBYpwacgCTGWAHFTbUrXEg6LdLxoEBny2YDz \
+--airnode-address 0x224e030f03Cd3440D88BD78C9BF5Ed36458A1A25 \
+--sponsor-address 0x14d1e21657557ac43a94f2ffbd104c8dadce1b9a
+
+// Poly Mumbai
+npx @api3/airnode-admin derive-sponsor-wallet-address \
+--airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo \
+--airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D \
+--sponsor-address 0x2a5816582b998d517363aa83f1eba61b1c372ece
+// Sponsor wallet address: 0xe2105726a2c6e97c5c5eC87043d7fDb62741BAD7
+	
+*/
+
 import "forge-std/Test.sol";
 import "../src/LottoV3.sol";
 import "../src/CustomERC20.sol";

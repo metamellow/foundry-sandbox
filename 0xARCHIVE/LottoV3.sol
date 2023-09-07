@@ -8,13 +8,6 @@ pragma solidity ^0.8.0;
 
 /* PS. We love you all! Stay happy, healthy, and wealthy!*/
 
-
-
-// NOTE make sure to edit the NFT collection name before deploying
-// NOTE make sure to check/delete the RESET settings and BET INCREASE
-
-
-
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -86,7 +79,7 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         uint256 _taxRate,
         address _airnodeRrp
         ) RrpRequesterV0(_airnodeRrp)
-        ERC721("BON.Lotto Winner", "LOTTO"){
+        ERC721("BON.Lotto - Infinity Winner", "LOTTO"){
         erc20Token = _erc20Token;
         treasury = _treasury;
         staking = _staking;
@@ -203,12 +196,18 @@ contract LottoV3 is Ownable, RrpRequesterV0, ERC721, ERC721Burnable {
         address _player1W, 
         address _player2W, 
         uint256 _betPrice, 
-        uint256 _counter
+        uint256 _betBase, 
+        uint256 _counter,
+        uint256 _restartDuration,
+        uint256 _restartTimer
         ) external onlyOwner{
         player1W = _player1W;
         player2W = _player2W;
         betPrice = _betPrice; 
+        betBase = _betBase;
         counter = _counter;
+        restartDuration = _restartDuration;
+        restartTimer = _restartTimer;
     }
 
     function resetLotto(
