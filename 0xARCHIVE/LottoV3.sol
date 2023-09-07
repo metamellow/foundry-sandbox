@@ -10,32 +10,8 @@ pragma solidity ^0.8.0;
 
 
 
-
-
-
-
-
-
-
-
-
-// NOTE make sure to edit the NFT collection name before delpoying
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// NOTE make sure to edit the NFT collection name before deploying
+// NOTE make sure to check/delete the RESET settings and BET INCREASE
 
 
 
