@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.   BANK OF NOWHERE LOTTO  V3.02  .-.-.-.-. */
-/* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
+/* -.-.-.-.-.    [[ BUILT BY METAMELLOW ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 /* PS. We love you all! Stay happy, healthy, and wealthy!*/

@@ -11,6 +11,7 @@ pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.-.-. ALPHA STAKING POOL v0.3 .-.-.-.-.-.-. */
+/* -.-.-.-.-.    [[ BUILT BY METAMELLOW ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";

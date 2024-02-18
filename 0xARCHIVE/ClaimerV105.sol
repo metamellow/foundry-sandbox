@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.  NFT TOKEN TIMER CLAIMER  V1.06 .-.-.-.-. */
-/* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
+/* -.-.-.-.-.    [[ BUILT BY METAMELLOW ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";

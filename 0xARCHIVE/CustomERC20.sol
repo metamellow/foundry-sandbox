@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-.-       CUSTOM ERC20 TOKEN      -.-.-.-.-. */
-/* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
+/* -.-.-.-.-.    [[ BUILT BY METAMELLOW ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";

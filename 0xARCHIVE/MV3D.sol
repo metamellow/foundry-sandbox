@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 /* -.-.-.-.-. MODULUSVERSE 3D NFT COLLECTION  .-.-.-.-. */
-/* -.-.-.-.-.    [[ BUILT BY REBEL LABS ]]    .-.-.-.-. */
+/* -.-.-.-.-.    [[ BUILT BY METAMELLOW ]]    .-.-.-.-. */
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
